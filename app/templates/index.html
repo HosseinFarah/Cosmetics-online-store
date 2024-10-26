@@ -1,0 +1,47 @@
+{% extends 'base.html' %} {% block content %}
+<div class="container">
+  <h1>Home</h1>
+  <p>Welcome to the home page!</p>
+  <a href="{{ url_for('todos.new_todo') }}" class="btn btn-primary"
+    ><i class="fas fa-plus"></i> New Todo</a
+  >
+
+  <div class="row d-flex justify-content-center">
+    {% if current_user.is_authenticated %} {% for todo in todos %}
+    <div class="col-md-4">
+      <div class="card mb-4 shadow-sm">
+        <div class="card-body">
+          {% if todo.status == 'pending' %}
+          <div class="card-header bg-warning">
+            <h5 class="card-title">{{ todo.title }}</h5>
+          </div>
+            {% elif todo.status == 'completed' %}
+            <div class="card-header bg-success">
+              <h5 class="card-title">{{ todo.title }}</h5>
+            </div>
+            {% else %}
+            <div class="card-header bg-danger">
+              <h5 class="card-title">{{ todo.title }}</h5>
+            </div>
+            {% endif %}
+          <p class="card-text"><i class="fas fa-tag"></i> Description:  {{ todo.description }}</p>
+          <!-- status -->
+          <p class="card-text"><i class="fas fa-spinner"></i></i> Status:  {{ todo.status }}</p>
+            <!-- created_at -->
+          <p class="card-text"><i class="fas fa-calendar-week"></i> Created At:  {{ todo.created_at }}</p>
+        </div>
+        <div class="card-footer">
+          <p class="card-text"><i class="fas fa-calendar-week"></i> Due Date:  {{ todo.due_date }}</p>
+            <a href="{{ url_for('todos.update_todo', id=todo.id) }}" class="btn btn-warning"
+                ><i class="fas fa-edit"></i> </a>
+            <a href="{{ url_for('todos.delete_todo', id=todo.id) }}" class="btn btn-danger"
+                ><i class="fas fa-trash"></i> </a>
+        </div>
+      </div>
+    </div>
+    {% endfor %} {% else %}
+    <div class="alert alert-info" role="alert">No todos found!</div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
