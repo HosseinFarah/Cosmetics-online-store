@@ -1,0 +1,95 @@
+{% extends 'base.html' %} {% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <form action="{{ url_for('auth.all_users') }}" method="get">
+        <div class="input-group mb-3">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Search"
+            name="search"
+            value="{{ search }}"
+          />
+          <div class="input-group-append">
+            <button class="btn btn-outline-secondary" type="submit">Search</button>
+            <button class="btn btn-outline-secondary" type="button" onclick="window.location.href='{{ url_for('auth.all_users', search='', page=1) }}'">Clear</button>       
+           </div>
+      </form>
+    </div>
+  <div class="row d-flex justify-content-center overflow-auto">
+    <div class="col-md-12">
+        <!-- pagination -->
+      <nav aria-label="Page navigation">
+        <ul class="pagination">
+          <li class="page-item {% if page == 1 %}disabled{% endif %}">
+            <a class="page-link" href="{{ url_for('auth.all_users', page=1) }}"
+              >First</a
+            >
+          </li>
+          <li class="page-item {% if page == 1 %}disabled{% endif %}">
+            <a
+              class="page-link"
+              href="{{ url_for('auth.all_users', page=page-1) }}"
+              >Previous</a
+            >
+          </li>
+          <li class="page-item {% if page == pages %}disabled{% endif %}">
+            <a
+              class="page-link"
+              href="{{ url_for('auth.all_users', page=page+1) }}"
+              >Next</a
+            >
+          </li>
+          <li class="page-item {% if page == pages %}disabled{% endif %}">
+            <a
+              class="page-link"
+              href="{{ url_for('auth.all_users', page=pages) }}"
+              >Last</a
+            >
+          </li>
+        </ul>
+      </nav>
+
+      <h2 class="badge text-bg-primary">All Users | {{all_users}}</h2>
+
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Firstname</th>
+            <th>Lastname</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Phone</th>
+            <th>Address</th>
+            <th>Zipcode</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for user in users %}
+          <tr>
+            <td>{{ user.firstname }}</td>
+            <td>{{ user.lastname }}</td>
+            <td>{{ user.email }}</td>
+            <td>{{ user.role }}</td>
+            <td>{{ user.phone }}</td>
+            <td>{{ user.address }}</td>
+            <td>{{ user.zipcode }}</td>
+            <td>
+              <a
+                href="{{ url_for('auth.edit_user_admin', id=user.id) }}"
+                class="btn btn-primary"
+                ><i class="fa fa-edit"></i
+              ></a>
+              <a href="{{ url_for('auth.delete_user_admin', id=user.id) }}"class="btn btn-danger" onclick="return confirm('Are you sure you want to delete user: {{ user.firstname }} {{ user.lastname }}?')"><i class="fa fa-trash"></i></a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      
+    </div>
+  </div>
+</div>
+{% endblock %}

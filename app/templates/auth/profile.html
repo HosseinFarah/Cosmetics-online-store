@@ -19,7 +19,8 @@
                     <div class="card-footer">
                         <p><strong>Last Login:</strong> {{ user.last_login.strftime('%Y-%m-%d %H:%M:%S') }}</p>
                         <a href="{{ url_for('auth.update_profile') }}" class="btn btn-primary"><i class="fa fa-edit"></i> Edit Profile</a>
-                        
+                        <a href="{{ url_for('auth.update_password') }}" class="btn btn-primary"><i class="fa fa-edit"></i> Update Password</a>
+                        <a href="{{ url_for('auth.reset_email_request') }}" class="btn btn-primary"><i class="fa fa-edit"></i> Update Email</a>
                 </div>
             </div>
         </div>

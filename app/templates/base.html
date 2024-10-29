@@ -35,6 +35,12 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ms-auto">
+                        {% if current_user.is_administrator()%}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('auth.all_users') }}"
+                                >All Users</a>
+                        </li>
+                        {% endif %}
                         {% if current_user.is_authenticated %}
                         <li class="nav-item">
                           <a class="nav-link {{ 'active' if request.endpoint == 'auth.profile' else '' }}" href="{{ url_for('auth.profile') }}">
@@ -46,6 +52,7 @@
                                 >Logout</a
                             >
                         </li>
+
                         {% else %}
                         <li class="nav-item">
                             <a class="nav-link{{'active' if request.endpoint =='auth/login'else ''}}" href="{{ url_for('auth.login') }}"

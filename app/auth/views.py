@@ -2,13 +2,16 @@ from flask import render_template, redirect, url_for, request, flash, current_ap
 from flask_login import login_user, logout_user, login_required, current_user
 from app.models import User
 from app import login, db
-from ..forms import LoginForm, RegistrationForm, ChangePasswordForm, PasswordResetRequestForm, UpdateAccountForm, ResetEmailRequestForm, ResetEmailForm
+from ..forms import LoginForm, RegistrationForm, ChangePasswordForm, PasswordResetRequestForm, UpdateAccountForm, ResetEmailRequestForm, ResetEmailForm,UpdateUserByAdmin,SearchForm,UpdatePasswordForm
 from app.auth import auth
 from werkzeug.utils import secure_filename
 import os
 from app.email import send_email
 from pytz import timezone
 from datetime import datetime
+from ..decorators import permission_required, admin_required
+from app.models import Role
+
 
 @login.user_loader
 def load_user(id):
@@ -17,13 +20,9 @@ def load_user(id):
 @auth.before_app_request
 def before_request():
     if current_user.is_authenticated:
-        current_user.last_login = datetime.now(timezone('Europe/Helsinki'))
-        db.session.commit()
-        
-@auth.before_app_request
-def before_request():
-    if current_user.is_authenticated and not current_user.is_confirmed and request.endpoint[:5] != 'auth.' and request.endpoint != 'static':
-        return redirect(url_for('auth.unconfirmed'))
+        current_user.ping()
+        if not current_user.is_confirmed and request.endpoint[:5] != 'auth.' and request.endpoint != 'static':
+            return redirect(url_for('auth.unconfirmed'))
     
 
 @auth.route('/unconfirmed')
@@ -42,7 +41,10 @@ def login():
         user = User.query.filter_by(email=form.email.data).first()
         if user and user.check_password(form.password.data):
             login_user(user, remember=form.remember.data)
-            return redirect(url_for('main.index'))
+            next_page = request.args.get('next')
+            if next_page and not next_page.startswith('/'):
+                next_page = None
+            return redirect(next_page or url_for('main.index'))
         flash('Invalid email or password.', 'danger')
     return render_template('auth/login.html', title='Login', form=form)
 
@@ -76,6 +78,7 @@ def confirm(token):
     if current_user.is_confirmed:
         return redirect(url_for('main.index'))
     if current_user.confirm(token):
+        db.session.commit()
         flash('You have confirmed your account. Thanks!', 'success')
     else:
         flash('The confirmation link is invalid or has expired.', 'danger')
@@ -165,3 +168,100 @@ def update_profile():
         print("Form validation failed")
         print(form.errors)
     return render_template('auth/update_profile.html', form=form)
+
+
+@auth.route('/all_users', methods=['GET', 'POST'])
+@login_required
+@admin_required
+def all_users():
+    search = request.args.get('search', '')
+    page=request.args.get('page', 1, type=int)
+    per_page = 15
+    all_users_count = User.query.count()
+    if search:
+        users = User.query.filter(User.firstname.like(f'%{search}%') | User.lastname.like(f'%{search}%') | User.email.like(f'%{search}%')| User.phone.like(f'%{search}%')).paginate(page=page, per_page=per_page, error_out=False)
+    else:
+        users = User.query.paginate(page=page, per_page=per_page, error_out=False)
+    return render_template('auth/all_users.html', users=users, search=search, page=page, pages=users.pages, all_users=all_users_count)
+
+@auth.route('/edit_user_admin/<int:id>', methods=['GET', 'POST'])
+@login_required
+@admin_required
+def edit_user_admin(id):
+    user = User.query.get(id)
+    form = UpdateUserByAdmin()
+    if form.validate_on_submit():
+        user.firstname = form.firstname.data
+        user.lastname = form.lastname.data
+        user.address = form.address.data
+        user.zipcode = form.zipcode.data
+        role = Role.query.filter_by(name=form.role.data).first()
+        user.role = role
+        
+        try:
+            db.session.commit()
+            flash('User has been updated.', 'success')
+        except Exception as e:
+            db.session.rollback()
+            flash('An error occurred while updating user.', 'danger')
+        return redirect(url_for('auth.all_users'))
+    
+    elif request.method == 'GET':
+        form.firstname.data = user.firstname
+        form.lastname.data = user.lastname
+        form.address.data = user.address
+        form.zipcode.data = user.zipcode
+        form.role.data = user.role.name if user.role else 'User'
+    return render_template('auth/edit_user_admin.html', form=form, user=user)
+
+
+@auth.route('/delete_user_admin/<int:id>', methods=['GET', 'POST'])
+@login_required
+@admin_required
+def delete_user_admin(id):
+    user = User.query.get(id)
+    db.session.delete(user)
+    db.session.commit()
+    flash('User has been deleted.', 'success')
+    return redirect(url_for('auth.all_users'))
+
+@auth.route('/update_password', methods=['GET', 'POST'])
+@login_required
+def update_password():
+    form = UpdatePasswordForm()
+    if form.validate_on_submit():
+        if current_user.check_password(form.old_password.data):
+            current_user.password = form.new_password.data
+            try:
+                db.session.commit()
+                flash('Your password has been updated.', 'success')
+            except Exception as e:
+                db.session.rollback()
+                flash('An error occurred while updating your password.', 'danger')
+        else:
+            flash('Invalid old password.', 'danger')
+    return render_template('auth/update_password.html', form=form)
+
+@auth.route('/reset_email_request', methods=['GET', 'POST'])
+@login_required
+def reset_email_request():
+    form = ResetEmailRequestForm()
+    if form.validate_on_submit():
+        token = current_user.generate_email_change_token(form.email.data)
+        send_email(form.email.data, 'Confirm Your Email Address', 'auth/email/change_email', user=current_user, token=token)
+        flash('An email with instructions to confirm your new email address has been sent to you.', 'info')
+        return redirect(url_for('auth.profile'))
+    return render_template('auth/reset_email_request.html', form=form)
+
+@auth.route('/change_email/<token>', methods=['GET', 'POST'])
+@login_required
+def change_email(token):
+    if current_user.change_email(token):
+        db.session.commit()
+        flash('Your email address has been updated.', 'success')
+    else:
+        flash('The confirmation link is invalid or has expired.', 'danger')
+    return redirect(url_for('auth.profile'))
+
+
+        

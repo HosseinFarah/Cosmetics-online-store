@@ -19,6 +19,8 @@ class Config:
     MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
     FLASKY_MAIL_SUBJECT_PREFIX= '[Todo-APP]'
     FLASKY_MAIL_SENDER = 'Todo-APP Admin <' + os.environ.get('MAIL_SENDER') + '>'
+    #for role 
+    ADMIN_EMAIL= os.environ.get('ADMIN_EMAIL')
 
     @staticmethod
     def init_app(app):
