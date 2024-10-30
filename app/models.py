@@ -21,9 +21,9 @@ class User(UserMixin, db.Model):
     image = db.Column(db.String(255), nullable=False, default='default.jpg')
     created_at = db.Column(db.DateTime, default=datetime.now(timezone('Europe/Helsinki')))
     updated_at = db.Column(db.DateTime, default=datetime.now(timezone('Europe/Helsinki')))
-    is_active = db.Column(db.Boolean, default=True)
-    is_confirmed = db.Column(db.Boolean, default=False)
-    role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
+    is_active = db.Column(db.Boolean, default=True,server_default=sa.sql.expression.true())
+    is_confirmed = db.Column(db.Boolean, default=False),
+    role_id = db.Column(db.Integer, db.ForeignKey('roles.id'), default=1)
     user_todos = db.relationship('Todo', backref='user', lazy='dynamic')
     last_login = db.Column(db.DateTime, default=datetime.now(timezone('Europe/Helsinki')))
     role = db.relationship('Role', backref='users')

@@ -11,7 +11,7 @@ from pytz import timezone
 from datetime import datetime
 from ..decorators import permission_required, admin_required
 from app.models import Role
-
+from sqlalchemy import func
 
 @login.user_loader
 def load_user(id):
@@ -41,7 +41,11 @@ def login():
         if user and user.check_password(form.password.data):
             login_user(user, remember=form.remember.data)
             #last_login 
-            current_user.ping()
+            if current_user.is_authenticated:
+                current_user.ping()
+            if not current_user.is_active or current_user.is_anonymous:
+                flash('Your account has been disabled. Please contact the administrator.', 'danger')
+                return redirect(url_for('auth.logout'))
             next_page = request.args.get('next')
             if next_page and not next_page.startswith('/'):
                 next_page = None
@@ -104,11 +108,12 @@ def reset_password_request():
         if user:
             token = user.generate_reset_token()
             send_email(user.email, 'Reset Your Password', 'auth/email/reset_password', user=user, token=token)
-        flash('An email with instructions to reset your password has been sent to you.', 'info')
-    else:
-        flash('Something went wrong. Please try again.', 'danger')
+            flash('An email with instructions to reset your password has been sent to you.', 'info')
+        else:
+            flash('Something went wrong. Please try again.', 'danger')
         return redirect(url_for('auth.login'))
-    return render_template('auth/reset_password_request.html', title='Reset Password', form=form)
+    return render_template('auth/reset_password_request.html', form=form)
+
     
 @auth.route('/reset_password/<token>', methods=['GET', 'POST'])
 def reset_password(token):
@@ -279,4 +284,75 @@ def change_email(token):
     return redirect(url_for('auth.profile'))
 
 
-        
+
+# @auth.route('/activate_users', methods=['GET', 'POST'])
+# @login_required
+# @admin_required
+# def activate_users():
+#     if request.method == 'POST':
+#         users = request.form.getlist('users')
+#         print(f"Form data: {request.form}")  # Debug print
+#         print(f"Selected user IDs: {users}")  # Debug print
+
+#         if 'update_button' in request.form:
+#             print("Update button clicked")  # Debug print
+#             for user in User.query.all():
+#                 is_active = f'is_active_{user.id}' in request.form
+#                 print(f"Before update: {user.email}, is_active: {user.is_active}")  # Debug print
+#                 user.is_active = is_active
+#                 print(f"After update: {user.email}, is_active: {user.is_active}")  # Debug print
+#             try:
+#                 db.session.commit()
+#                 flash('Users have been updated.', 'success')
+#             except Exception as e:
+#                 db.session.rollback()
+#                 print(f"Database commit failed: {e}")  # Debug print
+#                 flash('An error occurred while updating users.', 'danger')
+#         else:
+#             print("No button clicked")  # Debug print
+#             flash('No action selected.', 'danger')
+#         return redirect(url_for('auth.activate_users'))
+    
+#     # Handle GET request
+#     users = User.query.all()
+    
+#     return render_template('auth/activate_users.html', users=users)
+
+@auth.route('/activate_users', methods=['GET', 'POST'])
+@login_required
+@admin_required
+def activate_users():
+    page = request.args.get('page', 1, type=int)
+    per_page = 25  # Set the number of users to show per page
+
+    if request.method == 'POST':
+        users = request.form.getlist('users')
+        print(f"Form data: {request.form}")  # Debug print
+        print(f"Selected user IDs: {users}")  # Debug print
+
+        if 'update_button' in request.form:
+            print("Update button clicked")  # Debug print
+            for user_id in users:
+                user = User.query.get(int(user_id))
+                if user:
+                    is_active = f'is_active_{user.id}' in request.form
+                    print(f"Before update: {user.email}, is_active: {user.is_active}")  # Debug print
+                    user.is_active = is_active
+                    print(f"After update: {user.email}, is_active: {user.is_active}")  # Debug print
+            try:
+                db.session.commit()
+                flash('Users have been updated.', 'success')
+            except Exception as e:
+                db.session.rollback()
+                print(f"Database commit failed: {e}")  # Debug print
+                flash('An error occurred while updating users.', 'danger')
+        else:
+            print("No button clicked")  # Debug print
+            flash('No action selected.', 'danger')
+        return redirect(url_for('auth.activate_users', page=page))
+
+    # Handle GET request with pagination
+    pagination = User.query.paginate(page=page, per_page=per_page)
+    users = pagination.items
+
+    return render_template('auth/activate_users.html', users=users, pagination=pagination)
