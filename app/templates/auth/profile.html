@@ -5,22 +5,23 @@
         <div class="row">
             <div class="col-md-6 col-md-offset-3">
                 <div class="card">
-                    <div class="card-header">
+                    <div class="card-header bg-info">
                         <h3 class="card-title">Profile</h3>
-                        <img src="{{ url_for('static', filename='uploads/users/' + user.image) }}" alt="{{ user.firstname }}" class="img-thumbnail" style="width: 100px; height: 100px; border-radius: 50%; margin-top: 10px;">
+                        <img src="{{ url_for('static', filename='uploads/users/' + user.image) }}" alt="{{ user.firstname }}" class="img-thumbnail ms-auto" style="width: 100px; height:100px;  border-radius: 50%; margin-top: 10px;position: absolute; top: 0; right: 10px;">
                     </div>
                     <div class="card-body">
-                        <p><strong>Fullname:</strong> {{ user.firstname }} {{ user.lastname }}</p>
-                        <p><strong>Email:</strong> {{ user.email }}</p>
-                        <p><strong>Phone:</strong> {{ user.phone }}</p>
-                        <p><strong>Address:</strong> {{ user.address }}</p>
-                        <p><strong>Zipcode:</strong> {{ user.zipcode }}</p>
+                        <p><strong class="text-info"><i class="fa fa-user "></i> Fullname:</strong> {{ user.firstname }} {{ user.lastname }}</p>
+                        <p><strong class="text-info"><i class="fa fa-envelope "></i> Email:</strong> {{ user.email }}</p>
+                        <p><strong class="text-info"><i class="fa fa-phone "></i> Phone:</strong> {{ user.phone }}</p>
+                        <p><strong class="text-info"><i class="fa fa-user "></i> Role:</strong> {{ user.role.name }}</p>
+                        <p><strong class="text-info"><i class="fa fa-map-marker "></i> Address:</strong> {{ user.address }}</p>
+                        <p><strong class="text-info"><i class="fa fa-shipping-fast"></i> Zipcode:</strong> {{ user.zipcode }}</p>
                     </div>
                     <div class="card-footer">
-                        <p><strong>Last Login:</strong> {{ user.last_login.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+                        <p><strong>Last Login:</strong> {{ user.last_login}}</p>
                         <a href="{{ url_for('auth.update_profile') }}" class="btn btn-primary"><i class="fa fa-edit"></i> Edit Profile</a>
-                        <a href="{{ url_for('auth.update_password') }}" class="btn btn-primary"><i class="fa fa-edit"></i> Update Password</a>
-                        <a href="{{ url_for('auth.reset_email_request') }}" class="btn btn-primary"><i class="fa fa-edit"></i> Update Email</a>
+                        <a href="{{ url_for('auth.update_password') }}" class="btn btn-warning"><i class="fa fa-edit"></i> Update Password</a>
+                        <a href="{{ url_for('auth.reset_email_request') }}" class="btn btn-warning"><i class="fa fa-edit"></i> Update Email</a>
                 </div>
             </div>
         </div>

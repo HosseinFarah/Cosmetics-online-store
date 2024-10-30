@@ -136,13 +136,8 @@ class User(UserMixin, db.Model):
         db.session.commit()
         return True
     
-       
-        
-        
-            
-    
-            
-    
+
+ #for role    
 class Permission:
     Follow = 1
     COMMENT = 2
@@ -198,11 +193,6 @@ class Role(db.Model):
             db.session.add(role)
         db.session.commit()
 #for role  
-
-
-    
-    
-    
 
 class Todo(db.Model):
     __tablename__ = 'todos'

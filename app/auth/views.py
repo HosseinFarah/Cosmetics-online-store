@@ -20,7 +20,6 @@ def load_user(id):
 @auth.before_app_request
 def before_request():
     if current_user.is_authenticated:
-        current_user.ping()
         if not current_user.is_confirmed and request.endpoint[:5] != 'auth.' and request.endpoint != 'static':
             return redirect(url_for('auth.unconfirmed'))
     
@@ -41,6 +40,8 @@ def login():
         user = User.query.filter_by(email=form.email.data).first()
         if user and user.check_password(form.password.data):
             login_user(user, remember=form.remember.data)
+            #last_login 
+            current_user.ping()
             next_page = request.args.get('next')
             if next_page and not next_page.startswith('/'):
                 next_page = None
@@ -179,10 +180,20 @@ def all_users():
     per_page = 15
     all_users_count = User.query.count()
     if search:
-        users = User.query.filter(User.firstname.like(f'%{search}%') | User.lastname.like(f'%{search}%') | User.email.like(f'%{search}%')| User.phone.like(f'%{search}%')).paginate(page=page, per_page=per_page, error_out=False)
+        query = User.query.filter(User.firstname.like(f'%{search}%') | User.lastname.like(f'%{search}%') | User.email.like(f'%{search}%')| User.phone.like(f'%{search}%'))
     else:
-        users = User.query.paginate(page=page, per_page=per_page, error_out=False)
-    return render_template('auth/all_users.html', users=users, search=search, page=page, pages=users.pages, all_users=all_users_count)
+        query = User.query
+
+    sort_by = request.args.get('sort_by', 'firstname')
+    order = request.args.get('order', 'asc')
+
+    if order == 'asc':
+        query = query.order_by(getattr(User, sort_by).asc())
+    else:
+        query = query.order_by(getattr(User, sort_by).desc())
+    
+    users = query.paginate(page=page, per_page=per_page, error_out=False)
+    return render_template('auth/all_users.html', users=users, search=search, page=page, pages=users.pages, all_users=all_users_count,order=order, sort_by=sort_by)
 
 @auth.route('/edit_user_admin/<int:id>', methods=['GET', 'POST'])
 @login_required

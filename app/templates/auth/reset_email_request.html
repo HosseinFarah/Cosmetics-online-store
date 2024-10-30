@@ -14,7 +14,8 @@
                             <span class="text-danger">{{ error }}</span>
                         {% endfor %}
                     </div>
-                    {{ form.submit(class="btn btn-primary") }}
+                    {{ form.submit(class="btn btn-primary mt-2") }}
+                    <a href="{{ url_for('auth.profile') }}" class="btn btn-secondary mt-2">Back</a>
                 </form>
             </div>
         </div>
