@@ -109,7 +109,11 @@ class UpdateUserByAdmin(FlaskForm):
     address = StringField('Address', validators=[DataRequired(),Regexp("^[a-zåäöA-ZÅÄÖ0-9'\\- ]+$", message='Only letters, numbers, hyphens and apostrophes allowed')])
     zipcode = StringField('Zip Code', validators=[DataRequired(),Regexp("^[0-9]{5}$", message='Zip code must be 5 digits long')])
     role = SelectField('Role', choices=[('User', 'User'), ('Moderator', 'Moderator'), ('Administrator', 'Administrator')], validators=[DataRequired()])
+    is_active = BooleanField('is_active')
     submit = SubmitField('Update')
+    
+    
+    
 
      
         

@@ -105,6 +105,8 @@ def reset_password_request():
             token = user.generate_reset_token()
             send_email(user.email, 'Reset Your Password', 'auth/email/reset_password', user=user, token=token)
         flash('An email with instructions to reset your password has been sent to you.', 'info')
+    else:
+        flash('Something went wrong. Please try again.', 'danger')
         return redirect(url_for('auth.login'))
     return render_template('auth/reset_password_request.html', title='Reset Password', form=form)
     
@@ -207,6 +209,7 @@ def edit_user_admin(id):
         user.address = form.address.data
         user.zipcode = form.zipcode.data
         role = Role.query.filter_by(name=form.role.data).first()
+        user.is_active = form.is_active.data
         user.role = role
         
         try:
@@ -223,6 +226,7 @@ def edit_user_admin(id):
         form.address.data = user.address
         form.zipcode.data = user.zipcode
         form.role.data = user.role.name if user.role else 'User'
+        form.is_active.data = user.is_active
     return render_template('auth/edit_user_admin.html', form=form, user=user)
 
 
