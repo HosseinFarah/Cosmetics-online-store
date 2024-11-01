@@ -17,3 +17,5 @@
 2024-11-01 13:12:52,951 - werkzeug - INFO - 127.0.0.1 - - [01/Nov/2024 13:12:52] "[36mGET /static/css/styles.css HTTP/1.1[0m" 304 -
 2024-11-01 13:12:53,266 - werkzeug - INFO - 127.0.0.1 - - [01/Nov/2024 13:12:53] "[36mGET /static/js/script.js HTTP/1.1[0m" 304 -
 2024-11-01 13:13:57,726 - werkzeug - INFO -  * Detected change in 'C:\\projektit\\Flask\\Flask Autentikointi\\app\\auth\\views.py', reloading
+2024-11-01 13:14:00,495 - werkzeug - WARNING -  * Debugger is active!
+2024-11-01 13:14:00,501 - werkzeug - INFO -  * Debugger PIN: 672-526-274
