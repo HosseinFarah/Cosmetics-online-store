@@ -4,6 +4,7 @@ from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationE
 from app.models import User, Todo
 from flask_login import current_user
 from flask_wtf.file import FileAllowed, FileRequired
+import re
 
 class LoginForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
@@ -11,6 +12,16 @@ class LoginForm(FlaskForm):
     remember = BooleanField('Remember Me')
     submit = SubmitField('Login')
     
+# Custom validator for image size
+def img_size(max_size, message=None):
+    def _img_size(form, field):
+        if field.data:
+            field.data.seek(0, 2)  # Seek to end of file
+            size = field.data.tell()
+            if size > max_size:
+                raise ValidationError(message or 'File size must be less than %d bytes' % max_size)
+    return _img_size
+
 class RegistrationForm(FlaskForm):
     firstname = StringField('First Name', validators=[DataRequired(), Length(min=2, max=100), Regexp("^[a-zåäöA-ZÅÄÖ'\\-]+$", message='Only letters, hyphens and apostrophes allowed')])
     lastname = StringField('Last Name', validators=[DataRequired(), Length(min=2, max=100), Regexp("^[a-zåäöA-ZÅÄÖ'\\-]+$", message='Only letters, hyphens and apostrophes allowed')])
@@ -21,7 +32,7 @@ class RegistrationForm(FlaskForm):
     zipcode = StringField('Zip Code', validators=[DataRequired(),Regexp("^[0-9]{5}$", message='Zip code must be 5 digits long')])
     # define phone number Regex pattern accepted numbers and - or space and + and () max 15 digits
     phone = StringField('Phone Number', validators=[DataRequired(),Regexp("^[\d\s\-\+\(\)]{1,15}$", message='Phone number must have at most 15 digits and can contain numbers, spaces, hyphens, plus signs and parentheses')])
-    image = FileField('Profile Picture', validators=[FileAllowed(['jpg', 'png', 'jpeg', 'gif'], 'Only jpg, png, jpeg and gif files allowed'), FileRequired()])
+    image = FileField('Profile Picture', validators=[FileAllowed(['jpg', 'png', 'jpeg', 'gif'], 'Only jpg, png, jpeg and gif files allowed'), FileRequired(),img_size(1*1024*1024, message='Image size must be less than 1MB')])
     submit = SubmitField('Sign Up')
     
     def validate_email(self, email):
@@ -33,8 +44,7 @@ class RegistrationForm(FlaskForm):
         user = User.query.filter_by(phone=phone.data).first()
         if user:
             raise ValidationError('Phone number already in use. Please choose a different one.')
-        
-
+   
 class UpdateAccountForm(FlaskForm):
     firstname = StringField('First Name', validators=[DataRequired(), Length(min=2, max=100), Regexp("^[a-zåäöA-ZÅÄÖ'\\-]+$", message='Only letters, hyphens and apostrophes allowed')])
     lastname = StringField('Last Name', validators=[DataRequired(), Length(min=2, max=100), Regexp("^[a-zåäöA-ZÅÄÖ'\\-]+$", message='Only letters, hyphens and apostrophes allowed')])

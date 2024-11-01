@@ -284,7 +284,7 @@ def change_email(token):
     return redirect(url_for('auth.profile'))
 
 
-
+# Active or Deactive Users without pagination-OK
 # @auth.route('/activate_users', methods=['GET', 'POST'])
 # @login_required
 # @admin_required
@@ -318,36 +318,36 @@ def change_email(token):
     
 #     return render_template('auth/activate_users.html', users=users)
 
+# Active or Deactive Users with pagination-OK
 @auth.route('/activate_users', methods=['GET', 'POST'])
 @login_required
 @admin_required
 def activate_users():
     page = request.args.get('page', 1, type=int)
-    per_page = 25  # Set the number of users to show per page
-
+    per_page = 25 
     if request.method == 'POST':
         users = request.form.getlist('users')
-        print(f"Form data: {request.form}")  # Debug print
-        print(f"Selected user IDs: {users}")  # Debug print
+        # print(f"Form data: {request.form}")  # Debug print
+        # print(f"Selected user IDs: {users}")  # Debug print
 
         if 'update_button' in request.form:
-            print("Update button clicked")  # Debug print
+            # print("Update button clicked")  # Debug print
             for user_id in users:
                 user = User.query.get(int(user_id))
                 if user:
                     is_active = f'is_active_{user.id}' in request.form
-                    print(f"Before update: {user.email}, is_active: {user.is_active}")  # Debug print
+                    # print(f"Before update: {user.email}, is_active: {user.is_active}")  # Debug print
                     user.is_active = is_active
-                    print(f"After update: {user.email}, is_active: {user.is_active}")  # Debug print
+                    # print(f"After update: {user.email}, is_active: {user.is_active}")  # Debug print
             try:
                 db.session.commit()
                 flash('Users have been updated.', 'success')
             except Exception as e:
                 db.session.rollback()
-                print(f"Database commit failed: {e}")  # Debug print
+                # print(f"Database commit failed: {e}")  # Debug print
                 flash('An error occurred while updating users.', 'danger')
         else:
-            print("No button clicked")  # Debug print
+            # print("No button clicked")  # Debug print
             flash('No action selected.', 'danger')
         return redirect(url_for('auth.activate_users', page=page))
 

@@ -5,7 +5,8 @@
 .flaskenv
 
 # User uploads
-static/uploads/users/
+static/uploads/users/*
+!static/uploads/users/default.jpg
 
 # Python
 *.pyc
