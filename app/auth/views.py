@@ -135,7 +135,8 @@ def reset_password(token):
 @login_required
 def profile():
     user=current_user
-    return render_template('auth/profile.html', title='Profile', user=user)
+    member_since = datetime.now(timezone('Europe/Helsinki')) - user.created_at.replace(tzinfo=timezone('Europe/Helsinki'))
+    return render_template('auth/profile.html', title='Profile', user=user, member_since=member_since.days)
 
 @auth.route('/update_profile', methods=['GET', 'POST'])
 @login_required

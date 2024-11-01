@@ -20,6 +20,7 @@ def img_size(max_size, message=None):
             size = field.data.tell()
             if size > max_size:
                 raise ValidationError(message or 'File size must be less than %d bytes' % max_size)
+            field.data.seek(0) # Seek back to beginning of file
     return _img_size
 
 class RegistrationForm(FlaskForm):
@@ -51,10 +52,9 @@ class UpdateAccountForm(FlaskForm):
     address = StringField('Address', validators=[DataRequired(),Regexp("^[a-zåäöA-ZÅÄÖ0-9'\\- ]+$", message='Only letters, numbers, hyphens and apostrophes allowed')])
     zipcode = StringField('Zip Code', validators=[DataRequired(),Regexp("^[0-9]{5}$", message='Zip code must be 5 digits long')])
     phone = StringField('Phone Number', validators=[DataRequired(),Regexp("^[\d\s\-\+\(\)]{1,15}$", message='Phone number must have at most 15 digits and can contain numbers, spaces, hyphens, plus signs and parentheses')])
-    image = FileField('Update Profile Picture', validators=[FileAllowed(['jpg', 'png', 'jpeg', 'gif'], 'Only jpg, png, jpeg and gif files allowed')])
+    image = FileField('Update Profile Picture', validators=[FileAllowed(['jpg', 'png', 'jpeg', 'gif'], 'Only jpg, png, jpeg and gif files allowed'),img_size(1*1024*1024, message='Image size must be less than 1MB')])
     submit = SubmitField('Update')
     
-        
     def validate_phone(self, phone):
         if phone.data != current_user.phone:
             user = User.query.filter_by(phone=phone.data).first()
