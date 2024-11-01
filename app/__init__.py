@@ -33,8 +33,8 @@ def create_app(config_name='default'):
     mail.init_app(app)
     
     
-    logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', handlers=[logging.FileHandler('app.log'),logging.StreamHandler()])
-    
+    # logging
+    logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',handlers=[logging.FileHandler('app.log'), logging.StreamHandler()])    
 
     from app.auth import auth as auth_blueprint
     app.register_blueprint(auth_blueprint, url_prefix='/auth')

@@ -40,6 +40,7 @@ def login():
         user = User.query.filter_by(email=form.email.data).first()
         if user and user.check_password(form.password.data):
             login_user(user, remember=form.remember.data)
+            current_app.logger.info(f"Login by {user.email}, {user.firstname + user.lastname} at {datetime.now(timezone('US/Eastern')).strftime('%Y-%m-%d %H:%M:%S')}")
             #last_login 
             if current_user.is_authenticated:
                 current_user.ping()

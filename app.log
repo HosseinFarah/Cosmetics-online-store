@@ -1,21 +1,116 @@
-2024-11-01 13:11:23,338 - werkzeug - WARNING -  * Debugger is active!
-2024-11-01 13:11:23,344 - werkzeug - INFO -  * Debugger PIN: 672-526-274
-2024-11-01 13:11:23,502 - werkzeug - INFO - 127.0.0.1 - - [01/Nov/2024 13:11:23] "[32mGET /auth/auth/logout HTTP/1.1[0m" 302 -
-2024-11-01 13:11:23,508 - werkzeug - INFO - 127.0.0.1 - - [01/Nov/2024 13:11:23] "[32mGET /index HTTP/1.1[0m" 302 -
-2024-11-01 13:11:23,550 - werkzeug - INFO - 127.0.0.1 - - [01/Nov/2024 13:11:23] "GET /auth/login?next=/index HTTP/1.1" 200 -
-2024-11-01 13:11:23,984 - werkzeug - INFO - 127.0.0.1 - - [01/Nov/2024 13:11:23] "[36mGET /static/css/styles.css HTTP/1.1[0m" 304 -
-2024-11-01 13:11:23,989 - werkzeug - INFO - 127.0.0.1 - - [01/Nov/2024 13:11:23] "[36mGET /static/js/script.js HTTP/1.1[0m" 304 -
-2024-11-01 13:11:26,079 - werkzeug - INFO - 127.0.0.1 - - [01/Nov/2024 13:11:26] "GET /auth/register HTTP/1.1" 200 -
-2024-11-01 13:11:26,363 - werkzeug - INFO - 127.0.0.1 - - [01/Nov/2024 13:11:26] "[36mGET /static/css/styles.css HTTP/1.1[0m" 304 -
-2024-11-01 13:11:26,423 - werkzeug - INFO - 127.0.0.1 - - [01/Nov/2024 13:11:26] "[36mGET /static/js/script.js HTTP/1.1[0m" 304 -
-2024-11-01 13:12:09,499 - werkzeug - INFO - 127.0.0.1 - - [01/Nov/2024 13:12:09] "POST /auth/register HTTP/1.1" 200 -
-2024-11-01 13:12:09,562 - werkzeug - INFO - 127.0.0.1 - - [01/Nov/2024 13:12:09] "[36mGET /static/css/styles.css HTTP/1.1[0m" 304 -
-2024-11-01 13:12:09,699 - werkzeug - INFO - 127.0.0.1 - - [01/Nov/2024 13:12:09] "[36mGET /static/js/script.js HTTP/1.1[0m" 304 -
-2024-11-01 13:12:52,788 - app - INFO - User test2@test.com registered at 2024-11-01 07:12:52
-2024-11-01 13:12:52,886 - werkzeug - INFO - 127.0.0.1 - - [01/Nov/2024 13:12:52] "[32mPOST /auth/register HTTP/1.1[0m" 302 -
-2024-11-01 13:12:52,893 - werkzeug - INFO - 127.0.0.1 - - [01/Nov/2024 13:12:52] "GET /auth/login HTTP/1.1" 200 -
-2024-11-01 13:12:52,951 - werkzeug - INFO - 127.0.0.1 - - [01/Nov/2024 13:12:52] "[36mGET /static/css/styles.css HTTP/1.1[0m" 304 -
-2024-11-01 13:12:53,266 - werkzeug - INFO - 127.0.0.1 - - [01/Nov/2024 13:12:53] "[36mGET /static/js/script.js HTTP/1.1[0m" 304 -
-2024-11-01 13:13:57,726 - werkzeug - INFO -  * Detected change in 'C:\\projektit\\Flask\\Flask Autentikointi\\app\\auth\\views.py', reloading
-2024-11-01 13:14:00,495 - werkzeug - WARNING -  * Debugger is active!
-2024-11-01 13:14:00,501 - werkzeug - INFO -  * Debugger PIN: 672-526-274
+2024-11-01 14:00:43,213 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2024-11-01 14:00:43,214 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2024-11-01 14:00:43,218 - werkzeug - INFO -  * Restarting with stat
+2024-11-01 14:00:46,838 - werkzeug - WARNING -  * Debugger is active!
+2024-11-01 14:00:46,846 - werkzeug - INFO -  * Debugger PIN: 672-526-274
+2024-11-01 14:01:09,504 - werkzeug - INFO -  * Detected change in 'C:\\projektit\\Flask\\Flask Autentikointi\\app\\auth\\views.py', reloading
+2024-11-01 14:01:09,684 - werkzeug - INFO -  * Restarting with stat
+2024-11-01 14:01:11,075 - werkzeug - WARNING -  * Debugger is active!
+2024-11-01 14:01:11,091 - werkzeug - INFO -  * Debugger PIN: 672-526-274
+2024-11-01 14:01:16,510 - werkzeug - INFO -  * Detected change in 'C:\\projektit\\Flask\\Flask Autentikointi\\app\\auth\\views.py', reloading
+2024-11-01 14:01:16,675 - werkzeug - INFO -  * Restarting with stat
+2024-11-01 14:01:18,232 - werkzeug - WARNING -  * Debugger is active!
+2024-11-01 14:01:18,237 - werkzeug - INFO -  * Debugger PIN: 672-526-274
+2024-11-01 14:01:21,496 - werkzeug - INFO -  * Detected change in 'C:\\projektit\\Flask\\Flask Autentikointi\\app\\auth\\views.py', reloading
+2024-11-01 14:01:21,717 - werkzeug - INFO -  * Restarting with stat
+2024-11-01 14:01:23,143 - werkzeug - WARNING -  * Debugger is active!
+2024-11-01 14:01:23,149 - werkzeug - INFO -  * Debugger PIN: 672-526-274
+2024-11-01 14:01:28,564 - werkzeug - INFO -  * Detected change in 'C:\\projektit\\Flask\\Flask Autentikointi\\app\\auth\\views.py', reloading
+2024-11-01 14:01:28,770 - werkzeug - INFO -  * Restarting with stat
+2024-11-01 14:01:30,429 - werkzeug - WARNING -  * Debugger is active!
+2024-11-01 14:01:30,434 - werkzeug - INFO -  * Debugger PIN: 672-526-274
+2024-11-01 14:01:46,924 - app - INFO - User faren@gmail.com logged in at 2024-11-01 08:01:46
+2024-11-01 14:01:47,096 - werkzeug - INFO - 127.0.0.1 - - [01/Nov/2024 14:01:47] "[32mPOST /auth/login HTTP/1.1[0m" 302 -
+2024-11-01 14:01:47,223 - werkzeug - INFO - 127.0.0.1 - - [01/Nov/2024 14:01:47] "GET /index HTTP/1.1" 200 -
+2024-11-01 14:01:47,384 - werkzeug - INFO - 127.0.0.1 - - [01/Nov/2024 14:01:47] "[36mGET /static/css/styles.css HTTP/1.1[0m" 304 -
+2024-11-01 14:01:47,589 - werkzeug - INFO - 127.0.0.1 - - [01/Nov/2024 14:01:47] "[36mGET /static/js/script.js HTTP/1.1[0m" 304 -
+2024-11-01 14:02:24,628 - werkzeug - INFO -  * Detected change in 'C:\\projektit\\Flask\\Flask Autentikointi\\app\\auth\\views.py', reloading
+2024-11-01 14:02:24,989 - werkzeug - INFO -  * Restarting with stat
+2024-11-01 14:02:27,248 - werkzeug - WARNING -  * Debugger is active!
+2024-11-01 14:02:27,257 - werkzeug - INFO -  * Debugger PIN: 997-863-339
+2024-11-01 14:02:28,421 - werkzeug - INFO -  * Detected change in 'C:\\projektit\\Flask\\Flask Autentikointi\\app\\auth\\views.py', reloading
+2024-11-01 14:02:28,613 - werkzeug - INFO -  * Restarting with stat
+2024-11-01 14:02:30,171 - werkzeug - WARNING -  * Debugger is active!
+2024-11-01 14:02:30,177 - werkzeug - INFO -  * Debugger PIN: 997-863-339
+2024-11-01 14:02:34,717 - werkzeug - INFO -  * Detected change in 'C:\\projektit\\Flask\\Flask Autentikointi\\app\\auth\\views.py', reloading
+2024-11-01 14:02:34,942 - werkzeug - INFO -  * Restarting with stat
+2024-11-01 14:02:36,207 - werkzeug - WARNING -  * Debugger is active!
+2024-11-01 14:02:36,215 - werkzeug - INFO -  * Debugger PIN: 997-863-339
+2024-11-01 14:02:39,562 - werkzeug - INFO -  * Detected change in 'C:\\projektit\\Flask\\Flask Autentikointi\\app\\auth\\views.py', reloading
+2024-11-01 14:02:39,727 - werkzeug - INFO -  * Restarting with stat
+2024-11-01 14:02:40,993 - werkzeug - WARNING -  * Debugger is active!
+2024-11-01 14:02:41,002 - werkzeug - INFO -  * Debugger PIN: 997-863-339
+2024-11-01 14:02:44,310 - werkzeug - INFO -  * Detected change in 'C:\\projektit\\Flask\\Flask Autentikointi\\app\\auth\\views.py', reloading
+2024-11-01 14:02:44,533 - werkzeug - INFO -  * Restarting with stat
+2024-11-01 14:02:45,968 - werkzeug - WARNING -  * Debugger is active!
+2024-11-01 14:02:45,978 - werkzeug - INFO -  * Debugger PIN: 672-526-274
+2024-11-01 14:02:48,238 - werkzeug - INFO -  * Detected change in 'C:\\projektit\\Flask\\Flask Autentikointi\\app\\auth\\views.py', reloading
+2024-11-01 14:02:48,443 - werkzeug - INFO -  * Restarting with stat
+2024-11-01 14:02:49,954 - werkzeug - WARNING -  * Debugger is active!
+2024-11-01 14:02:49,960 - werkzeug - INFO -  * Debugger PIN: 672-526-274
+2024-11-01 14:02:53,307 - werkzeug - INFO -  * Detected change in 'C:\\projektit\\Flask\\Flask Autentikointi\\app\\auth\\views.py', reloading
+2024-11-01 14:02:53,495 - werkzeug - INFO -  * Restarting with stat
+2024-11-01 14:02:55,078 - werkzeug - WARNING -  * Debugger is active!
+2024-11-01 14:02:55,085 - werkzeug - INFO -  * Debugger PIN: 997-863-339
+2024-11-01 14:02:58,361 - werkzeug - INFO -  * Detected change in 'C:\\projektit\\Flask\\Flask Autentikointi\\app\\auth\\views.py', reloading
+2024-11-01 14:02:58,557 - werkzeug - INFO -  * Restarting with stat
+2024-11-01 14:03:00,236 - werkzeug - WARNING -  * Debugger is active!
+2024-11-01 14:03:00,241 - werkzeug - INFO -  * Debugger PIN: 672-526-274
+2024-11-01 14:03:01,454 - werkzeug - INFO -  * Detected change in 'C:\\projektit\\Flask\\Flask Autentikointi\\app\\auth\\views.py', reloading
+2024-11-01 14:03:01,685 - werkzeug - INFO -  * Restarting with stat
+2024-11-01 14:03:03,736 - werkzeug - WARNING -  * Debugger is active!
+2024-11-01 14:03:03,741 - werkzeug - INFO -  * Debugger PIN: 672-526-274
+2024-11-01 14:03:07,077 - werkzeug - INFO -  * Detected change in 'C:\\projektit\\Flask\\Flask Autentikointi\\app\\auth\\views.py', reloading
+2024-11-01 14:03:07,310 - werkzeug - INFO -  * Restarting with stat
+2024-11-01 14:03:09,192 - werkzeug - WARNING -  * Debugger is active!
+2024-11-01 14:03:09,197 - werkzeug - INFO -  * Debugger PIN: 672-526-274
+2024-11-01 14:03:10,897 - werkzeug - INFO - 127.0.0.1 - - [01/Nov/2024 14:03:10] "[32mGET /auth/auth/logout HTTP/1.1[0m" 302 -
+2024-11-01 14:03:10,959 - werkzeug - INFO - 127.0.0.1 - - [01/Nov/2024 14:03:10] "[32mGET /index HTTP/1.1[0m" 302 -
+2024-11-01 14:03:11,217 - werkzeug - INFO - 127.0.0.1 - - [01/Nov/2024 14:03:11] "GET /auth/login?next=/index HTTP/1.1" 200 -
+2024-11-01 14:03:11,409 - werkzeug - INFO - 127.0.0.1 - - [01/Nov/2024 14:03:11] "[36mGET /static/css/styles.css HTTP/1.1[0m" 304 -
+2024-11-01 14:03:11,619 - werkzeug - INFO - 127.0.0.1 - - [01/Nov/2024 14:03:11] "[36mGET /static/js/script.js HTTP/1.1[0m" 304 -
+2024-11-01 14:03:21,441 - werkzeug - INFO - 127.0.0.1 - - [01/Nov/2024 14:03:21] "[35m[1mPOST /auth/login?next=/index HTTP/1.1[0m" 500 -
+2024-11-01 14:03:21,500 - werkzeug - INFO - 127.0.0.1 - - [01/Nov/2024 14:03:21] "GET /auth/login?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+2024-11-01 14:03:21,515 - werkzeug - INFO - 127.0.0.1 - - [01/Nov/2024 14:03:21] "GET /auth/login?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+2024-11-01 14:03:21,943 - werkzeug - INFO - 127.0.0.1 - - [01/Nov/2024 14:03:21] "GET /auth/login?__debugger__=yes&cmd=resource&f=console.png&s=VGUC0UihwOhIxAXvEnpy HTTP/1.1" 200 -
+2024-11-01 14:03:22,194 - werkzeug - INFO - 127.0.0.1 - - [01/Nov/2024 14:03:22] "GET /auth/login?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+2024-11-01 14:03:35,194 - werkzeug - INFO -  * Detected change in 'C:\\projektit\\Flask\\Flask Autentikointi\\app\\auth\\views.py', reloading
+2024-11-01 14:03:35,396 - werkzeug - INFO -  * Restarting with stat
+2024-11-01 14:03:36,909 - werkzeug - WARNING -  * Debugger is active!
+2024-11-01 14:03:36,918 - werkzeug - INFO -  * Debugger PIN: 997-863-339
+2024-11-01 14:03:39,213 - werkzeug - INFO -  * Detected change in 'C:\\projektit\\Flask\\Flask Autentikointi\\app\\auth\\views.py', reloading
+2024-11-01 14:03:39,466 - werkzeug - INFO -  * Restarting with stat
+2024-11-01 14:03:40,932 - werkzeug - WARNING -  * Debugger is active!
+2024-11-01 14:03:40,938 - werkzeug - INFO -  * Debugger PIN: 672-526-274
+2024-11-01 14:03:43,192 - werkzeug - INFO -  * Detected change in 'C:\\projektit\\Flask\\Flask Autentikointi\\app\\auth\\views.py', reloading
+2024-11-01 14:03:43,372 - werkzeug - INFO -  * Restarting with stat
+2024-11-01 14:03:44,995 - werkzeug - WARNING -  * Debugger is active!
+2024-11-01 14:03:45,001 - werkzeug - INFO -  * Debugger PIN: 672-526-274
+2024-11-01 14:03:47,765 - werkzeug - INFO - 127.0.0.1 - - [01/Nov/2024 14:03:47] "GET /auth/login?next=/index HTTP/1.1" 200 -
+2024-11-01 14:03:54,593 - werkzeug - INFO - 127.0.0.1 - - [01/Nov/2024 14:03:54] "[35m[1mPOST /auth/login?next=/index HTTP/1.1[0m" 500 -
+2024-11-01 14:03:54,741 - werkzeug - INFO - 127.0.0.1 - - [01/Nov/2024 14:03:54] "[36mGET /auth/login?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+2024-11-01 14:03:54,987 - werkzeug - INFO - 127.0.0.1 - - [01/Nov/2024 14:03:54] "[36mGET /auth/login?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+2024-11-01 14:03:55,345 - werkzeug - INFO - 127.0.0.1 - - [01/Nov/2024 14:03:55] "GET /auth/login?__debugger__=yes&cmd=resource&f=console.png&s=CS19JuqB5kz8k2Wcmhsi HTTP/1.1" 200 -
+2024-11-01 14:03:55,615 - werkzeug - INFO - 127.0.0.1 - - [01/Nov/2024 14:03:55] "[36mGET /auth/login?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+2024-11-01 14:04:06,685 - werkzeug - INFO -  * Detected change in 'C:\\projektit\\Flask\\Flask Autentikointi\\app\\auth\\views.py', reloading
+2024-11-01 14:04:06,867 - werkzeug - INFO -  * Restarting with stat
+2024-11-01 14:04:08,617 - werkzeug - WARNING -  * Debugger is active!
+2024-11-01 14:04:08,624 - werkzeug - INFO -  * Debugger PIN: 997-863-339
+2024-11-01 14:04:11,007 - werkzeug - INFO -  * Detected change in 'C:\\projektit\\Flask\\Flask Autentikointi\\app\\auth\\views.py', reloading
+2024-11-01 14:04:11,229 - werkzeug - INFO -  * Restarting with stat
+2024-11-01 14:04:12,809 - werkzeug - WARNING -  * Debugger is active!
+2024-11-01 14:04:12,815 - werkzeug - INFO -  * Debugger PIN: 997-863-339
+2024-11-01 14:04:17,172 - werkzeug - INFO -  * Detected change in 'C:\\projektit\\Flask\\Flask Autentikointi\\app\\auth\\views.py', reloading
+2024-11-01 14:04:17,415 - werkzeug - INFO -  * Restarting with stat
+2024-11-01 14:04:18,957 - werkzeug - WARNING -  * Debugger is active!
+2024-11-01 14:04:18,968 - werkzeug - INFO -  * Debugger PIN: 672-526-274
+2024-11-01 14:04:20,240 - werkzeug - INFO -  * Detected change in 'C:\\projektit\\Flask\\Flask Autentikointi\\app\\auth\\views.py', reloading
+2024-11-01 14:04:20,411 - werkzeug - INFO -  * Restarting with stat
+2024-11-01 14:04:21,898 - werkzeug - WARNING -  * Debugger is active!
+2024-11-01 14:04:21,903 - werkzeug - INFO -  * Debugger PIN: 672-526-274
+2024-11-01 14:04:31,901 - app - INFO - Login by faren@gmail.com, FarenFarah at 2024-11-01 08:04:31
+2024-11-01 14:04:32,084 - werkzeug - INFO - 127.0.0.1 - - [01/Nov/2024 14:04:32] "[32mPOST /auth/login?next=/index HTTP/1.1[0m" 302 -
+2024-11-01 14:04:32,147 - werkzeug - INFO - 127.0.0.1 - - [01/Nov/2024 14:04:32] "GET /index HTTP/1.1" 200 -
+2024-11-01 14:04:32,598 - werkzeug - INFO - 127.0.0.1 - - [01/Nov/2024 14:04:32] "[36mGET /static/css/styles.css HTTP/1.1[0m" 304 -
+2024-11-01 14:04:32,599 - werkzeug - INFO - 127.0.0.1 - - [01/Nov/2024 14:04:32] "[36mGET /static/js/script.js HTTP/1.1[0m" 304 -
