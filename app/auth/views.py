@@ -72,6 +72,7 @@ def register():
         db.session.add(user)
         db.session.commit()
         token = user.generate_confirmation_token()
+        current_app.logger.info(f"User {user.email} registered at {datetime.now(timezone('US/Eastern')).strftime('%Y-%m-%d %H:%M:%S')}")
         send_email(user.email, 'Confirm Your Account', 'auth/email/confirm', user=user, token=token)
         flash('A confirmation email has been sent via email.', 'info')
         return redirect(url_for('auth.login'))

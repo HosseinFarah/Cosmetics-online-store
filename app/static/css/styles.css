@@ -6,3 +6,9 @@ body > footer {
   position: sticky;
   top: 100vh;
 }
+
+.previewImage {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+}

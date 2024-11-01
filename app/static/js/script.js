@@ -43,3 +43,33 @@
               });
           });
       })();
+
+
+    //  Preview Selected Image 
+      const remove_img = (element) => {
+        document.querySelector("#" + element).value = "";
+        document.querySelector("#previewImage").src = "";
+        document.querySelector("#previewDiv").classList.add("d-none");
+        document
+          .querySelector("#" + element + "~ .previewDiv")
+          .classList.add("d-none");
+      };
+      const previewImage = document.querySelector("#previewImage");
+      if (previewImage) {
+        const fileInput = document.querySelector("#image");
+        const previewDiv = document.querySelector("#previewDiv");
+    
+        fileInput.addEventListener("change", () => {
+          const file = fileInput.files[0];
+          //console.log(file);
+          const reader = new FileReader();
+          reader.addEventListener("load", () => {
+            previewImage.src = reader.result;
+          });
+    
+          if (file) {
+            previewDiv.classList.remove("d-none");
+            reader.readAsDataURL(file);
+          }
+        });
+      }
