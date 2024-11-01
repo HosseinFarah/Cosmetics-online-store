@@ -10,7 +10,7 @@ class Config:
     TODO_ADMIN = os.environ.get('TODO_ADMIN')
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or os.path.join(basedir, 'site.db')
     UPLOAD_FOLDER = os.path.join(basedir, 'app/static/uploads/users')
-    MAX_CONTRENT_LENGTH = 16 * 1024 * 1024  # 16MB
+    MAX_CONTRENT_LENGTH = 2 * 1024 * 1024  # 2MB
     MAIL_SENDER= os.environ.get('MAIL_SENDER')
     MAIL_SERVER = 'sandbox.smtp.mailtrap.io'
     MAIL_PORT = 587

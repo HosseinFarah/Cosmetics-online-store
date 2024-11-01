@@ -146,6 +146,7 @@ def update_profile():
             image = request.files['image']
             if image:
                 filename = secure_filename(image.filename)
+                filename = f"{current_user.id}_{filename}"
                 image.save(os.path.join(current_app.config['UPLOAD_FOLDER'], filename))
                 current_image_path = os.path.join(current_app.config['UPLOAD_FOLDER'], current_user.image)
                 if current_user.image != 'default.jpg' and current_user.image != filename:
@@ -172,6 +173,7 @@ def update_profile():
         form.address.data = current_user.address
         form.zipcode.data = current_user.zipcode
         form.phone.data = current_user.phone
+        form.image.data = current_user.image
     else:
         print("Form validation failed")
         print(form.errors)
