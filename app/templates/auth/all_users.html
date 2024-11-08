@@ -58,32 +58,32 @@
         <thead>
           <tr>
             <th>
-              <a href="{{ url_for('auth.all_users', sort_by='firstname', order='asc', search=search) }}"><i class="fa fa-sort-up"></i>Firstname</a>
+              <a href="{{ url_for('auth.all_users', sort_by='firstname', order='asc', search=search) }}"><i class="fa fa-sort-up"></i>Fullname</a>
               <a href="{{ url_for('auth.all_users', sort_by='firstname', order='desc', search=search) }}"><i class="fa fa-sort-down"></i></a>
             </th>
+
             <th>
-              <a href="{{ url_for('auth.all_users', sort_by='lastname', order='asc', search=search) }}"><i class="fa fa-sort-up"></i>Lastname</a>
-              <a href="{{ url_for('auth.all_users', sort_by='lastname', order='desc', search=search) }}"><i class="fa fa-sort-down"></i></a>
-            </th>
-            <th>
-              <a href="{{ url_for('auth.all_users', sort_by='email', order='asc', search=search) }}"><i class="fa fa-sort-up"></i>Email</a>
-              <a href="{{ url_for('auth.all_users', sort_by='email', order='desc', search=search) }}"><i class="fa fa-sort-down"></i></a>
+              Email
             </th>
             <th>
               <a href="{{ url_for('auth.all_users', sort_by='role_id', order='asc', search=search) }}"><i class="fa fa-sort-up"></i>Role</a>
               <a href="{{ url_for('auth.all_users', sort_by='role_id', order='desc', search=search) }}"><i class="fa fa-sort-down"></i></a>
             </th>
             <th>
-              <a href="{{ url_for('auth.all_users', sort_by='phone', order='asc', search=search) }}"><i class="fa fa-sort-up"></i>Phone</a>
-              <a href="{{ url_for('auth.all_users', sort_by='phone', order='desc', search=search) }}"><i class="fa fa-sort-down"></i></a>
+              Phone
             </th>
             <th>
-              <a href="{{ url_for('auth.all_users', sort_by='address', order='asc', search=search) }}"><i class="fa fa-sort-up"></i>Address</a>
-              <a href="{{ url_for('auth.all_users', sort_by='address', order='desc', search=search) }}"><i class="fa fa-sort-down"></i></a>
+              <a href="{{ url_for('auth.all_users', sort_by='city', order='asc', search=search) }}"><i class="fa fa-sort-up"></i>City</a>
+              <a href="{{ url_for('auth.all_users', sort_by='city', order='desc', search=search) }}"><i class="fa fa-sort-down"></i></a>
             </th>
             <th>
-              <a href="{{ url_for('auth.all_users', sort_by='zipcode', order='asc', search=search) }}"><i class="fa fa-sort-up"></i>Zipcode</a>
-              <a href="{{ url_for('auth.all_users', sort_by='zipcode', order='desc', search=search) }}"><i class="fa fa-sort-down"></i></a>
+              Address
+            </th>
+            <th>
+              Zipcode
+            </th>
+            <th>
+              Active
             </th>
             <th>Action</th>
           </tr>
@@ -91,20 +91,24 @@
         <tbody>
           {% for user in users %}
           <tr>
-            <td>{{ user.firstname }}</td>
-            <td>{{ user.lastname }}</td>
+            <td>{{ user.firstname }} {{ user.lastname }}</td>
             <td>{{ user.email }}</td>
             <td>{{ user.role }}</td>
             <td>{{ user.phone }}</td>
+            <td>{{ user.city }}</td>
             <td>{{ user.address }}</td>
             <td>{{ user.zipcode }}</td>
+            <td>{{ user.is_active }}</td>
             <td>
+              {% if user.is_administrator() %}
+              {% else %}
               <a
                 href="{{ url_for('auth.edit_user_admin', id=user.id) }}"
-                class="btn btn-primary"
-                ><i class="fa fa-edit"></i
+                class="text-primary"
+                ><i class="fa fa-edit fs-6"></i
               ></a>
-              <a href="{{ url_for('auth.delete_user_admin', id=user.id) }}"class="btn btn-danger" onclick="return confirm('Are you sure you want to delete user: {{ user.firstname }} {{ user.lastname }}?')"><i class="fa fa-trash"></i></a>
+              <a href="{{ url_for('auth.delete_user_admin', id=user.id) }}"class="text-danger" onclick="return confirm('Are you sure you want to delete user: {{ user.firstname }} {{ user.lastname }}?')"><i class="fa fa-trash fs-6"></i></a>
+              {% endif %}
             </td>
           </tr>
           {% endfor %}

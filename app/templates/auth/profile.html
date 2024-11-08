@@ -14,11 +14,13 @@
                         <p><strong class="text-info"><i class="fa fa-envelope "></i> Email:</strong> {{ user.email }}</p>
                         <p><strong class="text-info"><i class="fa fa-phone "></i> Phone:</strong> {{ user.phone }}</p>
                         <p><strong class="text-info"><i class="fa fa-user "></i> Role:</strong> {{ user.role.name }}</p>
+                        <p><strong class="text-info"><i class="fa fa-city "></i> City:</strong> {{ user.city }}</p>
                         <p><strong class="text-info"><i class="fa fa-map-marker "></i> Address:</strong> {{ user.address }}</p>
                         <p><strong class="text-info"><i class="fa fa-shipping-fast"></i> Zipcode:</strong> {{ user.zipcode }}</p>
                     </div>
                     <div class="card-footer">
                         <p><strong>Last Login:</strong> {{ user.last_login}}</p>
+                        <p><strong>Member Since: {{ member_since }} </strong> Days ago</p>
                         <a href="{{ url_for('auth.update_profile') }}" class="btn btn-primary"><i class="fa fa-edit"></i> Edit Profile</a>
                         <a href="{{ url_for('auth.update_password') }}" class="btn btn-warning"><i class="fa fa-edit"></i> Update Password</a>
                         <a href="{{ url_for('auth.reset_email_request') }}" class="btn btn-warning"><i class="fa fa-edit"></i> Update Email</a>

@@ -47,6 +47,17 @@
           <div class="text-danger">{{ error }}</div>
           {% endfor %}
         </div>
+
+        <div class="form-group">
+          {{ form.city.label(class="form-label") }}
+          {{ form.city(class="form-control" ,id = "city") }}
+
+          <div class="invalid-feedback">Please enter your city.</div>
+          {% for error in form.city.errors %}
+          <span class="text-danger">{{ error }}</span>
+          {% endfor %}
+        </div>
+
         <div class="form-group">
           {{ form.address.label(class="control-label") }} {{
           form.address(class="form-control") }} {% for error in
@@ -68,6 +79,22 @@
           <div class="text-danger">{{ error }}</div>
           {% endfor %}
         </div>
+        <!-- Preview Selected Image -->
+        <div class="previewDiv mt-1 col-sm-8 d-none" id="previewDiv">
+          <img
+            class="previewImage rounded mt-2"
+            src=""
+            id="previewImage"
+          />
+          <button
+            type="button"
+            class="btn btn-outline-secondary btn-sm"
+            onclick="remove_img('image')"
+          >
+            <i class="fa fa-trash"></i>
+          </button>
+        </div>
+
         {{form.submit(class="btn btn-primary mt-3")}}
       </form>
     </div>

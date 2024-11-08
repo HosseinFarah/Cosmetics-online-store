@@ -10,7 +10,7 @@ class Config:
     TODO_ADMIN = os.environ.get('TODO_ADMIN')
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or os.path.join(basedir, 'site.db')
     UPLOAD_FOLDER = os.path.join(basedir, 'app/static/uploads/users')
-    MAX_CONTRENT_LENGTH = 16 * 1024 * 1024  # 16MB
+    MAX_CONTRENT_LENGTH = 2 * 1024 * 1024  # 2MB
     MAIL_SENDER= os.environ.get('MAIL_SENDER')
     MAIL_SERVER = 'sandbox.smtp.mailtrap.io'
     MAIL_PORT = 587
@@ -21,6 +21,8 @@ class Config:
     FLASKY_MAIL_SENDER = 'Todo-APP Admin <' + os.environ.get('MAIL_SENDER') + '>'
     #for role 
     ADMIN_EMAIL= os.environ.get('ADMIN_EMAIL')
+    JSON_FOLDER= os.path.join(basedir, 'app/static/js')
+    PRODUCT_IMAGE_FOLDER = os.environ.get('PRODUCT_IMAGE_FOLDER') or os.path.join(basedir, 'app/static/uploads/products')
 
     @staticmethod
     def init_app(app):
@@ -39,16 +41,17 @@ class TestingConfig(Config):
     TESTING = True
     SQLALCHEMY_DATABASE_URI = os.environ.get('TEST_DATABASE_URL') or os.path.join(basedir, 'siteTest.db')
     
-class ProductionConfig(Config):
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or os.path.join(basedir, 'site.db')
-    
 class XAMPPConfig(Config):
+    DEBUG = True
     DB_SERVER = os.environ.get('DB_SERVER') or 'localhost'
     DB_USER= os.environ.get('DB_USER') or 'root'
     DB_PASSWORD = os.environ.get('DB_PASSWORD') or ''
-    DB_NAME = os.environ.get('DB_NAME') or 'flask_todos'
+    DB_NAME = os.environ.get('DB_NAME') or 'kosmetiikka_db'
     DB_PORT = os.environ.get('DB_PORT') or '3306'
     SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://' + DB_USER + ':' + DB_PASSWORD + '@' + DB_SERVER + ':' + DB_PORT + '/' + DB_NAME
+    
+class ProductionConfig(XAMPPConfig):
+    DEBUG = False
     
 config = {
     'development': DevelopmentConfig,

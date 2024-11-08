@@ -1,4 +1,4 @@
-from flask import render_template, redirect, url_for, request, flash, current_app
+from flask import render_template, redirect, url_for, request, flash, current_app, jsonify
 from flask_login import login_user, logout_user, login_required, current_user
 from app.models import User
 from app import login, db
@@ -9,9 +9,10 @@ import os
 from app.email import send_email
 from pytz import timezone
 from datetime import datetime
-from ..decorators import permission_required, admin_required
+from ..decorators import permission_required, admin_required, debugger
 from app.models import Role
-
+from sqlalchemy import func
+import json
 
 @login.user_loader
 def load_user(id):
@@ -31,6 +32,14 @@ def unconfirmed():
     return render_template('auth/unconfirmed.html')
 
 
+@auth.route('/cities', methods=['GET', 'POST'])
+def get_cities():
+    cities_file = os.path.join(current_app.config['JSON_FOLDER'], 'cities.json')
+    with open(cities_file,encoding='utf-8') as f:
+        cities = json.load(f)
+    return jsonify(cities)
+
+
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
@@ -40,8 +49,13 @@ def login():
         user = User.query.filter_by(email=form.email.data).first()
         if user and user.check_password(form.password.data):
             login_user(user, remember=form.remember.data)
+            current_app.logger.info(f"Login by {user.email}, {user.firstname + user.lastname} at {datetime.now(timezone('US/Eastern')).strftime('%Y-%m-%d %H:%M:%S')}")
             #last_login 
-            current_user.ping()
+            if current_user.is_authenticated:
+                current_user.ping()
+            if not current_user.is_active or current_user.is_anonymous:
+                flash('Your account has been disabled. Please contact the administrator.', 'danger')
+                return redirect(url_for('auth.logout'))
             next_page = request.args.get('next')
             if next_page and not next_page.startswith('/'):
                 next_page = None
@@ -59,6 +73,11 @@ def register():
     if current_user.is_authenticated:
         return redirect(url_for('main.index'))
     form = RegistrationForm()
+     # Populate city choices
+    cities_file = os.path.join(current_app.config['JSON_FOLDER'], 'cities.json')
+    with open(cities_file, encoding='utf-8') as f:
+        cities = json.load(f)
+    form.city.choices = [(city, city) for city in cities]
     if form.validate_on_submit():
         image = request.files['image']
         if image:
@@ -68,6 +87,7 @@ def register():
         db.session.add(user)
         db.session.commit()
         token = user.generate_confirmation_token()
+        current_app.logger.info(f"User {user.email} registered at {datetime.now(timezone('US/Eastern')).strftime('%Y-%m-%d %H:%M:%S')}")
         send_email(user.email, 'Confirm Your Account', 'auth/email/confirm', user=user, token=token)
         flash('A confirmation email has been sent via email.', 'info')
         return redirect(url_for('auth.login'))
@@ -104,9 +124,12 @@ def reset_password_request():
         if user:
             token = user.generate_reset_token()
             send_email(user.email, 'Reset Your Password', 'auth/email/reset_password', user=user, token=token)
-        flash('An email with instructions to reset your password has been sent to you.', 'info')
+            flash('An email with instructions to reset your password has been sent to you.', 'info')
+        else:
+            flash('Something went wrong. Please try again.', 'danger')
         return redirect(url_for('auth.login'))
-    return render_template('auth/reset_password_request.html', title='Reset Password', form=form)
+    return render_template('auth/reset_password_request.html', form=form)
+
     
 @auth.route('/reset_password/<token>', methods=['GET', 'POST'])
 def reset_password(token):
@@ -126,30 +149,38 @@ def reset_password(token):
 @login_required
 def profile():
     user=current_user
-    return render_template('auth/profile.html', title='Profile', user=user)
+    member_since = datetime.now(timezone('Europe/Helsinki')) - user.created_at.replace(tzinfo=timezone('Europe/Helsinki'))
+    return render_template('auth/profile.html', title='Profile', user=user, member_since=member_since.days)
 
 @auth.route('/update_profile', methods=['GET', 'POST'])
 @login_required
 def update_profile():
+    
     image=None
     form = UpdateAccountForm()
+    # Populate city choices
+    cities_file = os.path.join(current_app.config['JSON_FOLDER'], 'cities.json')
+    with open(cities_file, encoding='utf-8') as f:
+        cities = json.load(f)
+        form.city.choices = [(city, city) for city in cities]
     if form.validate_on_submit():
-        print("Form validated successfully")
         if request.files['image']:
             image = request.files['image']
             if image:
                 filename = secure_filename(image.filename)
+                filename = f"{current_user.id}_{filename}"
                 image.save(os.path.join(current_app.config['UPLOAD_FOLDER'], filename))
                 current_image_path = os.path.join(current_app.config['UPLOAD_FOLDER'], current_user.image)
                 if current_user.image != 'default.jpg' and current_user.image != filename:
                     if os.path.exists(current_image_path):
-                        os.remove(current_image_path)
+                        os.remove(current_image_path)         
                 current_user.image = filename
         current_user.firstname = form.firstname.data
         current_user.lastname = form.lastname.data
         current_user.address = form.address.data
         current_user.zipcode = form.zipcode.data
         current_user.phone = form.phone.data
+        current_user.city = form.city.data
         try:
             db.session.commit()
             print("Database commit successful")
@@ -160,11 +191,13 @@ def update_profile():
             flash('An error occurred while updating your profile.', 'danger')
         return redirect(url_for('auth.profile'))
     elif request.method == 'GET':
+        form.city.data = current_user.city
         form.firstname.data = current_user.firstname
         form.lastname.data = current_user.lastname
         form.address.data = current_user.address
         form.zipcode.data = current_user.zipcode
         form.phone.data = current_user.phone
+        form.image.data = current_user.image
     else:
         print("Form validation failed")
         print(form.errors)
@@ -180,7 +213,7 @@ def all_users():
     per_page = 15
     all_users_count = User.query.count()
     if search:
-        query = User.query.filter(User.firstname.like(f'%{search}%') | User.lastname.like(f'%{search}%') | User.email.like(f'%{search}%')| User.phone.like(f'%{search}%'))
+        query = User.query.filter(User.firstname.like(f'%{search}%') | User.lastname.like(f'%{search}%') | User.email.like(f'%{search}%')| User.phone.like(f'%{search}%')| User.city.like(f'%{search}%')| User.address.like(f'%{search}%')| User.zipcode.like(f'%{search}%')| User.role.has(Role.name.like(f'%{search}%'))| User.firstname+User.lastname.like(f'%{search}%')) 
     else:
         query = User.query
 
@@ -201,15 +234,24 @@ def all_users():
 def edit_user_admin(id):
     user = User.query.get(id)
     form = UpdateUserByAdmin()
+    cities_file = os.path.join(current_app.config['JSON_FOLDER'], 'cities.json')
+    with open(cities_file, encoding='utf-8') as f:
+        cities = json.load(f)
+        form.city.choices = [(city, city) for city in cities]
     if form.validate_on_submit():
         user.firstname = form.firstname.data
         user.lastname = form.lastname.data
+        user.city = form.city.data
         user.address = form.address.data
         user.zipcode = form.zipcode.data
         role = Role.query.filter_by(name=form.role.data).first()
+        user.is_active = form.is_active.data
         user.role = role
         
         try:
+            # for key,value in vars(user).items():
+            #     if key in ['firstname','lastname','address','zipcode','is_active','role']:
+            #         print(f"{key} : {value}")
             db.session.commit()
             flash('User has been updated.', 'success')
         except Exception as e:
@@ -220,9 +262,11 @@ def edit_user_admin(id):
     elif request.method == 'GET':
         form.firstname.data = user.firstname
         form.lastname.data = user.lastname
+        form.city.data = user.city
         form.address.data = user.address
         form.zipcode.data = user.zipcode
         form.role.data = user.role.name if user.role else 'User'
+        form.is_active.data = user.is_active
     return render_template('auth/edit_user_admin.html', form=form, user=user)
 
 
@@ -275,4 +319,75 @@ def change_email(token):
     return redirect(url_for('auth.profile'))
 
 
-        
+# Active or Deactive Users without pagination-OK
+# @auth.route('/activate_users', methods=['GET', 'POST'])
+# @login_required
+# @admin_required
+# def activate_users():
+#     if request.method == 'POST':
+#         users = request.form.getlist('users')
+#         print(f"Form data: {request.form}")  # Debug print
+#         print(f"Selected user IDs: {users}")  # Debug print
+
+#         if 'update_button' in request.form:
+#             print("Update button clicked")  # Debug print
+#             for user in User.query.all():
+#                 is_active = f'is_active_{user.id}' in request.form
+#                 print(f"Before update: {user.email}, is_active: {user.is_active}")  # Debug print
+#                 user.is_active = is_active
+#                 print(f"After update: {user.email}, is_active: {user.is_active}")  # Debug print
+#             try:
+#                 db.session.commit()
+#                 flash('Users have been updated.', 'success')
+#             except Exception as e:
+#                 db.session.rollback()
+#                 print(f"Database commit failed: {e}")  # Debug print
+#                 flash('An error occurred while updating users.', 'danger')
+#         else:
+#             print("No button clicked")  # Debug print
+#             flash('No action selected.', 'danger')
+#         return redirect(url_for('auth.activate_users'))
+    
+#     # Handle GET request
+#     users = User.query.all()
+    
+#     return render_template('auth/activate_users.html', users=users)
+
+# Active or Deactive Users with pagination-OK
+@auth.route('/activate_users', methods=['GET', 'POST'])
+@login_required
+@admin_required
+def activate_users():
+    page = request.args.get('page', 1, type=int)
+    per_page = 25 
+    if request.method == 'POST':
+        users = request.form.getlist('users')
+        # print(f"Form data: {request.form}")  # Debug print
+        # print(f"Selected user IDs: {users}")  # Debug print
+
+        if 'update_button' in request.form:
+            # print("Update button clicked")  # Debug print
+            for user_id in users:
+                user = User.query.get(int(user_id))
+                if user:
+                    is_active = f'is_active_{user.id}' in request.form
+                    # print(f"Before update: {user.email}, is_active: {user.is_active}")  # Debug print
+                    user.is_active = is_active
+                    # print(f"After update: {user.email}, is_active: {user.is_active}")  # Debug print
+            try:
+                db.session.commit()
+                flash('Users have been updated.', 'success')
+            except Exception as e:
+                db.session.rollback()
+                # print(f"Database commit failed: {e}")  # Debug print
+                flash('An error occurred while updating users.', 'danger')
+        else:
+            # print("No button clicked")  # Debug print
+            flash('No action selected.', 'danger')
+        return redirect(url_for('auth.activate_users', page=page))
+
+    # Handle GET request with pagination
+    pagination = User.query.paginate(page=page, per_page=per_page)
+    users = pagination.items
+
+    return render_template('auth/activate_users.html', users=users, pagination=pagination)

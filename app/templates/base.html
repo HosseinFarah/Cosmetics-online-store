@@ -35,10 +35,21 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link{{'active' if request.endpoint =='products.basket'else ''}}" href="{{ url_for('products.basket') }}"
+                                ><i class="fas fa-shopping-basket"></i><span class="{{ 'badge bg-success' if session['basket']|length else 'badge bg-danger' }}">
+                                    {{ session['basket']|length }}
+                                </span>
+                            </a>
+                        </li>
                         {% if current_user.is_administrator()%}
                         <li class="nav-item">
                             <a class="nav-link" href="{{ url_for('auth.all_users') }}"
                                 >All Users</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('auth.activate_users') }}"
+                                >Active Users</a>
                         </li>
                         {% endif %}
                         {% if current_user.is_authenticated %}
@@ -64,6 +75,7 @@
                                 >Register</a
                             >
                         </li>
+                       
                         {% endif %}
                     </ul>
                 </div>
@@ -78,6 +90,7 @@
     </head>
     <body>
         <div class="container">
+            <!-- category and message for flash messages -->
             <div class="col-md-6 mt-1">
                 {%for category, message in get_flashed_messages(with_categories=true)%}
                 {% set category = 'danger' if category == 'error' else category %}

@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, session
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
@@ -7,6 +7,7 @@ from flask_bootstrap import Bootstrap
 from flask_wtf.csrf import CSRFProtect
 from config import config
 from flask_mail import Mail
+import logging
 
 db = SQLAlchemy()
 migrate = Migrate()
@@ -30,6 +31,10 @@ def create_app(config_name='default'):
     bootstrap.init_app(app)
     csrf.init_app(app)
     mail.init_app(app)
+    
+    
+    # logging
+    logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',handlers=[logging.FileHandler('app.log'), logging.StreamHandler()])    
 
     from app.auth import auth as auth_blueprint
     app.register_blueprint(auth_blueprint, url_prefix='/auth')
@@ -44,5 +49,7 @@ def create_app(config_name='default'):
     from app.todos import todos as todos_blueprint
     app.register_blueprint(todos_blueprint, url_prefix='/todos')
     
+    from app.products import products as products_blueprint
+    app.register_blueprint(products_blueprint, url_prefix='/products')
 
     return app
