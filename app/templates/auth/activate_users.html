@@ -20,7 +20,7 @@
           <tr>
             <td>{{ user.firstname }} {{ user.lastname }}</td>
             <td>{{ user.email }}</td>
-            {% if user.role_id == 5 %}
+            {% if user.is_administrator() %}
             <td><i class="fas fa-user-shield text-success"></i></td>
             {% else %}
             <td>
