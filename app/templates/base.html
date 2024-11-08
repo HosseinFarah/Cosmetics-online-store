@@ -35,6 +35,13 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link{{'active' if request.endpoint =='products.basket'else ''}}" href="{{ url_for('products.basket') }}"
+                                ><i class="fas fa-shopping-basket"></i><span class="{{ 'badge bg-success' if session['basket']|length else 'badge bg-danger' }}">
+                                    {{ session['basket']|length }}
+                                </span>
+                            </a>
+                        </li>
                         {% if current_user.is_administrator()%}
                         <li class="nav-item">
                             <a class="nav-link" href="{{ url_for('auth.all_users') }}"
@@ -68,6 +75,7 @@
                                 >Register</a
                             >
                         </li>
+                       
                         {% endif %}
                     </ul>
                 </div>

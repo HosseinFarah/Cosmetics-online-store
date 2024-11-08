@@ -18,11 +18,12 @@ class User(UserMixin, db.Model):
     phone=db.Column(db.String(20), nullable=False, unique=True,index=True)
     address=db.Column(db.String(255), nullable=False)
     zipcode=db.Column(db.String(15), nullable=False)
+    city=db.Column(db.String(100), nullable=False)
     image = db.Column(db.String(255), nullable=False, default='default.jpg')
     created_at = db.Column(db.DateTime, default=datetime.now(timezone('Europe/Helsinki')))
     updated_at = db.Column(db.DateTime, default=datetime.now(timezone('Europe/Helsinki')))
     is_active = db.Column(db.Boolean, default=True,server_default=sa.sql.expression.true())
-    is_confirmed = db.Column(db.Boolean, default=False),
+    is_confirmed = db.Column(db.Boolean, default=False)
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'), default=1)
     user_todos = db.relationship('Todo', backref='user', lazy='dynamic')
     last_login = db.Column(db.DateTime, default=datetime.now(timezone('Europe/Helsinki')))
@@ -139,7 +140,7 @@ class User(UserMixin, db.Model):
 
  #for role    
 class Permission:
-    Follow = 1
+    FOLLOW = 1
     COMMENT = 2
     WRITE = 4
     MODERATE = 8
@@ -151,8 +152,7 @@ class Role(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     default = db.Column(db.Boolean, default=False, index=True)
-    permissions = db.Column(db.Integer, default=0, index=True)
-    
+    permissions = db.Column(db.Integer, default=0, index=True)    
     
     def __repr__(self) -> str:
         return self.name
@@ -208,3 +208,17 @@ class Todo(db.Model):
     def __repr__(self) -> str:
         return '<Todo %r>' % self.title
 
+
+class Product(db.Model):
+    __tablename__ = 'products'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(255), nullable=False, index=True)
+    price = db.Column(db.Float, nullable=False)
+    image = db.Column(db.String(255), nullable=False)
+    pictures = db.Column(db.Text, nullable=False)
+    description = db.Column(db.Text, nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.now(timezone('Europe/Helsinki')))
+    updated_at = db.Column(db.DateTime, default=datetime.now(timezone('Europe/Helsinki')))
+    
+    def __repr__(self) -> str:
+        return '<Product %r>' % self.name

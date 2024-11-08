@@ -1,0 +1,24 @@
+<!-- create csrf error template -->
+<!-- create csrf_error.html in app/templates/errors -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CSRF Error</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+</head>
+<body>
+  <div class="container mt-5">
+    <div class="alert alert-danger" role="alert">
+      <h4 class="alert-heading">CSRF Error</h4>
+      <p>CSRF token is missing or incorrect. Please try again.</p>
+      <h5>{{ reason }}</h5>
+      <hr>
+
+      <p class="mb-0">Click <a href="{{ url_for('auth.login') }}">here</a> to go back to the login page.</p>
+    </div>
+  </div>
+</body>
+</html>

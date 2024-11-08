@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, session
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
@@ -49,5 +49,7 @@ def create_app(config_name='default'):
     from app.todos import todos as todos_blueprint
     app.register_blueprint(todos_blueprint, url_prefix='/todos')
     
+    from app.products import products as products_blueprint
+    app.register_blueprint(products_blueprint, url_prefix='/products')
 
     return app

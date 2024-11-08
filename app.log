@@ -1,9 +1,0 @@
-2024-11-04 09:13:22,456 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
- * Running on http://127.0.0.1:5000
-2024-11-04 09:13:22,458 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
-2024-11-04 09:13:22,467 - werkzeug - INFO -  * Restarting with stat
-2024-11-04 09:13:26,268 - werkzeug - WARNING -  * Debugger is active!
-2024-11-04 09:13:26,278 - werkzeug - INFO -  * Debugger PIN: 672-526-274
-2024-11-04 09:13:49,055 - werkzeug - INFO - 127.0.0.1 - - [04/Nov/2024 09:13:49] "GET /auth/login HTTP/1.1" 200 -
-2024-11-04 09:13:49,457 - werkzeug - INFO - 127.0.0.1 - - [04/Nov/2024 09:13:49] "[36mGET /static/css/styles.css HTTP/1.1[0m" 304 -
-2024-11-04 09:13:49,840 - werkzeug - INFO - 127.0.0.1 - - [04/Nov/2024 09:13:49] "[36mGET /static/js/script.js HTTP/1.1[0m" 304 -

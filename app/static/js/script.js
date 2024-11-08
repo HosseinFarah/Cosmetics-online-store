@@ -11,8 +11,14 @@
       
           // Define regex patterns for validation
           const patterns = {
-              email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, // Simple email regex pattern
-              password: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{}|;:'",.<>?/])[A-Za-z\d!@#$%^&*()_+\-=\[\]{}|;:'",.<>?/]{8,}$/ // Password pattern: at least 8 chars, one uppercase, one lowercase, one number, one special character
+              email: /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/, // Email pattern
+              password: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{}|;:'",.<>?/])[A-Za-z\d!@#$%^&*()_+\-=\[\]{}|;:'",.<>?/]{8,}$/, // Password pattern: at least 8 chars, one uppercase, one lowercase, one number, one special character
+              firstname:/^[a-zåäöA-ZÅÄÖ'\-]+$/,
+              lastname:/^[a-zåäöA-ZÅÄÖ'\-]+$/,
+              phone:/^[0-9]{7,15}$/,
+              address:/^[a-zåäöA-ZÅÄÖ0-9'\- ]+$/,
+              city:/^[a-zåäöA-ZÅÄÖ'\-]+$/,
+              zip:/^[0-9]{5}$/,
           };
       
           // Apply validation on input fields
@@ -73,3 +79,19 @@
           }
         });
       }
+
+// get the cities from the server and populate the city select element
+      document.addEventListener('DOMContentLoaded', function() {
+        fetch('/auth/cities')
+            .then(response => response.json())
+            .then(data => {
+                const citySelect = document.getElementById('city');
+                data.forEach(city => {
+                    const option = document.createElement('option');
+                    option.value = city;
+                    option.textContent = city;
+                    citySelect.appendChild(option);
+                });
+            })
+            .catch(error => console.error('Error fetching cities:', error));
+    });

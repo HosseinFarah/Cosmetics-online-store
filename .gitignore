@@ -3,11 +3,12 @@
 # Environment variables
 .env
 .flaskenv
-
+*.log
+app.log
 # User uploads
 /static/uploads/users/*
 !/static/uploads/users/default.jpg
-
+/static/uploads/products/*
 # Python
 *.pyc
 __pycache__/
@@ -70,6 +71,3 @@ coverage.xml
 Thumbs.db
 ehthumbs.db
 
-
-app.log
-*.log

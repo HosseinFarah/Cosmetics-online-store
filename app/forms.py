@@ -5,6 +5,7 @@ from app.models import User, Todo
 from flask_login import current_user
 from flask_wtf.file import FileAllowed, FileRequired
 import re
+import os
 
 class LoginForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
@@ -16,7 +17,7 @@ class LoginForm(FlaskForm):
 def img_size(max_size, message=None):
     def _img_size(form, field):
         if field.data:
-            field.data.seek(0, 2)  # Seek to end of file
+            field.data.seek(0, os.SEEK_END) # Seek to end of file
             size = field.data.tell()
             if size > max_size:
                 raise ValidationError(message or 'File size must be less than %d bytes' % max_size)
@@ -31,6 +32,7 @@ class RegistrationForm(FlaskForm):
     confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
     address = StringField('Address', validators=[DataRequired(),Regexp("^[a-zåäöA-ZÅÄÖ0-9'\\- ]+$", message='Only letters, numbers, hyphens and apostrophes allowed')])
     zipcode = StringField('Zip Code', validators=[DataRequired(),Regexp("^[0-9]{5}$", message='Zip code must be 5 digits long')])
+    city = SelectField('City', choices=[], validators=[DataRequired()])
     # define phone number Regex pattern accepted numbers and - or space and + and () max 15 digits
     phone = StringField('Phone Number', validators=[DataRequired(),Regexp("^[\d\s\-\+\(\)]{1,15}$", message='Phone number must have at most 15 digits and can contain numbers, spaces, hyphens, plus signs and parentheses')])
     image = FileField('Profile Picture', validators=[FileAllowed(['jpg', 'png', 'jpeg', 'gif'], 'Only jpg, png, jpeg and gif files allowed'), FileRequired(),img_size(1*1024*1024, message='Image size must be less than 1MB')])
@@ -49,6 +51,7 @@ class RegistrationForm(FlaskForm):
 class UpdateAccountForm(FlaskForm):
     firstname = StringField('First Name', validators=[DataRequired(), Length(min=2, max=100), Regexp("^[a-zåäöA-ZÅÄÖ'\\-]+$", message='Only letters, hyphens and apostrophes allowed')])
     lastname = StringField('Last Name', validators=[DataRequired(), Length(min=2, max=100), Regexp("^[a-zåäöA-ZÅÄÖ'\\-]+$", message='Only letters, hyphens and apostrophes allowed')])
+    city = SelectField('City', choices=[], validators=[DataRequired()])
     address = StringField('Address', validators=[DataRequired(),Regexp("^[a-zåäöA-ZÅÄÖ0-9'\\- ]+$", message='Only letters, numbers, hyphens and apostrophes allowed')])
     zipcode = StringField('Zip Code', validators=[DataRequired(),Regexp("^[0-9]{5}$", message='Zip code must be 5 digits long')])
     phone = StringField('Phone Number', validators=[DataRequired(),Regexp("^[\d\s\-\+\(\)]{1,15}$", message='Phone number must have at most 15 digits and can contain numbers, spaces, hyphens, plus signs and parentheses')])
@@ -116,6 +119,7 @@ class ResetEmailForm(FlaskForm):
 class UpdateUserByAdmin(FlaskForm):
     firstname = StringField('First Name', validators=[DataRequired(), Length(min=2, max=100), Regexp("^[a-zåäöA-ZÅÄÖ'\\-]+$", message='Only letters, hyphens and apostrophes allowed')])
     lastname = StringField('Last Name', validators=[DataRequired(), Length(min=2, max=100), Regexp("^[a-zåäöA-ZÅÄÖ'\\-]+$", message='Only letters, hyphens and apostrophes allowed')])
+    city = SelectField('City', choices=[], validators=[DataRequired()])
     address = StringField('Address', validators=[DataRequired(),Regexp("^[a-zåäöA-ZÅÄÖ0-9'\\- ]+$", message='Only letters, numbers, hyphens and apostrophes allowed')])
     zipcode = StringField('Zip Code', validators=[DataRequired(),Regexp("^[0-9]{5}$", message='Zip code must be 5 digits long')])
     role = SelectField('Role', choices=[('User', 'User'), ('Moderator', 'Moderator'), ('Administrator', 'Administrator')], validators=[DataRequired()])

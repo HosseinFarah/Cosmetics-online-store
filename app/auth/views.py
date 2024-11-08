@@ -1,4 +1,4 @@
-from flask import render_template, redirect, url_for, request, flash, current_app
+from flask import render_template, redirect, url_for, request, flash, current_app, jsonify
 from flask_login import login_user, logout_user, login_required, current_user
 from app.models import User
 from app import login, db
@@ -9,9 +9,10 @@ import os
 from app.email import send_email
 from pytz import timezone
 from datetime import datetime
-from ..decorators import permission_required, admin_required
+from ..decorators import permission_required, admin_required, debugger
 from app.models import Role
 from sqlalchemy import func
+import json
 
 @login.user_loader
 def load_user(id):
@@ -29,6 +30,14 @@ def unconfirmed():
     if current_user.is_anonymous or current_user.is_confirmed:
         return redirect(url_for('main.index'))
     return render_template('auth/unconfirmed.html')
+
+
+@auth.route('/cities', methods=['GET', 'POST'])
+def get_cities():
+    cities_file = os.path.join(current_app.config['JSON_FOLDER'], 'cities.json')
+    with open(cities_file,encoding='utf-8') as f:
+        cities = json.load(f)
+    return jsonify(cities)
 
 
 @auth.route('/login', methods=['GET', 'POST'])
@@ -64,6 +73,11 @@ def register():
     if current_user.is_authenticated:
         return redirect(url_for('main.index'))
     form = RegistrationForm()
+     # Populate city choices
+    cities_file = os.path.join(current_app.config['JSON_FOLDER'], 'cities.json')
+    with open(cities_file, encoding='utf-8') as f:
+        cities = json.load(f)
+    form.city.choices = [(city, city) for city in cities]
     if form.validate_on_submit():
         image = request.files['image']
         if image:
@@ -141,10 +155,15 @@ def profile():
 @auth.route('/update_profile', methods=['GET', 'POST'])
 @login_required
 def update_profile():
+    
     image=None
     form = UpdateAccountForm()
+    # Populate city choices
+    cities_file = os.path.join(current_app.config['JSON_FOLDER'], 'cities.json')
+    with open(cities_file, encoding='utf-8') as f:
+        cities = json.load(f)
+        form.city.choices = [(city, city) for city in cities]
     if form.validate_on_submit():
-        print("Form validated successfully")
         if request.files['image']:
             image = request.files['image']
             if image:
@@ -154,13 +173,14 @@ def update_profile():
                 current_image_path = os.path.join(current_app.config['UPLOAD_FOLDER'], current_user.image)
                 if current_user.image != 'default.jpg' and current_user.image != filename:
                     if os.path.exists(current_image_path):
-                        os.remove(current_image_path)
+                        os.remove(current_image_path)         
                 current_user.image = filename
         current_user.firstname = form.firstname.data
         current_user.lastname = form.lastname.data
         current_user.address = form.address.data
         current_user.zipcode = form.zipcode.data
         current_user.phone = form.phone.data
+        current_user.city = form.city.data
         try:
             db.session.commit()
             print("Database commit successful")
@@ -171,6 +191,7 @@ def update_profile():
             flash('An error occurred while updating your profile.', 'danger')
         return redirect(url_for('auth.profile'))
     elif request.method == 'GET':
+        form.city.data = current_user.city
         form.firstname.data = current_user.firstname
         form.lastname.data = current_user.lastname
         form.address.data = current_user.address
@@ -192,7 +213,7 @@ def all_users():
     per_page = 15
     all_users_count = User.query.count()
     if search:
-        query = User.query.filter(User.firstname.like(f'%{search}%') | User.lastname.like(f'%{search}%') | User.email.like(f'%{search}%')| User.phone.like(f'%{search}%'))
+        query = User.query.filter(User.firstname.like(f'%{search}%') | User.lastname.like(f'%{search}%') | User.email.like(f'%{search}%')| User.phone.like(f'%{search}%')| User.city.like(f'%{search}%')| User.address.like(f'%{search}%')| User.zipcode.like(f'%{search}%')| User.role.has(Role.name.like(f'%{search}%'))| User.firstname+User.lastname.like(f'%{search}%')) 
     else:
         query = User.query
 
@@ -213,9 +234,14 @@ def all_users():
 def edit_user_admin(id):
     user = User.query.get(id)
     form = UpdateUserByAdmin()
+    cities_file = os.path.join(current_app.config['JSON_FOLDER'], 'cities.json')
+    with open(cities_file, encoding='utf-8') as f:
+        cities = json.load(f)
+        form.city.choices = [(city, city) for city in cities]
     if form.validate_on_submit():
         user.firstname = form.firstname.data
         user.lastname = form.lastname.data
+        user.city = form.city.data
         user.address = form.address.data
         user.zipcode = form.zipcode.data
         role = Role.query.filter_by(name=form.role.data).first()
@@ -223,6 +249,9 @@ def edit_user_admin(id):
         user.role = role
         
         try:
+            # for key,value in vars(user).items():
+            #     if key in ['firstname','lastname','address','zipcode','is_active','role']:
+            #         print(f"{key} : {value}")
             db.session.commit()
             flash('User has been updated.', 'success')
         except Exception as e:
@@ -233,6 +262,7 @@ def edit_user_admin(id):
     elif request.method == 'GET':
         form.firstname.data = user.firstname
         form.lastname.data = user.lastname
+        form.city.data = user.city
         form.address.data = user.address
         form.zipcode.data = user.zipcode
         form.role.data = user.role.name if user.role else 'User'
