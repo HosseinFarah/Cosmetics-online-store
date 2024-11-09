@@ -58,7 +58,13 @@
         <small class="form-text text-danger">{{ error }}</small>
         {% endfor %}
       </div>
-
+      <div class="form-group">
+        {{form.category.label(class="form-control-label")}}
+        {{form.category(class="form-control")}}
+        {% for error in form.category.errors %}
+            <span class="text-danger">{{ error }}</span>
+        {% endfor %}
+    </div>
       {{ form.submit(class="btn btn-primary") }}
       <a href="{{ url_for('main.index') }}" class="btn btn-secondary">Cancel</a>
     </form>

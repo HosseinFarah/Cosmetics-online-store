@@ -219,6 +219,35 @@ class Product(db.Model):
     description = db.Column(db.Text, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.now(timezone('Europe/Helsinki')))
     updated_at = db.Column(db.DateTime, default=datetime.now(timezone('Europe/Helsinki')))
+    category_id = db.Column(db.Integer, db.ForeignKey('categories.id'),default=2)
+    category = db.relationship('Category', backref='products')
     
     def __repr__(self) -> str:
         return '<Product %r>' % self.name
+    
+    
+class Category(db.Model):
+    __tablename__ = 'categories'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False, index=True)
+    created_at = db.Column(db.DateTime, default=datetime.now(timezone('Europe/Helsinki')))
+    updated_at = db.Column(db.DateTime, default=datetime.now(timezone('Europe/Helsinki')))
+    
+    def __repr__(self) -> str:
+        return '<Category %r>' % self.name
+    
+    @staticmethod
+    def insert_category():
+        categories = ['Electronics', 'Cosmetics', 'Toiletries']
+        default_category = 'Cosmetics'
+        for c in categories:
+            category = Category.query.filter_by(name=c).first()
+            if category is None:
+                category = Category(name=c)
+            category.default = (category.name == default_category)
+            db.session.add(category)
+        db.session.commit()
+        
+       
+        
+        

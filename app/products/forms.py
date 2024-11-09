@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, TextAreaField, DecimalField, MultipleFileField
+from wtforms import StringField, SubmitField, TextAreaField, DecimalField, MultipleFileField, SelectField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
 from app.models import Product
 from flask_wtf.file import FileField, FileAllowed, FileRequired
@@ -26,7 +26,8 @@ class EditProduct(FlaskForm):
     description = TextAreaField('Description', validators=[DataRequired(), Length(min=2, max=255)])
     price = DecimalField('Price', validators=[DataRequired()])
     image = FileField('Product Image', validators=[FileAllowed(['jpg', 'png', 'jpeg'])])
-    pictures = MultipleFileField('Product Pictures', validators=[FileAllowed(['jpg', 'png', 'jpeg'])])
+    pictures = MultipleFileField('Product Pictures', validators=[FileAllowed(['jpg', 'png', 'jpeg','webp'])])
+    category = SelectField('Category', choices=[(1, 'Electronics'), (2, 'Cosmetics'), (3, 'Toiletries')], coerce=int)
     submit = SubmitField('Update Product')
     
 
