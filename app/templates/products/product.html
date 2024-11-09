@@ -1,0 +1,22 @@
+{% extends 'base.html' %} {% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+        <div class="card">
+            <img src="{{ url_for('static', filename='uploads/products/' + product.image) }}" class="card-img-top" alt="{{ product.name }}" style="max-width: 500px;">
+            <div class="card-header">
+                <h5 class="card-title">{{ product.name }}</h5>
+            </div>
+            <div class="card-body">
+                <p class="card-text">{{ product.description }}</p>
+                <p class="card-text">Price: ${{ product.price }}</p>
+            </div>
+            <div class="card-footer">
+                <a href="{{ url_for('products.add_to_basket', id=product.id) }}" class="btn btn-primary">Add to Basket</a>
+                <a href="{{ url_for('main.index') }}" class="btn btn-warning"><i class="fa fa-arrow-left"></i> Continue Shopping</a>
+            </div>
+        </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

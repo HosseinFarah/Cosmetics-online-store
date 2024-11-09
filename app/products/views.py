@@ -38,24 +38,87 @@ def create_new_product():
 def init_basket():
     if "basket" not in session:
         session["basket"] = []
+        
+        
 
 @products.route("/add_to_basket/<int:id>")
 def add_to_basket(id):
     init_basket()
     products = db.session.query(Product).all()
     product = next((p for p in products if p.id == id), None)
+    
     if product:
-        session["basket"].append({"id": product.id, "name": product.name, "price": product.price})
-        session.modified = True
-    return redirect(url_for("main.index"))
+        # # Debugging statement to check the contents of session["basket"]
+        # print("Basket contents:", session["basket"])
+        
+        # Check if the product is already in the basket
+        for item in session["basket"]:
+            try:
+                # # Debugging statement to check the type of item
+                # print("Item type:", type(item))
+                
+                if isinstance(item, dict) and int(item["id"]) == int(product.id):
+                    item["quantity"] = item.get("quantity", 1) + 1
+                    session.modified = True
+                    flash("Product quantity increased in basket")
+                    break
+            except ValueError:
+                flash("Invalid product ID in basket")
+                return redirect(url_for("products.product", id=id))
+        else:
+            # If the product is not in the basket, add it with quantity 1
+            session["basket"].append({
+                "id": product.id,
+                "name": product.name,
+                "price": product.price,
+                "image": product.image,
+                "description": product.description,
+                "quantity": 1
+            })
+            session.modified = True
+            flash("Product added to basket")
+    else:
+        flash("Product not found")
+        
+    return redirect(url_for("products.product", id=id))
+
+
+@products.route("/basket/increment/<int:id>")
+def increment_product(id):
+    for item in session.get("basket", []):
+        if isinstance(item, dict) and item.get("id") == id:
+            item["quantity"] = item.get("quantity", 1) + 1
+            break
+    session.modified = True
+    return redirect(url_for("products.basket"))
+
+@products.route("/basket/decrement/<int:id>")
+def decrement_product(id):
+    for item in session.get("basket", []):
+        if isinstance(item, dict) and item.get("id") == id:
+            if item.get("quantity", 1) > 1:
+                item["quantity"] -= 1
+            else:
+                session["basket"].remove(item)
+            break
+    session.modified = True
+    return redirect(url_for("products.basket"))
+
 
 @products.route("/basket")
 def basket():
     init_basket()
-    total = sum(item["price"] for item in session["basket"] if isinstance(item, dict))
-    return render_template("products/basket.html", basket=[item for item in session["basket"] if isinstance(item, dict)], total=total)
+    basket = []
+    for item in session["basket"]:
+        if isinstance(item, dict):
+            item.setdefault("quantity", 1)
+            basket.append(item)
+    total = sum(item["price"] * item["quantity"] for item in basket)
+    return render_template("products/basket.html", basket=basket, total=total)
 
-@products.route("/remove/<int:id>")
+
+
+@products.route("/remove_from_basket/<int:id>")
 def remove_from_basket(id):
     init_basket()
     session["basket"] = [item for item in session["basket"] if not (isinstance(item, dict) and item["id"] == id)]
@@ -102,3 +165,8 @@ def delete_product(id):
     db.session.commit()
     flash("Product deleted successfully")
     return redirect(url_for("main.index"))
+
+@products.route("/product/<int:id>")
+def product(id):
+    product = db.session.query(Product).get(id)
+    return render_template("products/product.html", product=product)

@@ -1,16 +1,53 @@
 {% extends 'base.html' %} {% block content %}
-<h2>Your Basket</h2>
-{% if basket %}
-    <ul>
-        {% for item in basket %}
-            <li>
-                {{ item.name }} - ${{ item.price }}
-                <a href="{{ url_for('products.remove_from_basket', id=item.id) }}">Remove</a>
-            </li>
-        {% endfor %}
-    </ul>
-    <p>Total: ${{ total }}</p>
-{% else %}
-    <p>Your basket is empty.</p>
-{% endif %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h1>Your Basket</h1>
+            {% if basket|length == 0 %}
+            <p>Your basket is empty</p>
+            {% else %}
+            <table class="table table-striped align-middle">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <td>Product Image</td>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                        <th>Total</th>
+                        <th>Details</th>
+                        <th>Actions</th>
+                        <th>Remove</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in basket %}
+                    <tr>
+                        <td>{{ item.name }}</td>
+                        <td class="img-thumbnail"><img src="{{ url_for('static', filename='uploads/products/' + item.image) }}" alt="{{ item.name }}" style="width: 150px; height: 150px;border-radius: 50%;" class="img-fluid"></td>
+                        <td>{{ item.quantity }}</td>
+                        <td>{{ item.price }}</td>
+                        <td>{{ item.price * item.quantity }}</td>
+                        <td>
+                            <a href="{{ url_for('products.product', id=item.id) }}" class="btn btn-primary"><i class="fa fa-info"></i></a>
+                        </td>
+                        <td>
+                            <a href="{{ url_for('products.increment_product', id=item.id) }}"><i class="fa fa-plus"></i></a>
+                            <a href="{{ url_for('products.decrement_product', id=item.id) }}"><i class="fa fa-minus"></i></a>
+                        </td>
+                        <td>
+                            <a href="{{ url_for('products.remove_from_basket', id=item.id) }}" class="btn btn-danger"><i class="fa fa-trash"></i></a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <h3>Total: {{ total }}</h3>
+            {% endif %}
+        </div>
+        <a href="{{ url_for('main.index') }}" class="btn btn-primary"><i class="fa fa-arrow-left"></i> Continue Shopping</a>
+    </div>
+</div>
 {% endblock %}
+
+
+

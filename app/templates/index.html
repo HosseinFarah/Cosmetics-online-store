@@ -12,7 +12,6 @@
     </div>
     {% endif %}
   </div>
-
   <div class="row">
     {% for product in products %}
     <div class="col-md-4">
@@ -21,7 +20,7 @@
           src="{{ url_for('static', filename='uploads/products/' + product.image) }}"
           class="card-img-top"
           alt="{{ product.name }}"
-            style="max-width: 500px; object-fit: cover"
+          style="max-width: 500px; object-fit: cover"
         />
         <div class="card-header">
           <h5 class="card-title">{{ product.name }}</h5>
@@ -34,21 +33,33 @@
           <a
             href="{{ url_for('products.add_to_basket', id=product.id) }}"
             class="btn btn-primary"
-            >Add to Basket</a>
-            {% if current_user.is_administrator() %}
-            <a href="{{ url_for('products.edit_product', id=product.id) }}"
-              class="btn btn-warning"><i class="fa fa-edit"></i></a>
-            <a href="{{ url_for('products.delete_product', id=product.id) }}"
-              class="btn btn-danger" onclick="return confirm('Are you sure you want to delete {{ product.name }}?')"><i class="fa fa-trash"></i></a>
+            ><i class="fa fa-shopping-cart"></i> <i class="fa fa-plus"></i> Add
+            to Basket</a
+          >
+          <a
+            href="{{ url_for('products.product', id=product.id) }}"
+            class="btn btn-light"
+            ><i class="fa fa-info"></i>
+            <span class="badge bg-primary text-light">Details</span></a
+          >
+          {% if current_user.is_administrator() %}
+          <a
+            href="{{ url_for('products.edit_product', id=product.id) }}"
+            class="btn btn-warning"
+            ><i class="fa fa-edit"></i
+          ></a>
+          <a
+            href="{{ url_for('products.delete_product', id=product.id) }}"
+            class="btn btn-danger"
+            onclick="return confirm('Are you sure you want to delete {{ product.name }}?')"
+            ><i class="fa fa-trash"></i
+          ></a>
 
-              {% endif %}
+          {% endif %}
         </div>
-        </div>
-        </div>
-        {% endfor %}
-        </div>
-        </div>
-        {% endblock %}
-        
-
-
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}
