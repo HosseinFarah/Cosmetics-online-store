@@ -26,10 +26,10 @@ def create_new_product():
                 picture_filename = secure_filename(picture.filename)
                 picture.save(os.path.join(current_app.config['PRODUCT_IMAGE_FOLDER'], picture_filename))
                 picture_filenames.append(picture_filename)
-        product = Product(name=form.name.data, price=form.price.data, description=form.description.data, image=image_filename, pictures=json.dumps(picture_filenames))
+        product = Product(name=form.name.data, price=form.price.data, description=form.description.data, image=image_filename, pictures=json.dumps(picture_filenames), instructions=form.instructions.data, ingredients=form.ingredients.data, size=form.size.data, weight=form.weight.data, ean=form.ean.data, category_id=form.category.data)
         db.session.add(product)
         db.session.commit()
-        flash('Product created successfully')
+        flash('Product created successfully', 'success')
         return redirect(url_for('main.index'))
     return render_template('products/create_new_product.html', form=form)
 
@@ -60,10 +60,10 @@ def add_to_basket(id):
                 if isinstance(item, dict) and int(item["id"]) == int(product.id):
                     item["quantity"] = item.get("quantity", 1) + 1
                     session.modified = True
-                    flash("Product quantity increased in basket")
+                    flash("From this product, another product was added to the shopping cart", "success")
                     break
             except ValueError:
-                flash("Invalid product ID in basket")
+                flash("Invalid product ID in basket", "danger")
                 return redirect(url_for("products.product", id=id))
         else:
             # If the product is not in the basket, add it with quantity 1
@@ -73,12 +73,18 @@ def add_to_basket(id):
                 "price": product.price,
                 "image": product.image,
                 "description": product.description,
+                "instructions": product.instructions,
+                "ingredients": product.ingredients,
+                "size": product.size,
+                "weight": product.weight,
+                "ean": product.ean,
+                "category_id": product.category_id,
                 "quantity": 1
             })
             session.modified = True
-            flash("Product added to basket")
+            flash("Product added to basket", "success")
     else:
-        flash("Product not found")
+        flash("Product not found", "danger")
         
     return redirect(url_for("products.product", id=id))
 
@@ -125,7 +131,6 @@ def remove_from_basket(id):
     session.modified = True
     return redirect(url_for("products.basket"))
         
-            
 @products.route("/edit_product/<int:id>", methods=["GET", "POST"])
 @login_required
 @admin_required
@@ -145,17 +150,28 @@ def edit_product(id):
                 picture_filename = secure_filename(picture.filename)
                 picture.save(os.path.join(current_app.config["PRODUCT_IMAGE_FOLDER"], picture_filename))
                 picture_filenames.append(picture_filename)
-            else:
-                picture_filenames = json.loads(product.pictures)
+        if not picture_filenames:
+            picture_filenames = json.loads(product.pictures)
         product.name = form.name.data
         product.price = form.price.data
         product.description = form.description.data
         product.pictures = json.dumps(picture_filenames)
+        product.instructions = form.instructions.data
+        product.ingredients = form.ingredients.data
+        product.size = form.size.data
+        product.weight = form.weight.data
+        product.ean = form.ean.data
+        product.category_id = form.category.data
+
+        # Commit the changes
         db.session.commit()
-        flash("Product updated successfully")
+        flash("Product updated successfully", "success")
         return redirect(url_for("main.index", id=id))
-    return render_template("products/edit_product.html", form=form, product=product,pictures=json.loads(product.pictures))
-    
+        
+    return render_template("products/edit_product.html", form=form, product=product, pictures=json.loads(product.pictures))
+
+
+
 @products.route("/delete_product/<int:id>")
 @login_required
 @admin_required
@@ -163,10 +179,10 @@ def delete_product(id):
     product = db.session.query(Product).get(id)
     db.session.delete(product)
     db.session.commit()
-    flash("Product deleted successfully")
+    flash("Product deleted successfully", "success")
     return redirect(url_for("main.index"))
 
 @products.route("/product/<int:id>")
 def product(id):
     product = db.session.query(Product).get(id)
-    return render_template("products/product.html", product=product)
+    return render_template("products/product.html", product=product, pictures=json.loads(product.pictures))

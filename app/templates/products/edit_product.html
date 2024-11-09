@@ -29,11 +29,57 @@
         {% endfor %}
       </div>
       <div class="mb-3">
+        {{form.instructions.label(class="form-label")}}
+        {{form.instructions(class="form-control")}}
+        <div class="invalid-feedback">Please provide valid instructions.</div>
+        {% for error in form.instructions.errors %}
+        <small class="form-text text-danger">{{ error }}</small>
+        {% endfor %}
+      </div>
+      <div class="mb-3">
+        {{form.ingredients.label(class="form-label")}}
+        {{form.ingredients(class="form-control")}}
+        <div class="invalid-feedback">Please provide valid ingredients.</div>
+        {% for error in form.ingredients.errors %}
+        <small class="form-text text-danger">{{ error }}</small>
+        {% endfor %}
+      </div>
+      <div class="mb-3">
+        {{form.size.label(class="form-label")}}
+        {{form.size(class="form-control")}}
+        <div class="invalid-feedback">Please provide a valid size.</div>
+        {% for error in form.size.errors %}
+        <small class="form-text text-danger">{{ error }}</small>
+        {% endfor %}
+      </div>
+      <div class="mb-3">
+        {{form.weight.label(class="form-label")}}
+        {{form.weight(class="form-control")}}
+        <div class="invalid-feedback">Please provide a valid weight.</div>
+        {% for error in form.weight.errors %}
+        <small class="form-text text-danger">{{ error }}</small>
+        {% endfor %}
+      </div>
+      <div class="mb-3">
+        {{form.ean.label(class="form-label")}}
+        {{form.ean(class="form-control")}}
+        <div class="invalid-feedback">Please provide a valid ean.</div>
+        {% for error in form.ean.errors %}
+        <small class="form-text text-danger">{{ error }}</small>
+        {% endfor %}
+      </div>
+
+      <div class="mb-3">
         <img
-          src="{{ url_for('static', filename='uploads/products/' + form.image.data) }}"
+          src="{{ url_for('static', filename='uploads/products/' + product.image) }}"
           class="img-fluid"
           alt="{{ form.name.data }}"
-          style="width: 200px; height: 200px; margin-bottom: 10px;border-radius: 50%"
+          style="
+            width: 200px;
+            height: 200px;
+            margin-bottom: 10px;
+            border-radius: 50%;
+          "
         />
         {{form.image(class="form-control")}}
         <div class="invalid-feedback">Please provide a valid image.</div>
@@ -57,14 +103,16 @@
         {% for error in form.pictures.errors %}
         <small class="form-text text-danger">{{ error }}</small>
         {% endfor %}
-      </div>
-      <div class="form-group">
-        {{form.category.label(class="form-control-label")}}
-        {{form.category(class="form-control")}}
-        {% for error in form.category.errors %}
-            <span class="text-danger">{{ error }}</span>
-        {% endfor %}
     </div>
+      <div class="mb-3">
+        {{form.category.label(class="form-label")}}
+        {{form.category(class="form-control")}}
+        <div class="invalid-feedback">Please provide a valid category.</div>
+        {% for error in form.category.errors %}
+        <small class="form-text text-danger">{{ error }}</small>
+        {% endfor %}
+      </div>
+
       {{ form.submit(class="btn btn-primary") }}
       <a href="{{ url_for('main.index') }}" class="btn btn-secondary">Cancel</a>
     </form>

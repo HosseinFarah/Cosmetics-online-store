@@ -1,6 +1,7 @@
 html,
 body {
   height: 100%;
+  font-family: "Jura", sans-serif;
 }
 body > footer {
   position: sticky;
@@ -63,4 +64,18 @@ body > footer {
 .shine-effect:hover::before {
   left: 100%;
   opacity: 1;
+}
+
+
+
+.login-btn {
+    background-color: #ff2461;
+    border: none;
+    color: white;
+    transition: all 0.3s;
+}
+.login-btn:hover {
+  background-color: #16658d;
+    color: #ffffff;
+    box-shadow: 0 0 3px #ff2461, 0 0 5px #ff2461, 0 0 15px #ff2461;
 }

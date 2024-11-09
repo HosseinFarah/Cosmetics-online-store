@@ -1,4 +1,11 @@
 {% extends 'base.html' %} {% block content %}
+<!-- loading... -->
+<div id="loader" style="display: none">
+  <div class="spinner-grow text-danger" role="status"></div>
+  <div class="spinner-grow text-warning" role="status"></div>
+  <div class="spinner-grow text-info" role="status"></div>
+</div>
+<!-- end loading... -->
 
 <div
   id="carouselExampleIndicators"
@@ -25,13 +32,14 @@
               src="{{ url_for('static', filename='uploads/products/' + product.image) }}"
               class="card-img-top"
               alt="{{ product.name }}"
-              style="max-width: 300px; object-fit: cover"
+              style="max-height: 250px; object-fit: contain;"
             />
             <div class="card-header">
               <h5 class="card-title">{{ product.name }}</h5>
             </div>
             <div class="card-body">
-              <p class="card-text">{{ product.description }}</p>
+              <p class="card-text">{{ product.size }}</p>
+              <p class="card-text">{{ product.weight }}</p>
               <p class="card-text">Price: ${{ product.price }}</p>
               <a
                 href="{{ url_for('products.product', id=product.id) }}"
@@ -99,54 +107,6 @@
     </div>
     {% endif %}
   </div>
-  <div class="row">
-    {% for product in products %}
-    <div class="col-md-4">
-      <div class="card mt-3">
-        <img
-          src="{{ url_for('static', filename='uploads/products/' + product.image) }}"
-          class="card-img-top"
-          alt="{{ product.name }}"
-          style="max-width: 500px; object-fit: cover"
-        />
-        <div class="card-header">
-          <h5 class="card-title">{{ product.name }}</h5>
-        </div>
-        <div class="card-body">
-          <p class="card-text">{{ product.description }}</p>
-          <p class="card-text">Price: ${{ product.price }}</p>
-        </div>
-        <div class="card-footer">
-          <a
-            href="{{ url_for('products.add_to_basket', id=product.id) }}"
-            class="btn btn-primary"
-            ><i class="fa fa-shopping-cart"></i> <i class="fa fa-plus"></i> Add
-            to Basket</a
-          >
-          <a
-            href="{{ url_for('products.product', id=product.id) }}"
-            class="btn btn-light"
-            ><i class="fa fa-info"></i>
-            <span class="badge bg-primary text-light">Details</span></a
-          >
-          {% if current_user.is_administrator() %}
-          <a
-            href="{{ url_for('products.edit_product', id=product.id) }}"
-            class="btn btn-warning"
-            ><i class="fa fa-edit"></i
-          ></a>
-          <a
-            href="{{ url_for('products.delete_product', id=product.id) }}"
-            class="btn btn-danger"
-            onclick="return confirm('Are you sure you want to delete {{ product.name }}?')"
-            ><i class="fa fa-trash"></i
-          ></a>
-
-          {% endif %}
-        </div>
-      </div>
-    </div>
-    {% endfor %}
-  </div>
+  
 </div>
 {% endblock %}

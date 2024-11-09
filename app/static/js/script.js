@@ -95,3 +95,21 @@
             })
             .catch(error => console.error('Error fetching cities:', error));
     });
+
+    // loader
+    document.addEventListener("DOMContentLoaded", function() {
+      var loader = document.getElementById("loader");
+      var productDetails = document.getElementById("product-details");
+
+      // Show the loader
+      loader.style.display = "block";
+
+      // Simulate loading time
+      setTimeout(function() {
+          // Hide the loader
+          loader.style.display = "none";
+
+          // Show the product details
+          productDetails.style.display = "block";
+      }, 1000); // Adjust the timeout as needed
+  });

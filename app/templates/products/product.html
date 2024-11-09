@@ -1,22 +1,111 @@
 {% extends 'base.html' %} {% block content %}
 <div class="container">
-    <div class="row">
-        <div class="col-md-12">
-        <div class="card">
-            <img src="{{ url_for('static', filename='uploads/products/' + product.image) }}" class="card-img-top" alt="{{ product.name }}" style="max-width: 500px;">
-            <div class="card-header">
-                <h5 class="card-title">{{ product.name }}</h5>
-            </div>
-            <div class="card-body">
-                <p class="card-text">{{ product.description }}</p>
-                <p class="card-text">Price: ${{ product.price }}</p>
-            </div>
-            <div class="card-footer">
-                <a href="{{ url_for('products.add_to_basket', id=product.id) }}" class="btn btn-primary">Add to Basket</a>
-                <a href="{{ url_for('main.index') }}" class="btn btn-warning"><i class="fa fa-arrow-left"></i> Continue Shopping</a>
-            </div>
+  <!-- loading... -->
+  <div id="loader" style="display: none">
+    <div class="spinner-grow text-danger" role="status"></div>
+    <div class="spinner-grow text-warning" role="status"></div>
+    <div class="spinner-grow text-info" role="status"></div>
+  </div>
+  <!-- end loading... -->
+  <div class="row">
+    <div class="col-md-6">
+      <div class="card">
+        <img
+          src="{{ url_for('static', filename='uploads/products/' + product.image) }}"
+          class="card-img-center align-self-center"
+          alt="{{ product.name }}"
+          style="max-height: 400px;"
+        />
+        <div class="card-header">
+          <h5 class="card-title">{{ product.name }}</h5>
         </div>
+        <div class="card-body">
+          <p class="card-text">{{ product.description }}</p>
+          <p class="card-text">Price: ${{ product.price }}</p>
         </div>
+        <div class="card-footer">
+          <a
+            href="{{ url_for('products.add_to_basket', id=product.id) }}"
+            class="btn btn-primary"
+            >Add to Basket</a
+          >
+          <a href="{{ url_for('main.index') }}" class="btn btn-warning"
+            ><i class="fa fa-arrow-left"></i> Continue Shopping</a
+          >
+          {% if session['basket'] | length > 0 %}
+          <a href="{{ url_for('products.basket') }}" class="btn btn-success"
+            ><i class="fa fa-shopping-basket"></i> View Basket</a
+          >
+          {% endif %}
+        </div>
+      </div>
     </div>
+    <div class="col-md-6">
+      {% if pictures | length > 0 %}
+      <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel">
+          <div class="carousel-inner">
+              {% for picture in pictures %}
+              <div class="carousel-item {% if loop.first %}active{% endif %}">
+                  <img src="{{ url_for('static', filename='uploads/products/' + picture) }}" class="d-block w-100" alt="{{ product.name }}" style="max-height: 500px; object-fit: contain;">
+              </div>
+              {% endfor %}
+          </div>
+          <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Previous</span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Next</span>
+          </button>
+          <div class="carousel-indicators">
+              {% for picture in pictures %}
+              <button type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide-to="{{ loop.index0 }}" class="{% if loop.first %}active{% endif %}" aria-current="{% if loop.first %}true{% endif %}" aria-label="Slide {{ loop.index }}"></button>
+              {% endfor %}
+          </div>
+      </div>
+      <div class="row mt-3">
+          {% for picture in pictures %}
+          <div class="col-2">
+              <img src="{{ url_for('static', filename='uploads/products/' + picture) }}" class="img-thumbnail" alt="{{ product.name }}" data-bs-target="#carouselExampleAutoplaying" data-bs-slide-to="{{ loop.index0 }}">
+          </div>
+          {% endfor %}
+      </div>
+      {% endif %}
+  </div>
+  </div>
+</div>
+
+
+<div class="container">
+  <ul class="nav nav-tabs" id="myTab" role="tablist">
+      <li class="nav-item" role="presentation">
+          <a class="nav-link active" id="description-tab" data-bs-toggle="tab" href="#description" role="tab" aria-controls="description" aria-selected="true">Description</a>
+      </li>
+      <li class="nav-item" role="presentation">
+          <a class="nav-link" id="instructions-tab" data-bs-toggle="tab" href="#instructions" role="tab" aria-controls="instructions" aria-selected="false">Instructions</a>
+      </li>
+      <li class="nav-item" role="presentation">
+          <a class="nav-link" id="ingredients-tab" data-bs-toggle="tab" href="#ingredients" role="tab" aria-controls="ingredients" aria-selected="false">Ingredients</a>
+      </li>
+  </ul>
+  <div class="tab-content" id="myTabContent">
+      <div class="tab-pane fade show active" id="description" role="tabpanel" aria-labelledby="description-tab">
+          <div class="card card-body">
+              <strong>{{ product.description }}</strong>
+          </div>
+      </div>
+      <div class="tab-pane fade" id="instructions" role="tabpanel" aria-labelledby="instructions-tab">
+          <div class="card card-body">
+              <strong>{{ product.instructions }}</strong>
+          </div>
+      </div>
+      <div class="tab-pane fade" id="ingredients" role="tabpanel" aria-labelledby="ingredients-tab">
+          <div class="card card-body">
+              <strong>{{ product.ingredients }}</strong>
+          </div>
+      </div>
+  </div>
 </div>
 {% endblock %}
+

@@ -6,11 +6,17 @@ from flask_wtf.file import FileField, FileAllowed, FileRequired
 
 class CreateNewProduct(FlaskForm):
     name = StringField('Product Name', validators=[DataRequired(), Length(min=2, max=100)])
-    description = TextAreaField('Description', validators=[DataRequired(), Length(min=2, max=255)])
+    description = TextAreaField('Description', validators=[DataRequired(), Length(min=2)])
     price = DecimalField('Price', validators=[DataRequired()])
-    image = FileField('Product Image', validators=[FileAllowed(['jpg', 'png', 'jpeg'])])
-    pictures = MultipleFileField('Product Pictures', validators=[FileAllowed(['jpg', 'png', 'jpeg'])])
-    submit = SubmitField('Create Product')
+    image = FileField('Product Image', validators=[FileAllowed(['jpg', 'png', 'jpeg','webp'])])
+    pictures = MultipleFileField('Product Pictures', validators=[FileAllowed(['jpg', 'png', 'jpeg','webp'])])
+    instructions = TextAreaField('Instructions', validators=[DataRequired(), Length(min=2)])
+    ingredients = TextAreaField('Ingredients', validators=[DataRequired(), Length(min=2)])
+    size = StringField('Size', validators=[DataRequired(), Length(min=2, max=100)])
+    weight = StringField('Weight', validators=[DataRequired(), Length(min=2, max=100)])
+    ean = StringField('EAN', validators=[DataRequired(), Length(min=2, max=100)])
+    category = SelectField('Category', choices=[(1, 'Electronics'), (2, 'Cosmetics'), (3, 'Toiletries')], coerce=int)   
+    submit = SubmitField('Add Product')
     
     def validate_name(self, name):
         product = Product.query.filter_by(name=name.data).first()
@@ -23,11 +29,16 @@ class CreateNewProduct(FlaskForm):
 
 class EditProduct(FlaskForm):
     name = StringField('Product Name', validators=[DataRequired(), Length(min=2, max=100)])
-    description = TextAreaField('Description', validators=[DataRequired(), Length(min=2, max=255)])
+    description = TextAreaField('Description', validators=[DataRequired(), Length(min=2)])
     price = DecimalField('Price', validators=[DataRequired()])
-    image = FileField('Product Image', validators=[FileAllowed(['jpg', 'png', 'jpeg'])])
+    image = FileField('Product Image', validators=[FileAllowed(['jpg', 'png', 'jpeg','webp'])])
     pictures = MultipleFileField('Product Pictures', validators=[FileAllowed(['jpg', 'png', 'jpeg','webp'])])
     category = SelectField('Category', choices=[(1, 'Electronics'), (2, 'Cosmetics'), (3, 'Toiletries')], coerce=int)
+    instructions = TextAreaField('Instructions', validators=[DataRequired(), Length(min=2)])
+    ingredients = TextAreaField('Ingredients', validators=[DataRequired(), Length(min=2)])
+    size = StringField('Size', validators=[DataRequired(), Length(min=2, max=100)])
+    weight = StringField('Weight', validators=[DataRequired(), Length(min=2, max=100)])
+    ean = StringField('EAN', validators=[DataRequired(), Length(min=2, max=100)])
     submit = SubmitField('Update Product')
     
 
