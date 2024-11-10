@@ -38,13 +38,13 @@
               <h5 class="card-title">{{ product.name }}</h5>
             </div>
             <div class="card-body">
-              <p class="card-text">{{ product.size }}</p>
-              <p class="card-text">{{ product.weight }}</p>
-              <p class="card-text">Price: ${{ product.price }}</p>
+              <p class="card-text"><i class="fa fa-expand text-secondary"></i> {{ product.size }}</p>
+              <p class="card-text"><i class="fa fa-weight text-secondary"></i> {{ product.weight }}</p>
+              <p class="card-text"><i class="fa fa-euro-sign text-secondary"></i>Hinta: {{ product.price }} €</p>
               <a
                 href="{{ url_for('products.product', id=product.id) }}"
                 class="btn btn-light d-flex justify-content-end"
-                ><i class="fa fa-info text-danger m-1"></i>
+                ><i class="fa fa-info-circle text-danger m-1"></i>
                 <span class="badge bg-danger text-light m-1">  Details</span></a
               >
             </div>

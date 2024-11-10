@@ -1,5 +1,5 @@
 from . import products
-from flask import render_template, redirect, url_for, request, flash, current_app, session
+from flask import render_template, redirect, url_for, request, flash, current_app, session, jsonify
 from flask_login import login_user, logout_user, login_required, current_user
 from ..decorators import admin_required
 from .forms import CreateNewProduct, EditProduct
@@ -9,11 +9,24 @@ from werkzeug.utils import secure_filename
 import os
 import json
 
+
+
+@products.route('/brands', methods=['GET', 'POST'])
+def get_brands():
+    brands_file = os.path.join(current_app.config['JSON_FOLDER'], 'brands.json')
+    with open(brands_file,encoding='utf-8') as f:
+        brands = json.load(f)
+    return jsonify(brands)
+
 @products.route('/create_new_product', methods=['GET', 'POST'])
 @login_required
 @admin_required
 def create_new_product():
     form = CreateNewProduct()
+    brands_file = os.path.join(current_app.config['JSON_FOLDER'], 'brands.json')
+    with open(brands_file, encoding='utf-8') as f:
+        brands = json.load(f)
+    form.brand.choices = [(brand, brand) for brand in brands]
     if form.validate_on_submit():
         image = request.files['image']
         if image:
@@ -26,7 +39,7 @@ def create_new_product():
                 picture_filename = secure_filename(picture.filename)
                 picture.save(os.path.join(current_app.config['PRODUCT_IMAGE_FOLDER'], picture_filename))
                 picture_filenames.append(picture_filename)
-        product = Product(name=form.name.data, price=form.price.data, description=form.description.data, image=image_filename, pictures=json.dumps(picture_filenames), instructions=form.instructions.data, ingredients=form.ingredients.data, size=form.size.data, weight=form.weight.data, ean=form.ean.data, category_id=form.category.data)
+        product = Product(name=form.name.data, price=form.price.data, description=form.description.data, image=image_filename, pictures=json.dumps(picture_filenames), instructions=form.instructions.data, ingredients=form.ingredients.data, size=form.size.data, weight=form.weight.data, ean=form.ean.data, category_id=form.category.data, brand=form.brand.data)
         db.session.add(product)
         db.session.commit()
         flash('Product created successfully', 'success')
@@ -137,6 +150,10 @@ def remove_from_basket(id):
 def edit_product(id):
     product = db.session.query(Product).get(id)
     form = EditProduct(obj=product)
+    brands_file = os.path.join(current_app.config['JSON_FOLDER'], 'brands.json')
+    with open(brands_file, encoding='utf-8') as f:
+        brands = json.load(f)
+    form.brand.choices = [(brand, brand) for brand in brands]
     if form.validate_on_submit():
         image = request.files["image"]
         if image:
@@ -162,13 +179,27 @@ def edit_product(id):
         product.weight = form.weight.data
         product.ean = form.ean.data
         product.category_id = form.category.data
+        product.brand = form.brand.data
 
         # Commit the changes
         db.session.commit()
         flash("Product updated successfully", "success")
         return redirect(url_for("main.index", id=id))
-        
+    elif request.method == "GET":
+        form.brand.data = product.brand
+        form.name.data = product.name
+        form.price.data = product.price
+        form.description.data = product.description
+        form.instructions.data = product.instructions
+        form.ingredients.data = product.ingredients
+        form.size.data = product.size
+        form.weight.data = product.weight
+        form.ean.data = product.ean
+        form.category.data = product.category_id
     return render_template("products/edit_product.html", form=form, product=product, pictures=json.loads(product.pictures))
+
+        
+        
 
 
 

@@ -225,6 +225,7 @@ class Product(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.now(timezone('Europe/Helsinki')))
     updated_at = db.Column(db.DateTime, default=datetime.now(timezone('Europe/Helsinki')))
     category_id = db.Column(db.Integer, db.ForeignKey('categories.id'),default=2)
+    brand=db.Column(db.String(100), nullable=False)
     category = db.relationship('Category', backref='products')
     
     def __repr__(self) -> str:

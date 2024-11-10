@@ -113,3 +113,20 @@
           productDetails.style.display = "block";
       }, 1000); // Adjust the timeout as needed
   });
+
+
+  // get the brands from the server and populate the brand select element
+  document.addEventListener('DOMContentLoaded', function() {
+    fetch('/products/brands')
+        .then(response => response.json())
+        .then(data => {
+            const brandSelect = document.getElementById('brand');
+            data.forEach(brand => {
+                const option = document.createElement('option');
+                option.value = brand;
+                option.textContent = brand;
+                brandSelect.appendChild(option);
+            });
+        })
+        .catch(error => console.error('Error fetching brands:', error));
+});
