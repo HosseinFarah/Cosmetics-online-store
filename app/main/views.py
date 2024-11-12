@@ -17,4 +17,5 @@ from app.models import Product, Category
 def index():
     products = db.session.query(Product).all()
     categories = db.session.query(Category).all()
-    return render_template("index.html", products=products, categories=categories)
+    sliders = ['(1).webp', '(2).webp', '(3).webp', '(4).webp']
+    return render_template("index.html", products=products, categories=categories, sliders=sliders)

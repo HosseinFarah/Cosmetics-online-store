@@ -109,6 +109,34 @@
         </video>
     </div>
 </div>
+{% elif category.name == 'Toiletries' %}
+<div class="parallax">
+    <div class="col video-container">
+        <video autoplay loop muted playsinline>
+            <source src="{{ url_for('static', filename='uploads/videos/02.mp4') }}" type="video/mp4" />
+        </video>
+    </div>
+</div>
+{% elif category.name == 'Cosmetics' %}
+<div class="carousel-container">
+  <div id="carouselExampleInterval" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-inner">
+      {% for slider in sliders %}
+      <div class="carousel-item {% if loop.first %}active{% endif %}" data-bs-interval="1000">
+        <img src="{{ url_for('static', filename='uploads/slider/' + slider) }}" class="d-block w-100" alt="{{ slider }}" style="max-height: 300px; object-fit: cover">
+      </div>
+      {% endfor %}
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+  </div>
+</div>
 {% endif %}
 {% endfor %}
 

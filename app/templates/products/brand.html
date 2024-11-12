@@ -23,35 +23,45 @@
     {% for product in products %}
     {% if product.brand == brand %}
     <div class="col-md-4">
-        <div class="card m-1 position-relative">
-            <img
-                src="{{ url_for('static', filename='uploads/products/' + product.image) }}"
-                class="card-img-center align-self-center"
-                alt="{{ product.name }}"
-                style="max-height: 300px"
-            />
-            <div class="position-absolute bg-brand text-white p-2 rounded-start top-0 end-0">
-                {{ product.brand }}
-            </div>
-            <div class="card-header">
-                <h5 class="card-title">{{ product.name }}</h5>
-            </div>
-            <div class="card-body">
-                <p class="card-text badge bg-primary text-light">
-                    {{ product.price }} €
-                </p>
-            </div>
-            <div class="card-footer">
-                <a
-                    href="{{ url_for('products.add_to_basket', id=product.id) }}"
-                    class="btn btn-primary"
-                ><i class="fa fa-shopping-cart"></i> Add to Basket</a>
-                {% if session['basket'] | length > 0 %}
-                <a href="{{ url_for('products.basket') }}" class="btn btn-success"
-                ><i class="fa fa-shopping-basket"></i> View Basket</a>
-                {% endif %}
-            </div>
+      <div class="card m-1 position-relative">
+        <img
+          src="{{ url_for('static', filename='uploads/products/' + product.image) }}"
+          class="card-img-center align-self-center"
+          alt="{{ product.name }}"
+          style="max-height: 300px"
+        />
+        <div class="position-absolute bg-brand text-white p-2 rounded-start top-0 end-0">
+          {{ product.brand }}
         </div>
+        <div class="card-header">
+          <h5 class="card-title">{{ product.name }}</h5>
+        </div>
+        <div class="card-body">
+          <p class="card-text badge bg-primary text-light">{{ product.price }} €</p>
+        </div>
+        <div class="card-footer">
+          <a
+            href="{{ url_for('products.add_to_basket', id=product.id) }}"
+            class="btn btn-primary"
+            ><i class="fa fa-shopping-cart"></i> Add to Basket</a>
+            {% if session['basket'] | length > 0 %}
+            <a href="{{ url_for('products.basket') }}" class="btn btn-success"
+              ><i class="fa fa-shopping-basket"></i> View Basket</a
+            >
+            <hr>
+          
+          <a href="{{ url_for('main.index') }}" class="btn btn-light d-flex justify-content-end"
+              ></i> <i class="fa fa-home text-secondary"></i> </a>
+            <hr>
+          <a
+            href="{{ url_for('products.product', id=product.id) }}"
+            class="btn btn-light d-flex justify-content-end"
+            ><i class="fa fa-info-circle text-danger m-1"></i>
+            <span class="badge bg-danger text-light m-1">Details</span></a
+          >
+          {% endif %}
+        </div>
+      </div>
     </div>
     {% endif %}
     {% endfor %}

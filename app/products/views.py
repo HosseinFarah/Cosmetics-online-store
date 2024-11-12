@@ -230,8 +230,15 @@ def category(id):
     category = db.session.query(Category).get(id)
     
     if form.validate_on_submit():
-        return redirect(url_for("products.category", id=form.category.data))
+        selected_category = form.category.data
+        return redirect(url_for("products.category", id=selected_category))
+    
+    # Set the form data to the selected category
+    form.category.data = id
+    
     return render_template("products/category.html", products=products, categories=categories, form=form, category=category)
+
+
 
 
 @products.route("/brand/<string:brand>", methods=["GET", "POST"])
@@ -244,18 +251,15 @@ def brand(brand):
     
     # Filter out empty strings and use a set to remove duplicates
     unique_brands = sorted(set(filter(None, brands)))
-    
-    # Debugging: Print the unique brands list
-    print("Unique brands list:", unique_brands)
-    
+        
     form.brand.choices = [(b, b) for b in unique_brands]
-    
-    # Debugging: Print the form choices
-    print("Form choices:", form.brand.choices)
     
     if form.validate_on_submit():
         selected_brand = form.brand.data
         return redirect(url_for("products.brand", brand=selected_brand))
+    
+    # Set the form data to the selected brand
+    form.brand.data = brand
     
     # Filter products based on the brand
     products = db.session.query(Product).filter_by(brand=brand).all()
