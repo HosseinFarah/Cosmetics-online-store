@@ -2,8 +2,8 @@ from . import products
 from flask import render_template, redirect, url_for, request, flash, current_app, session, jsonify
 from flask_login import login_user, logout_user, login_required, current_user
 from ..decorators import admin_required
-from .forms import CreateNewProduct, EditProduct
-from app.models import Product
+from .forms import CreateNewProduct, EditProduct, CategoryForm, BrandsForm
+from app.models import Product, Category
 from app import db
 from werkzeug.utils import secure_filename
 import os
@@ -39,7 +39,7 @@ def create_new_product():
                 picture_filename = secure_filename(picture.filename)
                 picture.save(os.path.join(current_app.config['PRODUCT_IMAGE_FOLDER'], picture_filename))
                 picture_filenames.append(picture_filename)
-        product = Product(name=form.name.data, price=form.price.data, description=form.description.data, image=image_filename, pictures=json.dumps(picture_filenames), instructions=form.instructions.data, ingredients=form.ingredients.data, size=form.size.data, weight=form.weight.data, ean=form.ean.data, category_id=form.category.data, brand=form.brand.data)
+        product = Product(name=form.name.data, price=form.price.data, description=form.description.data, image=image_filename, pictures=json.dumps(picture_filenames), instructions=form.instructions.data, ingredients=form.ingredients.data, size=form.size.data, weight=form.weight.data, ean=form.ean.data, category_id=form.category.data, brand=form.brand.data,videos=form.videos.data)
         db.session.add(product)
         db.session.commit()
         flash('Product created successfully', 'success')
@@ -180,6 +180,7 @@ def edit_product(id):
         product.ean = form.ean.data
         product.category_id = form.category.data
         product.brand = form.brand.data
+        product.videos = form.videos.data
 
         # Commit the changes
         db.session.commit()
@@ -196,6 +197,7 @@ def edit_product(id):
         form.weight.data = product.weight
         form.ean.data = product.ean
         form.category.data = product.category_id
+        form.videos.data = product.videos
     return render_template("products/edit_product.html", form=form, product=product, pictures=json.loads(product.pictures))
 
         
@@ -217,3 +219,48 @@ def delete_product(id):
 def product(id):
     product = db.session.query(Product).get(id)
     return render_template("products/product.html", product=product, pictures=json.loads(product.pictures))
+
+
+@products.route("/category/<int:id>", methods=["GET", "POST"])
+def category(id):
+    form = CategoryForm()
+    form.category.choices = [(category.id, category.name) for category in db.session.query(Category).all()] 
+    products = db.session.query(Product).filter_by(category_id=id).all()
+    categories = db.session.query(Category).all()
+    category = db.session.query(Category).get(id)
+    
+    if form.validate_on_submit():
+        return redirect(url_for("products.category", id=form.category.data))
+    return render_template("products/category.html", products=products, categories=categories, form=form, category=category)
+
+
+@products.route("/brand/<string:brand>", methods=["GET", "POST"])
+def brand(brand):
+    form = BrandsForm()
+    
+    brands_file = os.path.join(current_app.config['JSON_FOLDER'], 'brands.json')
+    with open(brands_file, encoding='utf-8') as f:
+        brands = json.load(f)
+    
+    # Filter out empty strings and use a set to remove duplicates
+    unique_brands = sorted(set(filter(None, brands)))
+    
+    # Debugging: Print the unique brands list
+    print("Unique brands list:", unique_brands)
+    
+    form.brand.choices = [(b, b) for b in unique_brands]
+    
+    # Debugging: Print the form choices
+    print("Form choices:", form.brand.choices)
+    
+    if form.validate_on_submit():
+        selected_brand = form.brand.data
+        return redirect(url_for("products.brand", brand=selected_brand))
+    
+    # Filter products based on the brand
+    products = db.session.query(Product).filter_by(brand=brand).all()
+    
+    return render_template("products/brand.html", products=products, brands=unique_brands, form=form, brand=brand)
+
+    
+    

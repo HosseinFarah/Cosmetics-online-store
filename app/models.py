@@ -224,6 +224,7 @@ class Product(db.Model):
     ean = db.Column(db.String(100), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.now(timezone('Europe/Helsinki')))
     updated_at = db.Column(db.DateTime, default=datetime.now(timezone('Europe/Helsinki')))
+    videos = db.Column(db.Text, nullable=False)
     category_id = db.Column(db.Integer, db.ForeignKey('categories.id'),default=2)
     brand=db.Column(db.String(100), nullable=False)
     category = db.relationship('Category', backref='products')
@@ -240,7 +241,7 @@ class Category(db.Model):
     updated_at = db.Column(db.DateTime, default=datetime.now(timezone('Europe/Helsinki')))
     
     def __repr__(self) -> str:
-        return '<Category %r>' % self.name
+        return self.name
     
     @staticmethod
     def insert_category():

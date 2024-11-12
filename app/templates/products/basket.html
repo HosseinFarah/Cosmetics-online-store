@@ -30,7 +30,7 @@
                     {% for item in basket %}
                     <tr>
                         <td>{{ item.name }}</td>
-                        <td class="img-thumbnail"><img src="{{ url_for('static', filename='uploads/products/' + item.image) }}" alt="{{ item.name }}" style="width: 150px; height: 150px;border-radius: 50%;" class="img-fluid"></td>
+                        <td class="img-thumbnail"><img src="{{ url_for('static', filename='uploads/products/' + item.image) }}" alt="{{ item.name }}" style="width: 150px; height: 150px;border-radius: 50%; object-fit: contain;" class="img-fluid"></td>
                         <td>{{ item.quantity }}</td>
                         <td>{{ item.price }}</td>
                         <td>{{ item.price * item.quantity }}</td>

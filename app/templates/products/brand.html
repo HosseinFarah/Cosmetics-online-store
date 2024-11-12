@@ -1,0 +1,61 @@
+{% extends 'base.html' %} {% block content %}
+<div class="container">
+  <!-- loading... -->
+  <div id="loader" style="display: none">
+    <div class="spinner-grow text-danger" role="status"></div>
+    <div class="spinner-grow text-warning" role="status"></div>
+    <div class="spinner-grow text-info" role="status"></div>
+  </div>
+  <!-- end loading... -->
+  <div class="row">
+    <form method="post">
+      {{ form.hidden_tag() }}
+      <div class="input-group mb-3">
+        {{ form.brand.label(class="input-group-text") }} {{
+        form.brand(class="form-select") }}
+        <button type="submit" class="btn btn-primary">Filter</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="row d-flex justify-content-center">
+    <h1>{{ brand }}</h1>
+    {% for product in products %}
+    {% if product.brand == brand %}
+    <div class="col-md-4">
+        <div class="card m-1 position-relative">
+            <img
+                src="{{ url_for('static', filename='uploads/products/' + product.image) }}"
+                class="card-img-center align-self-center"
+                alt="{{ product.name }}"
+                style="max-height: 300px"
+            />
+            <div class="position-absolute bg-brand text-white p-2 rounded-start top-0 end-0">
+                {{ product.brand }}
+            </div>
+            <div class="card-header">
+                <h5 class="card-title">{{ product.name }}</h5>
+            </div>
+            <div class="card-body">
+                <p class="card-text badge bg-primary text-light">
+                    {{ product.price }} €
+                </p>
+            </div>
+            <div class="card-footer">
+                <a
+                    href="{{ url_for('products.add_to_basket', id=product.id) }}"
+                    class="btn btn-primary"
+                ><i class="fa fa-shopping-cart"></i> Add to Basket</a>
+                {% if session['basket'] | length > 0 %}
+                <a href="{{ url_for('products.basket') }}" class="btn btn-success"
+                ><i class="fa fa-shopping-basket"></i> View Basket</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    {% endfor %}
+</div>
+  </div>
+  {% endblock %}
+</div>

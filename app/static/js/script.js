@@ -102,7 +102,17 @@
       var productDetails = document.getElementById("product-details");
 
       // Show the loader
-      loader.style.display = "block";
+    loader.style.display = "flex";
+    loader.style.justifyContent = "center";
+    loader.style.alignItems = "center";
+    loader.style.position = "fixed";
+    loader.style.background = "rgba(255, 255, 255, 0.8)";
+    loader.style.width = "100%";
+    loader.style.height = "100%";
+    loader.style.zIndex = "9999";
+    loader.style.top = "0";
+    loader.style.left = "0";
+      
 
       // Simulate loading time
       setTimeout(function() {
@@ -111,8 +121,10 @@
 
           // Show the product details
           productDetails.style.display = "block";
-      }, 1000); // Adjust the timeout as needed
+      }, 500); // Adjust the timeout as needed
   });
+
+  
 
 
   // get the brands from the server and populate the brand select element

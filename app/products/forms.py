@@ -10,13 +10,14 @@ class CreateNewProduct(FlaskForm):
     price = DecimalField('Price', validators=[DataRequired()])
     image = FileField('Product Image', validators=[FileAllowed(['jpg', 'png', 'jpeg','webp'])])
     pictures = MultipleFileField('Product Pictures', validators=[FileAllowed(['jpg', 'png', 'jpeg','webp'])])
-    instructions = TextAreaField('Instructions', validators=[DataRequired(), Length(min=2)])
-    ingredients = TextAreaField('Ingredients', validators=[DataRequired(), Length(min=2)])
-    size = StringField('Size', validators=[DataRequired(), Length(min=2, max=100)])
-    weight = StringField('Weight', validators=[DataRequired(), Length(min=2, max=100)])
-    ean = StringField('EAN', validators=[DataRequired(), Length(min=2, max=100)])
+    instructions = TextAreaField('Instructions')
+    ingredients = TextAreaField('Ingredients')
+    size = StringField('Size')
+    weight = StringField('Weight')
+    ean = StringField('EAN')
     category = SelectField('Category', choices=[(1, 'Electronics'), (2, 'Cosmetics'), (3, 'Toiletries')], coerce=int)   
     brand = SelectField('Brand', choices=[], validators=[DataRequired()])
+    videos = TextAreaField('Videos')
     submit = SubmitField('Add Product')
     
     def validate_name(self, name):
@@ -35,15 +36,25 @@ class EditProduct(FlaskForm):
     image = FileField('Product Image', validators=[FileAllowed(['jpg', 'png', 'jpeg','webp'])])
     pictures = MultipleFileField('Product Pictures', validators=[FileAllowed(['jpg', 'png', 'jpeg','webp'])])
     category = SelectField('Category', choices=[(1, 'Electronics'), (2, 'Cosmetics'), (3, 'Toiletries')], coerce=int)
-    instructions = TextAreaField('Instructions', validators=[DataRequired(), Length(min=2)])
-    ingredients = TextAreaField('Ingredients', validators=[DataRequired(), Length(min=2)])
-    size = StringField('Size', validators=[DataRequired(), Length(min=2, max=100)])
-    weight = StringField('Weight', validators=[DataRequired(), Length(min=2, max=100)])
-    ean = StringField('EAN', validators=[DataRequired(), Length(min=2, max=100)])
+    instructions = TextAreaField('Instructions')
+    ingredients = TextAreaField('Ingredients')
+    size = StringField('Size')
+    weight = StringField('Weight')
+    ean = StringField('EAN')
     brand = SelectField('Brand', choices=[], validators=[DataRequired()])
+    videos = TextAreaField('Videos')
     submit = SubmitField('Update Product')
     
 
     def validate_price(self, price):
         if price.data <= 0:
             raise ValidationError('Price must be greater than zero.')
+        
+        
+class CategoryForm(FlaskForm):
+    category = SelectField('Category', choices=[])
+    submit = SubmitField('Go')
+    
+class BrandsForm(FlaskForm):
+    brand = SelectField('Brand', choices=[])
+    submit = SubmitField('Go')

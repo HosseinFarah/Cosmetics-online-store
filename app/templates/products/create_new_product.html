@@ -114,6 +114,15 @@
           <small class="form-text text-danger">{{ error }}</small>
           {% endfor %}
         </div>
+        <div class="form-group">
+          {{ form.videos.label(class="form-control-label") }} {{
+          form.videos(class="form-control") }}
+          <div class="invalid-feedback">Please provide a valid videos.</div>
+          {% for error in form.videos.errors %}
+          <small class="form-text text-danger">{{ error }}</small>
+          {% endfor %}
+        </div>
+        
         <div class="form-group mt-3">
           {{ form.submit(class="btn btn-primary") }}
           <a href="{{ url_for('main.index') }}" class="btn btn-secondary"><i class="fa fa-arrow-left"></i> Back</a
