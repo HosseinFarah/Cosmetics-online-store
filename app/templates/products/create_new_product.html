@@ -45,6 +45,23 @@
           {% endfor %}
         </div>
         <div class="form-group">
+          {{ form.maincategory.label(class="form-control-label") }} {{
+          form.maincategory(class="form-control") }}
+          <div class="invalid-feedback">Please provide a valid maincategory.</div>
+          {% for error in form.maincategory.errors %}
+          <small class="form-text text-danger">{{ error }}</small>
+          {% endfor %}
+        </div>
+        <div class="form-group">
+          {{ form.subcategory.label(class="form-control-label") }} {{
+          form.subcategory(class="form-control") }}
+          <div class="invalid-feedback">Please provide a valid subcategory.</div>
+          {% for error in form.subcategory.errors %}
+          <small class="form-text text-danger">{{ error }}</small>
+          {% endfor %}
+        </div>
+
+        <div class="form-group">
           {{ form.instructions.label(class="form-control-label") }} {{
           form.instructions(class="form-control") }}
           <div class="invalid-feedback">

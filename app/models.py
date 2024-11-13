@@ -231,6 +231,28 @@ class Category(db.Model):
             db.session.add(category)
         db.session.commit()
         
+class MainCategory(db.Model):
+    __tablename__ = 'main_categories'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False, index=True)
+    created_at = db.Column(db.DateTime, default=datetime.now(timezone('Europe/Helsinki')))
+    updated_at = db.Column(db.DateTime, default=datetime.now(timezone('Europe/Helsinki')))
+    
+    def __repr__(self) -> str:
+        return self.name
+    
+class SubCategory(db.Model):
+    __tablename__ = 'sub_categories'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False, index=True)
+    created_at = db.Column(db.DateTime, default=datetime.now(timezone('Europe/Helsinki')))
+    updated_at = db.Column(db.DateTime, default=datetime.now(timezone('Europe/Helsinki')))
+    
+    def __repr__(self) -> str:
+        return self.name     
+
+
+        
 
 class Brand(db.Model):
     __tablename__ = 'brands'
@@ -269,6 +291,10 @@ class Product(db.Model):
     category = db.relationship('Category', backref='products')
     discount = db.Column(db.Float, nullable=False, default=0)
     brand = db.relationship('Brand', backref='products')
+    maincategory_id = db.Column(db.Integer, db.ForeignKey('main_categories.id'))
+    maincategory = db.relationship('MainCategory', backref='products')
+    subcategory_id = db.Column(db.Integer, db.ForeignKey('sub_categories.id'))
+    subcategory = db.relationship('SubCategory', backref='products')
 
     
     def __repr__(self) -> str:

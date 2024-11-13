@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, TextAreaField, MultipleFileField, SelectField, DecimalField, FloatField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
-from app.models import Product, Brand
+from app.models import Product, Brand, MainCategory, SubCategory
 from flask_wtf.file import FileField, FileAllowed, FileRequired
 
 class CreateNewProduct(FlaskForm):
@@ -18,6 +18,8 @@ class CreateNewProduct(FlaskForm):
     category = SelectField('Category', choices=[(1, 'Electronics'), (2, 'Cosmetics'), (3, 'Toiletries')], coerce=int)   
     brand = SelectField('Brand', choices=[], validators=[DataRequired()])
     videos = TextAreaField('Videos')
+    maincategory = SelectField('Main Category', choices=[],coerce=int)
+    subcategory = SelectField('Sub Category', choices=[],coerce=int)
     submit = SubmitField('Add Product')
     
     def validate_name(self, name):
@@ -36,6 +38,8 @@ class EditProduct(FlaskForm):
     image = FileField('Product Image', validators=[FileAllowed(['jpg', 'png', 'jpeg','webp'])])
     pictures = MultipleFileField('Product Pictures', validators=[FileAllowed(['jpg', 'png', 'jpeg','webp'])])
     category = SelectField('Category', choices=[(1, 'Electronics'), (2, 'Cosmetics'), (3, 'Toiletries')], coerce=int)
+    maincategory = SelectField('Main Category', choices=[],coerce=int)
+    subcategory = SelectField('Sub Category', choices=[],coerce=int)
     instructions = TextAreaField('Instructions')
     ingredients = TextAreaField('Ingredients')
     size = StringField('Size')
@@ -80,3 +84,39 @@ class EditBrand(FlaskForm):
     video = FileField('Brand Video', validators=[FileAllowed(['mp4', 'webm'])])
     description = TextAreaField('Description')
     submit = SubmitField('Update Brand')
+    
+class CreateNewMainCategory(FlaskForm):
+    name = StringField('Main Category Name', validators=[DataRequired()])
+    submit = SubmitField('Add Main Category')
+    
+    def validate_name(self, name):
+        maincategory = MainCategory.query.filter_by(name=name.data).first()
+        if maincategory:
+            raise ValidationError('Main Category name already exists. Please choose a different name.')
+    
+class EditMainCategory(FlaskForm):
+    name = StringField('Main Category Name', validators=[DataRequired()])
+    submit = SubmitField('Update Main Category')
+    
+    def validate_name(self, name):
+        maincategory = MainCategory.query.filter_by(name=name.data).first()
+        if maincategory:
+            raise ValidationError('Main Category name already exists. Please choose a different name.')
+
+class CreateNewSubCategory(FlaskForm):
+    name = StringField('Sub Category Name', validators=[DataRequired()])
+    submit = SubmitField('Add Sub Category')
+    
+    def validate_name(self, name):
+        subcategory = SubCategory.query.filter_by(name=name.data).first()
+        if subcategory:
+            raise ValidationError('Sub Category name already exists. Please choose a different name.')
+
+class EditSubCategory(FlaskForm):
+    name = StringField('Sub Category Name', validators=[DataRequired()])
+    submit = SubmitField('Update Sub Category')
+    
+    def validate_name(self, name):
+        subcategory = SubCategory.query.filter_by(name=name.data).first()
+        if subcategory:
+            raise ValidationError('Sub Category name already exists. Please choose a different name.')
