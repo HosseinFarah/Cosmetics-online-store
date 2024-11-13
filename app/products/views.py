@@ -18,6 +18,7 @@ def create_new_product():
     form = CreateNewProduct()
     brands = db.session.query(Brand).all()
     form.brand.choices = [(brand.name, brand.name) for brand in brands]
+
     if form.validate_on_submit():
         image = request.files['image']
         if image:
@@ -31,7 +32,7 @@ def create_new_product():
                 picture.save(os.path.join(current_app.config['PRODUCT_IMAGE_FOLDER'], picture_filename))
                 picture_filenames.append(picture_filename)
         brand = db.session.query(Brand).filter_by(name=form.brand.data).first()
-        product = Product(name=form.name.data, price=form.price.data, description=form.description.data, image=image_filename, pictures=json.dumps(picture_filenames), instructions=form.instructions.data, ingredients=form.ingredients.data, size=form.size.data, weight=form.weight.data, ean=form.ean.data, category_id=form.category.data, brand=brand,videos=form.videos.data)
+        product = Product(name=form.name.data, price=form.price.data, description=form.description.data, image=image_filename, pictures=json.dumps(picture_filenames), instructions=form.instructions.data, ingredients=form.ingredients.data, size=form.size.data, weight=form.weight.data, ean=form.ean.data, category_id=form.category.data, brand=brand,videos=form.videos.data, subcategory=form.subcategory.data, discount=form.discount.data,maincategory=form.maincategory.data)
         db.session.add(product)
         db.session.commit()
         flash('Product created successfully', 'success')
@@ -85,6 +86,7 @@ def add_to_basket(id):
                 "ean": product.ean,
                 "category_id": product.category_id,
                 "brand": product.brand_id,
+                "discount": product.get_discount_percent(),
                 "quantity": 1
             })
             session.modified = True
@@ -124,8 +126,13 @@ def basket():
     for item in session["basket"]:
         if isinstance(item, dict):
             item.setdefault("quantity", 1)
+            item.setdefault("discount", 0)  # Ensure discount key exists
             basket.append(item)
-    total = sum(item["price"] * item["quantity"] for item in basket)
+        
+    total = sum(
+        item["quantity"] * (item["price"] * (1 - item["discount"] / 100)) if item["discount"] else item["quantity"] * item["price"]
+        for item in basket
+    )
     return render_template("products/basket.html", basket=basket, total=total)
 
 
@@ -163,7 +170,6 @@ def edit_product(id):
         
         brand = db.session.query(Brand).filter_by(name=form.brand.data).first()
         product.brand_id = brand.id
-
         product.name = form.name.data
         product.price = form.price.data
         product.description = form.description.data
@@ -175,6 +181,7 @@ def edit_product(id):
         product.ean = form.ean.data
         product.category_id = form.category.data
         product.videos = form.videos.data
+        product.discount = form.discount.data
 
         # Commit the changes
         db.session.commit()
@@ -197,6 +204,7 @@ def edit_product(id):
         form.ean.data = product.ean
         form.category.data = product.category_id
         form.videos.data = product.videos
+        form.discount.data = product.discount
     return render_template("products/edit_product.html", form=form, product=product, pictures=json.loads(product.pictures))
 
         

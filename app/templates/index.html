@@ -54,9 +54,20 @@
                   <i class="fa fa-weight text-secondary"></i> {{ product.weight }}
                 </p>
                 {% endif %}
+                {% if product.discount %}
                 <p class="card-text">
-                  <i class="fa fa-euro-sign text-secondary"></i>Hinta: {{ product.price }} €
+                    <i class="fa fa-percent text-info"></i> <span class="badge bg-info text-light">{{ product.get_discount_percent() }}%</span>
                 </p>
+                <p class="card-text">
+                    <i class="fa fa-euro-sign text-secondary"></i> 
+                    <span class="text-decoration-line-through">{{ product.price }} €</span>
+                    <span class="text-success fs-4">{{ product.get_discount_price() | round(2) }} €</span>
+                </p>
+            {% else %}
+                <p class="card-text">
+                    <i class="fa fa-euro-sign text-secondary"></i> {{ product.price }} €
+                </p>
+            {% endif %}
                 <a
                   href="{{ url_for('products.product', id=product.id) }}"
                   class="btn btn-light d-flex justify-content-end"

@@ -1,62 +1,102 @@
 {% extends 'base.html' %} {% block content %}
 <div class="container">
-    <!-- loading... -->
-    <div id="loader" style="display: none">
-        <div class="spinner-grow text-danger" role="status"></div>
-        <div class="spinner-grow text-warning" role="status"></div>
-        <div class="spinner-grow text-info" role="status"></div>
+  <!-- loading... -->
+  <div id="loader" style="display: none">
+    <div class="spinner-grow text-danger" role="status"></div>
+    <div class="spinner-grow text-warning" role="status"></div>
+    <div class="spinner-grow text-info" role="status"></div>
+  </div>
+  <!-- end loading... -->
+  <div class="row">
+    <div class="col-md-12">
+      <h1>Your Basket</h1>
+      {% if basket|length == 0 %}
+      <p>Your basket is empty</p>
+      {% else %}
+      <table class="table table-striped align-middle">
+        <thead>
+          <tr>
+            <th>Product</th>
+            <td>Product Image</td>
+            <th>Quantity</th>
+            <th>Price</th>
+            <th>Total</th>
+            <th>Details</th>
+            <th>Actions</th>
+            <th>Remove</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in basket %}
+          <tr>
+            <td>{{ item.name }}</td>
+            <td class="img-thumbnail">
+              <img
+                src="{{ url_for('static', filename='uploads/products/' + item.image) }}"
+                alt="{{ item.name }}"
+                style="
+                  width: 150px;
+                  height: 150px;
+                  border-radius: 50%;
+                  object-fit: contain;
+                "
+                class="img-fluid"
+              />
+            </td>
+            <td>{{ item.quantity }}</td>
+            <td>
+              {% if item.discount %}
+              <del>${{ item.price }}</del>
+              <span class="badge bg-danger text-light"
+                >-${{ item.discount }} %</span
+              >
+              <span class="badge bg-success text-light fs-5">
+                {{ (item["quantity"] * item["price"] * (1 - item["discount"] /100)) | round(2) }} €
+              </span>
+
+              {% else %} ${{ item.price }} {% endif %}
+            </td>
+            <td>
+              {% if item["discount"] %} {{ (item["quantity"] * item["price"] *
+              (1 - item["discount"] / 100)) | round(2) }} € {% else %} {{
+              (item["quantity"] * item["price"]) | round(2) }} € {% endif %}
+            </td>
+            <td>
+              <a
+                href="{{ url_for('products.product', id=item.id) }}"
+                class="btn btn-primary"
+                ><i class="fa fa-info"></i
+              ></a>
+            </td>
+            <td>
+              <a href="{{ url_for('products.increment_product', id=item.id) }}"
+                ><i class="fa fa-plus"></i
+              ></a>
+              <a href="{{ url_for('products.decrement_product', id=item.id) }}"
+                ><i class="fa fa-minus"></i
+              ></a>
+            </td>
+            <td>
+              <a
+                href="{{ url_for('products.remove_from_basket', id=item.id) }}"
+                class="btn btn-danger"
+                ><i class="fa fa-trash"></i
+              ></a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <div class="d-flex justify-content-end">
+        <h3 class="badge bg-success text-light fs-3 shadow">
+          Total: {{ total | round(2) }} €
+        </h3>
       </div>
-    <!-- end loading... -->
-    <div class="row">
-        <div class="col-md-12">
-            <h1>Your Basket</h1>
-            {% if basket|length == 0 %}
-            <p>Your basket is empty</p>
-            {% else %}
-            <table class="table table-striped align-middle">
-                <thead>
-                    <tr>
-                        <th>Product</th>
-                        <td>Product Image</td>
-                        <th>Quantity</th>
-                        <th>Price</th>
-                        <th>Total</th>
-                        <th>Details</th>
-                        <th>Actions</th>
-                        <th>Remove</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for item in basket %}
-                    <tr>
-                        <td>{{ item.name }}</td>
-                        <td class="img-thumbnail"><img src="{{ url_for('static', filename='uploads/products/' + item.image) }}" alt="{{ item.name }}" style="width: 150px; height: 150px;border-radius: 50%; object-fit: contain;" class="img-fluid"></td>
-                        <td>{{ item.quantity }}</td>
-                        <td>{{ item.price }}</td>
-                        <td>{{ item.price * item.quantity }}</td>
-                        <td>
-                            <a href="{{ url_for('products.product', id=item.id) }}" class="btn btn-primary"><i class="fa fa-info"></i></a>
-                        </td>
-                        <td>
-                            <a href="{{ url_for('products.increment_product', id=item.id) }}"><i class="fa fa-plus"></i></a>
-                            <a href="{{ url_for('products.decrement_product', id=item.id) }}"><i class="fa fa-minus"></i></a>
-                        </td>
-                        <td>
-                            <a href="{{ url_for('products.remove_from_basket', id=item.id) }}" class="btn btn-danger"><i class="fa fa-trash"></i></a>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-            <div class="d-flex justify-content-end">
-                <h3 class="badge bg-success text-light fs-3 shadow">Total: ${{ total }}</h3>
-            </div>
-            {% endif %}
-        </div>
-        <a href="{{ url_for('main.index') }}" class="btn btn-primary"><i class="fa fa-arrow-left"></i> Continue Shopping</a>
+      {% endif %}
     </div>
+    <a href="{{ url_for('main.index') }}" class="btn btn-primary"
+      ><i class="fa fa-arrow-left"></i> Continue Shopping</a
+    >
+  </div>
 </div>
 {% endblock %}
-
-
-

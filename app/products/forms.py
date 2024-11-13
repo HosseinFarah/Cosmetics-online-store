@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, TextAreaField, DecimalField, MultipleFileField, SelectField
+from wtforms import StringField, SubmitField, TextAreaField, MultipleFileField, SelectField, DecimalField, FloatField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
 from app.models import Product, Brand
 from flask_wtf.file import FileField, FileAllowed, FileRequired
@@ -43,6 +43,7 @@ class EditProduct(FlaskForm):
     ean = StringField('EAN')
     brand = SelectField('Brand', choices=[], validators=[DataRequired()])
     videos = TextAreaField('Videos')
+    discount = FloatField('Discount (%)')
     submit = SubmitField('Update Product')
     
 
@@ -50,6 +51,10 @@ class EditProduct(FlaskForm):
         if price.data <= 0:
             raise ValidationError('Price must be greater than zero.')
         
+    def validate_discount(self, discount):
+        if discount.data < 0:
+            raise ValidationError('Discount must be greater than or equal to zero.')
+
         
 class CategoryForm(FlaskForm):
     category = SelectField('Category', choices=[])

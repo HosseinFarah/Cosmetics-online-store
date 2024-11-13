@@ -267,8 +267,19 @@ class Product(db.Model):
     category_id = db.Column(db.Integer, db.ForeignKey('categories.id'),default=2)
     brand_id= db.Column(db.Integer, db.ForeignKey('brands.id'))
     category = db.relationship('Category', backref='products')
+    discount = db.Column(db.Float, nullable=False, default=0)
     brand = db.relationship('Brand', backref='products')
 
     
     def __repr__(self) -> str:
         return '<Product %r>' % self.name
+    
+    def get_discount_price(self):
+        return self.price - (self.price * self.discount / 100)
+    
+    def get_discount_amount(self):
+        return self.price * self.discount / 100
+    
+    def get_discount_percent(self):
+        return self.discount
+    
