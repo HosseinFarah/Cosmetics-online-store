@@ -221,26 +221,25 @@ def product(id):
     return render_template("products/product.html", product=product, pictures=json.loads(product.pictures))
 
 
-@products.route("/category/<int:id>", methods=["GET", "POST"])
-def category(id):
+@products.route("/category/<string:category_name>", methods=["GET", "POST"])
+def category(category_name):
     form = CategoryForm()
-    form.category.choices = [(category.id, category.name) for category in db.session.query(Category).all()] 
-    products = db.session.query(Product).filter_by(category_id=id).all()
     categories = db.session.query(Category).all()
-    category = db.session.query(Category).get(id)
+    form.category.choices = [(c.name, c.name) for c in categories]
+    category = db.session.query(Category).filter_by(name=category_name).first()
     
     if form.validate_on_submit():
         selected_category = form.category.data
-        return redirect(url_for("products.category", id=selected_category))
+        return redirect(url_for("products.category", category_name=selected_category))
     
     # Set the form data to the selected category
-    form.category.data = id
-    
+    form.category.data = category.name if category else None
+    # Filter products based on the selected category
+    products = db.session.query(Product).filter_by(category=category).all() if category else []
     return render_template("products/category.html", products=products, categories=categories, form=form, category=category)
-
-
-
-
+    
+    
+    
 @products.route("/brand/<string:brand>", methods=["GET", "POST"])
 def brand(brand):
     form = BrandsForm()

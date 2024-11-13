@@ -10,29 +10,20 @@
   <div class="row">
     <!-- All categories in combo box -->
     <div class="col-md-12">
-        <form method="post">
-            {{ form.csrf_token }}
-          <div class="input-group mb-3">
-            <select
-              class="form-select"
-              id="category"
-              name="category"
-              aria-label="Select Category"
-            >
-              <option selected>Select Category</option>
-              {% for category in categories %}
-              <option value="{{ category.id }}">{{ category.name }}</option>
-              {% endfor %}
-            </select>
-            <button class="btn btn-primary" type="submit">Go</button>
-          </div>
-        </form>
+      <form method="post">
+        {{ form.hidden_tag() }}
+        <div class="input-group mb-3">
+            {{ form.category.label(class="input-group-text") }}
+            {{ form.category(class="form-select") }}
+            <button type="submit" class="btn btn-primary"><i class="fa fa-filter"></i> Filter</button>
+        </div>
+    </form>
       </div>
 
 
 
     {% for product in products %}
-    {% if product.category_id == category.id %}
+    {% if product.category == category %}
     
     <div class="col-md-4">
       <div class="card m-1 position-relative">
