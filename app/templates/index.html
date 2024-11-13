@@ -26,26 +26,34 @@
         <div class="row d-flex justify-content-center">
           {% for product in product_batch %}
           <div class="col-md-2 position-relative">
-            <div class="card shadow-lg p-3 mb-5 rounded bg-gradient shine-effect">
+            <div class="card shadow-lg  mb-5 rounded bg-gradient shine-effect">
               <img
                 src="{{ url_for('static', filename='uploads/products/' + product.image) }}"
                 class="card-img-top"
                 alt="{{ product.name }}"
-                style="max-height: 250px; object-fit: contain"
+                style="max-height: 250px; object-fit: contain; background-color: #fcf5f3"
               />
-              <div class="position-absolute bg-brand text-white p-2 rounded-start top-0 end-0">
-                {{ product.brand }}
+              <div class="position-absolute bg-brand text-white p-1 top-0 end-0 shadow rounded-start-top"
+
+              >
+                <a href="{{ url_for('products.brand', brand_name=product.brand.name) }}"
+                 class="brand-link"
+                 >{{ product.brand.name }}</a>
             </div>
               <div class="card-header">
                 <h5 class="card-title">{{ product.name }}</h5>
               </div>
               <div class="card-body">
+                {% if product.size %}
                 <p class="card-text">
                   <i class="fa fa-expand text-secondary"></i> {{ product.size }}
                 </p>
+                {% endif %}
+                {% if product.weight %}
                 <p class="card-text">
                   <i class="fa fa-weight text-secondary"></i> {{ product.weight }}
                 </p>
+                {% endif %}
                 <p class="card-text">
                   <i class="fa fa-euro-sign text-secondary"></i>Hinta: {{ product.price }} €
                 </p>
@@ -122,7 +130,7 @@
   <div id="carouselExampleInterval" class="carousel slide" data-bs-ride="carousel">
     <div class="carousel-inner">
       {% for slider in sliders %}
-      <div class="carousel-item {% if loop.first %}active{% endif %}" data-bs-interval="1000">
+      <div class="carousel-item {% if loop.first %}active{% endif %}" data-bs-interval="2500">
         <img src="{{ url_for('static', filename='uploads/slider/' + slider) }}" class="d-block w-100" alt="{{ slider }}" style="max-height: 300px; object-fit: cover">
       </div>
       {% endfor %}
@@ -154,6 +162,8 @@
         class="btn btn-primary"
         ><i class="fa fa-plus"></i> Create New Product</a
       >
+      <a href="{{ url_for('products.new_brand') }}" class="btn btn-primary"
+        ><i class="fa fa-plus"></i> Create New Brand</a
     </div>
     {% endif %}
   </div>

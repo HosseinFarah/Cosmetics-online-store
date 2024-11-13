@@ -90,8 +90,7 @@
         </div>
         <div class="form-group">
           {{ form.brand.label(class="form-label") }} 
-          <select id="brand" name="brand" class="form-control">
-          </select>
+          {{ form.brand(class="form-control") }}
           <div class="invalid-feedback">Please enter your brand.</div>
           {% for error in form.brand.errors %}
           <span class="text-danger">{{ error }}</span>

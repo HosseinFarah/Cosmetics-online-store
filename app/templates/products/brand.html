@@ -18,20 +18,61 @@
     </form>
   </div>
 
-  <div class="row d-flex justify-content-center">
-    <h1>{{ brand }}</h1>
-    {% for product in products %}
-    {% if product.brand == brand %}
+  <div class="row">
     <div class="col-md-4">
-      <div class="card m-1 position-relative">
+      <img
+      src="{{ url_for('static', filename='uploads/brands/' + brand.logo) }}"
+      class="img-fluid rounded m-1 shadow-lg"
+        alt="{{ brand }}"
+        style="max-height: 150px;max-width: 150px; object-fit: contain;top: 0; left: 0;"
+      />
+      
+      <hr>
+      <p class="text-muted mt-5">
+        {{brand.summary}}
+      </p>
+    </div>
+    <div class="col-md-7 d-flex justify-content-end">
+      <p class="text-muted mt-1 text-justify">
+        <i class="fa fa-quote-left"></i> {{brand.description}} <i class="fa fa-quote-right"></i>
+      </p>
+      <video
+      src="{{ url_for('static', filename='uploads/brands/' + brand.video) }}"
+      class="img-fluid rounded m-1 shadow-lg"
+      alt="{{ brand }}"
+      style="max-height: 250px; object-fit: contain;"
+      autoplay
+      loop
+      playsinline
+      muted
+      ></video>
+    </div>
+    <div class="row m-2">
+      <div class="col-md-3 ms-auto">
+        {% if current_user.is_administrator() %}
+        <a href="{{ url_for('products.edit_brand', id=brand.id) }}" class="btn btn-warning"
+          ><i class="fa fa-edit"></i> Edit Brand</a>
+          {% endif %}
+      </div>
+    </div>
+    <h1 class="badge bg-brand text-white p-1 rounded-start top-0 end-0">{{ brand }}</h1>
+  </div>
+
+
+  <div class="row d-flex justify-content-center">
+    <h1>{{ brand.name }}</h1>
+    {% for product in products %}
+    {% if product.brand_id == brand.id %}
+    <div class="col-md-3">
+      <div class="card m-1 position-relative shine-effect">
         <img
           src="{{ url_for('static', filename='uploads/products/' + product.image) }}"
           class="card-img-center align-self-center"
           alt="{{ product.name }}"
-          style="max-height: 300px"
+          style="max-height: 200px; object-fit: contain;background-color: #fcf5f3"
         />
         <div class="position-absolute bg-brand text-white p-2 rounded-start top-0 end-0">
-          {{ product.brand }}
+          {{ brand.name }}
         </div>
         <div class="card-header">
           <h5 class="card-title">{{ product.name }}</h5>
@@ -43,11 +84,10 @@
           <a
             href="{{ url_for('products.add_to_basket', id=product.id) }}"
             class="btn btn-primary"
-            ><i class="fa fa-shopping-cart"></i> Add to Basket</a>
+            ><i class="fa fa-plus"></i> <i class="fa fa-shopping-cart"></i></a>
             {% if session['basket'] | length > 0 %}
             <a href="{{ url_for('products.basket') }}" class="btn btn-success"
-              ><i class="fa fa-shopping-basket"></i> View Basket</a
-            >
+              ><i class="fa fa-eye"></i> <i class="fa fa-shopping-basket"></i></a>
             <hr>
           
           <a href="{{ url_for('main.index') }}" class="btn btn-light d-flex justify-content-end"
@@ -66,6 +106,28 @@
     {% endif %}
     {% endfor %}
 </div>
+<hr>
+<div class="row">
+  <div class="col-md-12">
+      <h1>All Brands</h1>
+      <hr>
+      <h1>Brands</h1>
+      {% for letter, brands in grouped_brands|dictsort %}
+          <h2>{{ letter }}</h2>
+          <div class="row">
+              {% for brand in brands %}
+                  <div class="col-md-3">
+                      <a href="{{ url_for('products.brand', brand_name=brand.name) }}" class="btn btn-outline-primary m-1">
+                          <i class="fa fa-eye"></i> {{ brand.name }}
+                      </a>
+                  </div>
+              {% endfor %}
+          </div>
+      {% endfor %}
   </div>
-  {% endblock %}
 </div>
+  </div>
+
+
+  {% endblock %}
+

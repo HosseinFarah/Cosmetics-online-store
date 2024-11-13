@@ -116,5 +116,16 @@ body > footer {
   background-size: cover;
 }
 
+.brand-link{
+  color: #ffffff;
+  font-weight: bolder;
+  text-decoration: none;
+  transition: all 0.3s;
+}
 
-
+a.brand-link:hover{
+  text-shadow: 0 0 3px #ff2461, 0 0 5px #ff2461, 0 0 15px #ff2461;
+  text-decoration: none;
+  font-size: 15px;
+  background: #0880c5;
+}

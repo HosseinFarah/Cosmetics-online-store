@@ -87,7 +87,7 @@
       </div>
       {% endif %}
       <hr>
-      <h3 class="badge bg-primary">brand : <i class="fa fa-tag"></i> <a href="{{ url_for('products.brand', brand=product.brand)}}" class="text-light">Filter by: {{ product.brand }}</a></h3>
+      <h3 class="badge bg-primary">brand : <i class="fa fa-tag"></i> <a href="{{ url_for('products.brand', brand_name=brand.name)}}" class="text-light">Filter by: {{ brand.name}}</a></h3>
       <h3 class="badge bg-primary">category : <i class="fa fa-folder"></i> <a href="{{ url_for('products.category', category_name=product.category) }}" class="text-light">Filter by: {{ product.category }}</a></h3>
 
 

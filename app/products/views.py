@@ -2,8 +2,8 @@ from . import products
 from flask import render_template, redirect, url_for, request, flash, current_app, session, jsonify
 from flask_login import login_user, logout_user, login_required, current_user
 from ..decorators import admin_required
-from .forms import CreateNewProduct, EditProduct, CategoryForm, BrandsForm
-from app.models import Product, Category
+from .forms import CreateNewProduct, EditProduct, CategoryForm, BrandsForm, CreateNewBrand, EditBrand
+from app.models import Product, Category, Brand
 from app import db
 from werkzeug.utils import secure_filename
 import os
@@ -11,22 +11,13 @@ import json
 
 
 
-@products.route('/brands', methods=['GET', 'POST'])
-def get_brands():
-    brands_file = os.path.join(current_app.config['JSON_FOLDER'], 'brands.json')
-    with open(brands_file,encoding='utf-8') as f:
-        brands = json.load(f)
-    return jsonify(brands)
-
 @products.route('/create_new_product', methods=['GET', 'POST'])
 @login_required
 @admin_required
 def create_new_product():
     form = CreateNewProduct()
-    brands_file = os.path.join(current_app.config['JSON_FOLDER'], 'brands.json')
-    with open(brands_file, encoding='utf-8') as f:
-        brands = json.load(f)
-    form.brand.choices = [(brand, brand) for brand in brands]
+    brands = db.session.query(Brand).all()
+    form.brand.choices = [(brand.name, brand.name) for brand in brands]
     if form.validate_on_submit():
         image = request.files['image']
         if image:
@@ -39,7 +30,8 @@ def create_new_product():
                 picture_filename = secure_filename(picture.filename)
                 picture.save(os.path.join(current_app.config['PRODUCT_IMAGE_FOLDER'], picture_filename))
                 picture_filenames.append(picture_filename)
-        product = Product(name=form.name.data, price=form.price.data, description=form.description.data, image=image_filename, pictures=json.dumps(picture_filenames), instructions=form.instructions.data, ingredients=form.ingredients.data, size=form.size.data, weight=form.weight.data, ean=form.ean.data, category_id=form.category.data, brand=form.brand.data,videos=form.videos.data)
+        brand = db.session.query(Brand).filter_by(name=form.brand.data).first()
+        product = Product(name=form.name.data, price=form.price.data, description=form.description.data, image=image_filename, pictures=json.dumps(picture_filenames), instructions=form.instructions.data, ingredients=form.ingredients.data, size=form.size.data, weight=form.weight.data, ean=form.ean.data, category_id=form.category.data, brand=brand,videos=form.videos.data)
         db.session.add(product)
         db.session.commit()
         flash('Product created successfully', 'success')
@@ -92,6 +84,7 @@ def add_to_basket(id):
                 "weight": product.weight,
                 "ean": product.ean,
                 "category_id": product.category_id,
+                "brand": product.brand_id,
                 "quantity": 1
             })
             session.modified = True
@@ -150,10 +143,8 @@ def remove_from_basket(id):
 def edit_product(id):
     product = db.session.query(Product).get(id)
     form = EditProduct(obj=product)
-    brands_file = os.path.join(current_app.config['JSON_FOLDER'], 'brands.json')
-    with open(brands_file, encoding='utf-8') as f:
-        brands = json.load(f)
-    form.brand.choices = [(brand, brand) for brand in brands]
+    brands = db.session.query(Brand).all()
+    form.brand.choices = [(brand.name, brand.name) for brand in brands]
     if form.validate_on_submit():
         image = request.files["image"]
         if image:
@@ -169,6 +160,10 @@ def edit_product(id):
                 picture_filenames.append(picture_filename)
         if not picture_filenames:
             picture_filenames = json.loads(product.pictures)
+        
+        brand = db.session.query(Brand).filter_by(name=form.brand.data).first()
+        product.brand_id = brand.id
+
         product.name = form.name.data
         product.price = form.price.data
         product.description = form.description.data
@@ -179,7 +174,6 @@ def edit_product(id):
         product.weight = form.weight.data
         product.ean = form.ean.data
         product.category_id = form.category.data
-        product.brand = form.brand.data
         product.videos = form.videos.data
 
         # Commit the changes
@@ -187,7 +181,12 @@ def edit_product(id):
         flash("Product updated successfully", "success")
         return redirect(url_for("main.index", id=id))
     elif request.method == "GET":
-        form.brand.data = product.brand
+        
+        brand = db.session.query(Brand).get(product.brand_id)
+        if brand:
+            form.brand.data = brand.name
+        else:
+            form.brand.data = None
         form.name.data = product.name
         form.price.data = product.price
         form.description.data = product.description
@@ -218,7 +217,8 @@ def delete_product(id):
 @products.route("/product/<int:id>")
 def product(id):
     product = db.session.query(Product).get(id)
-    return render_template("products/product.html", product=product, pictures=json.loads(product.pictures))
+    brand = product.brand
+    return render_template("products/product.html", product=product, pictures=json.loads(product.pictures), brand=brand)
 
 
 @products.route("/category/<string:category_name>", methods=["GET", "POST"])
@@ -236,34 +236,94 @@ def category(category_name):
     form.category.data = category.name if category else None
     # Filter products based on the selected category
     products = db.session.query(Product).filter_by(category=category).all() if category else []
-    return render_template("products/category.html", products=products, categories=categories, form=form, category=category)
+    brands = db.session.query(Brand).all()
+    return render_template("products/category.html", products=products, categories=categories, form=form, category=category, brands=brands)
     
     
     
-@products.route("/brand/<string:brand>", methods=["GET", "POST"])
-def brand(brand):
+@products.route("/brand/<string:brand_name>", methods=["GET", "POST"])
+def brand(brand_name):
     form = BrandsForm()
     
-    brands_file = os.path.join(current_app.config['JSON_FOLDER'], 'brands.json')
-    with open(brands_file, encoding='utf-8') as f:
-        brands = json.load(f)
+    brands = db.session.query(Brand).all()
+    form.brand.choices = [(b.name, b.name) for b in brands]
     
-    # Filter out empty strings and use a set to remove duplicates
-    unique_brands = sorted(set(filter(None, brands)))
+    from collections import defaultdict
+    grouped_brands = defaultdict(list)
+    for brand in brands:
+        first_letter = brand.name[0].upper()
+        grouped_brands[first_letter].append(brand)
         
-    form.brand.choices = [(b, b) for b in unique_brands]
-    
     if form.validate_on_submit():
         selected_brand = form.brand.data
-        return redirect(url_for("products.brand", brand=selected_brand))
+        return redirect(url_for("products.brand", brand_name=selected_brand))
     
-    # Set the form data to the selected brand
-    form.brand.data = brand
+    # Get the Brand instance
+    brand = db.session.query(Brand).filter_by(name=brand_name).first()
+    # Filter products based on the selected brand
+    form.brand.data = brand.name if brand else None
     
-    # Filter products based on the brand
-    products = db.session.query(Product).filter_by(brand=brand).all()
+    products = db.session.query(Product).filter_by(brand=brand).all() if brand else []
+    return render_template("products/brand.html", products=products, brands=brands, form=form, brand=brand,grouped_brands=grouped_brands)
     
-    return render_template("products/brand.html", products=products, brands=unique_brands, form=form, brand=brand)
 
     
-    
+@products.route("/new_brand", methods=["GET", "POST"])
+@login_required
+@admin_required
+def new_brand():
+    form = CreateNewBrand()
+    if form.validate_on_submit():
+        logo = request.files["logo"]
+        if logo:
+            logo_filename = secure_filename(logo.filename)
+            logo.save(os.path.join(current_app.config["BRAND_FOLDER"], logo_filename))
+            current_logo_path = os.path.join(current_app.config["BRAND_FOLDER"], logo_filename)
+            if os.path.exists(current_logo_path):
+                os.remove(current_logo_path)
+        video = request.files["video"]
+        if video:
+            video_filename = secure_filename(video.filename)
+            video.save(os.path.join(current_app.config["BRAND_FOLDER"], video_filename))
+            video_path = os.path.join(current_app.config["BRAND_FOLDER"], video_filename)
+            if os.path.exists(video_path):
+                os.remove(video_path)
+        brand = Brand(name=form.name.data, logo=logo_filename, video=video_filename,summary=form.summary.data,description=form.description.data)
+        db.session.add(brand)
+        db.session.commit()
+        flash("Brand created successfully", "success")
+        return redirect(url_for("main.index"))
+    return render_template("products/new_brand.html", form=form)
+
+@products.route("/edit_brand/<int:id>", methods=["GET", "POST"])
+@login_required
+@admin_required
+def edit_brand(id):
+    brand = db.session.query(Brand).get(id)
+    form = EditBrand(obj=brand)
+    if form.validate_on_submit():
+        logo = request.files["logo"]
+        if logo:
+            logo_filename = secure_filename(logo.filename)
+            logo.save(os.path.join(current_app.config["BRAND_FOLDER"], logo_filename))
+            brand.logo = logo_filename
+        video = request.files["video"]
+        if video:
+            video_filename = secure_filename(video.filename)
+            video.save(os.path.join(current_app.config["BRAND_FOLDER"], video_filename))
+            brand.video = video_filename
+        brand.name = form.name.data
+        brand.summary = form.summary.data
+        brand.description = form.description.data
+        db.session.commit()
+        flash("Brand updated successfully", "success")
+        return redirect(url_for("products.brand", brand_name=brand.name))
+    elif request.method == "GET":
+        form.logo.data = brand.logo
+        form.video.data = brand.video
+        form.name.data = brand.name
+        form.summary.data = brand.summary
+        form.description.data = brand.description
+    return render_template("products/edit_brand.html", form=form, brand=brand)
+
+        

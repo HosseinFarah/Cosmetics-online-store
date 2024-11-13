@@ -208,30 +208,6 @@ class Todo(db.Model):
     def __repr__(self) -> str:
         return '<Todo %r>' % self.title
 
-
-class Product(db.Model):
-    __tablename__ = 'products'
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(255), nullable=False, index=True)
-    price = db.Column(db.Float, nullable=False)
-    image = db.Column(db.String(255), nullable=False)
-    pictures = db.Column(db.Text, nullable=False)
-    description = db.Column(db.Text, nullable=False)
-    instructions = db.Column(db.Text, nullable=False)
-    ingredients = db.Column(db.Text, nullable=False)
-    size = db.Column(db.String(100), nullable=False)
-    weight = db.Column(db.String(100), nullable=False)
-    ean = db.Column(db.String(100), nullable=False)
-    created_at = db.Column(db.DateTime, default=datetime.now(timezone('Europe/Helsinki')))
-    updated_at = db.Column(db.DateTime, default=datetime.now(timezone('Europe/Helsinki')))
-    videos = db.Column(db.Text, nullable=False)
-    category_id = db.Column(db.Integer, db.ForeignKey('categories.id'),default=2)
-    brand=db.Column(db.String(100), nullable=False)
-    category = db.relationship('Category', backref='products')
-    
-    def __repr__(self) -> str:
-        return '<Product %r>' % self.name
-    
     
 class Category(db.Model):
     __tablename__ = 'categories'
@@ -255,6 +231,44 @@ class Category(db.Model):
             db.session.add(category)
         db.session.commit()
         
-       
+
+class Brand(db.Model):
+    __tablename__ = 'brands'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False, index=True)
+    summary = db.Column(db.Text, nullable=False)
+    logo = db.Column(db.String(255), nullable=False)
+    description = db.Column(db.Text, nullable=False)
+    video = db.Column(db.Text, nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.now(timezone('Europe/Helsinki')))
+    updated_at = db.Column(db.DateTime, default=datetime.now(timezone('Europe/Helsinki')))
+    
+    def __repr__(self) -> str:
+        return self.name
+    
+
         
-        
+class Product(db.Model):
+    __tablename__ = 'products'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(255), nullable=False, index=True)
+    price = db.Column(db.Float, nullable=False)
+    image = db.Column(db.String(255), nullable=False)
+    pictures = db.Column(db.Text, nullable=False)
+    description = db.Column(db.Text, nullable=False)
+    instructions = db.Column(db.Text, nullable=False)
+    ingredients = db.Column(db.Text, nullable=False)
+    size = db.Column(db.String(100), nullable=False)
+    weight = db.Column(db.String(100), nullable=False)
+    ean = db.Column(db.String(100), nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.now(timezone('Europe/Helsinki')))
+    updated_at = db.Column(db.DateTime, default=datetime.now(timezone('Europe/Helsinki')))
+    videos = db.Column(db.Text, nullable=False)
+    category_id = db.Column(db.Integer, db.ForeignKey('categories.id'),default=2)
+    brand_id= db.Column(db.Integer, db.ForeignKey('brands.id'))
+    category = db.relationship('Category', backref='products')
+    brand = db.relationship('Brand', backref='products')
+
+    
+    def __repr__(self) -> str:
+        return '<Product %r>' % self.name

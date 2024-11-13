@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, TextAreaField, DecimalField, MultipleFileField, SelectField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
-from app.models import Product
+from app.models import Product, Brand
 from flask_wtf.file import FileField, FileAllowed, FileRequired
 
 class CreateNewProduct(FlaskForm):
@@ -58,3 +58,20 @@ class CategoryForm(FlaskForm):
 class BrandsForm(FlaskForm):
     brand = SelectField('Brand', choices=[])
     submit = SubmitField('Go')
+    
+    
+class CreateNewBrand(FlaskForm):
+    name = StringField('Brand Name')
+    summary = TextAreaField('Summary')
+    logo = FileField('Brand Logo', validators=[FileAllowed(['jpg', 'png', 'jpeg','webp'])])
+    video = FileField('Brand Video', validators=[FileAllowed(['mp4', 'webm'])])
+    description = TextAreaField('Description')
+    submit = SubmitField('Add Brand')
+
+class EditBrand(FlaskForm):
+    name = StringField('Brand Name')
+    summary = TextAreaField('Summary')
+    logo = FileField('Brand Logo', validators=[FileAllowed(['jpg', 'png', 'jpeg','webp'])])
+    video = FileField('Brand Video', validators=[FileAllowed(['mp4', 'webm'])])
+    description = TextAreaField('Description')
+    submit = SubmitField('Update Brand')
