@@ -121,24 +121,24 @@
     </a>
   </div>
 </div>
-{% if category.name == 'Electronics' %}
-<div class="parallax">
+{% if category.name == 'Hair' %}
+<div class="parallax shadow">
     <div class="col video-container">
         <video autoplay loop muted playsinline>
             <source src="{{ url_for('static', filename='uploads/videos/01.mp4') }}" type="video/mp4" />
         </video>
     </div>
 </div>
-{% elif category.name == 'Toiletries' %}
-<div class="parallax">
+{% elif category.name == 'Makeup' %}
+<div class="parallax shadow">
     <div class="col video-container">
         <video autoplay loop muted playsinline>
             <source src="{{ url_for('static', filename='uploads/videos/02.mp4') }}" type="video/mp4" />
         </video>
     </div>
 </div>
-{% elif category.name == 'Cosmetics' %}
-<div class="carousel-container">
+{% elif category.name == 'The scents' %}
+<div class="carousel-container shadow">
   <div id="carouselExampleInterval" class="carousel slide" data-bs-ride="carousel">
     <div class="carousel-inner">
       {% for slider in sliders %}

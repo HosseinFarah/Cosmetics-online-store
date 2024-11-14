@@ -107,6 +107,15 @@
         {% endfor %}
     </div>
       <div class="mb-3">
+        {{form.discount.label(class="form-label")}}
+        {{form.discount(class="form-control")}}
+        <div class="invalid-feedback">Please provide a valid discount.</div>
+        {% for error in form.discount.errors %}
+        <small class="form-text text-danger">{{ error }}</small>
+        {% endfor %}
+      </div>
+      
+      <div class="mb-3">
         {{form.category.label(class="form-label")}}
         {{form.category(class="form-control", id="category")}}
         <div class="invalid-feedback">Please provide a valid category.</div>

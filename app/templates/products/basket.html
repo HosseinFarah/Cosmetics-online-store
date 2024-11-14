@@ -92,6 +92,13 @@
           Total: {{ total | round(2) }} €
         </h3>
       </div>
+      <!-- Stripe Payment -->
+      <div class="d-flex justify-content-end mt-3">
+        <form action="{{ url_for('products.create_checkout_session') }}" method="POST">
+          {{ form.hidden_tag() }}
+          <button type="submit" class="btn btn-primary">{{ form.submit.label }}</button>
+        </form>
+      </div>
       {% endif %}
     </div>
     <a href="{{ url_for('main.index') }}" class="btn btn-primary"
