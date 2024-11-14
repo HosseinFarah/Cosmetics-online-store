@@ -215,42 +215,42 @@ class Category(db.Model):
     name = db.Column(db.String(100), nullable=False, index=True)
     created_at = db.Column(db.DateTime, default=datetime.now(timezone('Europe/Helsinki')))
     updated_at = db.Column(db.DateTime, default=datetime.now(timezone('Europe/Helsinki')))
+    default = db.Column(db.Boolean, default=False)
+    #default Subcategories
+    parent_id = db.Column(db.Integer, db.ForeignKey('categories.id'), nullable=True)
+    parent = db.relationship('Category', remote_side=[id], backref='subcategories')
     
     def __repr__(self) -> str:
         return self.name
     
     @staticmethod
     def insert_category():
-        categories = ['Electronics', 'Cosmetics', 'Toiletries']
-        default_category = 'Cosmetics'
+        categories = ['Makeup','Skin care','The scents','Hair','Gentlemen','ProSkin by Skincity','Care']
+        default_category = 'Makeup'
         for c in categories:
             category = Category.query.filter_by(name=c).first()
             if category is None:
                 category = Category(name=c)
+            # Assign default category check
             category.default = (category.name == default_category)
             db.session.add(category)
         db.session.commit()
-        
-class MainCategory(db.Model):
-    __tablename__ = 'main_categories'
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), nullable=False, index=True)
-    created_at = db.Column(db.DateTime, default=datetime.now(timezone('Europe/Helsinki')))
-    updated_at = db.Column(db.DateTime, default=datetime.now(timezone('Europe/Helsinki')))
     
-    def __repr__(self) -> str:
-        return self.name
-    
-class SubCategory(db.Model):
-    __tablename__ = 'sub_categories'
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), nullable=False, index=True)
-    created_at = db.Column(db.DateTime, default=datetime.now(timezone('Europe/Helsinki')))
-    updated_at = db.Column(db.DateTime, default=datetime.now(timezone('Europe/Helsinki')))
-    
-    def __repr__(self) -> str:
-        return self.name     
+    #get all subcategories
+    def get_all_subcategories(self):
+        subcategories = []
+        for subcategory in self.subcategories:
+            subcategories.append(subcategory)
+            subcategories.extend(subcategory.get_all_subcategories())
+        return subcategories
 
+    @staticmethod
+    def get_subcategories(parent_id):
+        return Category.query.filter_by(parent_id=parent_id).all()
+
+    # Check if category has products
+    def has_products(self):
+        return len(self.products) > 0
 
         
 
@@ -286,15 +286,14 @@ class Product(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.now(timezone('Europe/Helsinki')))
     updated_at = db.Column(db.DateTime, default=datetime.now(timezone('Europe/Helsinki')))
     videos = db.Column(db.Text, nullable=False)
-    category_id = db.Column(db.Integer, db.ForeignKey('categories.id'),default=2)
     brand_id= db.Column(db.Integer, db.ForeignKey('brands.id'))
-    category = db.relationship('Category', backref='products')
     discount = db.Column(db.Float, nullable=False, default=0)
     brand = db.relationship('Brand', backref='products')
-    maincategory_id = db.Column(db.Integer, db.ForeignKey('main_categories.id'))
-    maincategory = db.relationship('MainCategory', backref='products')
-    subcategory_id = db.Column(db.Integer, db.ForeignKey('sub_categories.id'))
-    subcategory = db.relationship('SubCategory', backref='products')
+    category_id = db.Column(db.Integer, db.ForeignKey('categories.id'),default=2)
+    subcategory_id = db.Column(db.Integer, db.ForeignKey('categories.id'), nullable=True)
+    category = db.relationship('Category', foreign_keys=[category_id], backref='products')
+    subcategory = db.relationship('Category', foreign_keys=[subcategory_id])
+
 
     
     def __repr__(self) -> str:
@@ -308,4 +307,3 @@ class Product(db.Model):
     
     def get_discount_percent(self):
         return self.discount
-    

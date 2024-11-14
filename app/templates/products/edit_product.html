@@ -108,28 +108,21 @@
     </div>
       <div class="mb-3">
         {{form.category.label(class="form-label")}}
-        {{form.category(class="form-control")}}
+        {{form.category(class="form-control", id="category")}}
         <div class="invalid-feedback">Please provide a valid category.</div>
         {% for error in form.category.errors %}
         <small class="form-text text-danger">{{ error }}</small>
         {% endfor %}
       </div>
-      <div class="form-group">
-        {{ form.maincategory.label(class="form-control-label") }} {{
-        form.maincategory(class="form-control") }}
-        <div class="invalid-feedback">Please provide a valid maincategory.</div>
-        {% for error in form.maincategory.errors %}
-        <small class="form-text text-danger">{{ error }}</small>
-        {% endfor %}
-      </div>
-      <div class="form-group">
-        {{ form.subcategory.label(class="form-control-label") }} {{
-        form.subcategory(class="form-control") }}
+      <div class="mb-3">
+        {{form.subcategory.label(class="form-label")}}
+        {{form.subcategory(class="form-control", id="subcategory")}}
         <div class="invalid-feedback">Please provide a valid subcategory.</div>
         {% for error in form.subcategory.errors %}
         <small class="form-text text-danger">{{ error }}</small>
         {% endfor %}
       </div>
+      
       <div class="form-group">
         {{ form.brand.label(class="form-label") }}
         {{ form.brand(class="form-control" ,id = "brand") }}
@@ -152,4 +145,5 @@
     </form>
   </div>
 </div>
+
 {% endblock %}

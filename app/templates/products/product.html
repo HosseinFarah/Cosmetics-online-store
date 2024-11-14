@@ -1,5 +1,12 @@
 {% extends 'base.html' %} {% block content %}
 <div class="container">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{{ url_for('main.index') }}">Home</a></li>
+      <li class="breadcrumb-item"><a href="{{ url_for('products.category', category_name=product.category) }}">{{ product.category }}</a></li>
+      <li class="breadcrumb-item active" aria-current="page">{{ product.name }}</li>
+    </ol>
+  </nav>
   <!-- loading... -->
   <div id="loader" style="display: none">
     <div class="spinner-grow text-danger" role="status"></div>

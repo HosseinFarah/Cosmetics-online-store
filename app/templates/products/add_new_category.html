@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <h2>Add New Category</h2>
+                <form  method="post" novalidate class="needs-validation">
+                    {{form.hidden_tag()}}
+                    <div class="form-group">
+                        {{form.name.label(class="form-control-label")}}
+                        {{form.name(class="form-control")}}
+                        {% if form.name.errors %}
+                            <div class="invalid-feedback">
+                                {% for error in form.name.errors %}
+                                    <span>{{error}}</span>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        {{form.parent_id.label(class="form-control-label")}}
+                        {{form.parent_id(class="form-control")}}
+                        {% if form.parent_id.errors %}
+                            <div class="invalid-feedback">
+                                {% for error in form.parent_id.errors %}
+                                    <span>{{error}}</span>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        {{form.submit(class="btn btn-primary")}}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

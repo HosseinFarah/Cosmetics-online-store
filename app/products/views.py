@@ -2,8 +2,8 @@ from . import products
 from flask import render_template, redirect, url_for, request, flash, current_app, session, jsonify
 from flask_login import login_user, logout_user, login_required, current_user
 from ..decorators import admin_required
-from .forms import CreateNewProduct, EditProduct, CategoryForm, BrandsForm, CreateNewBrand, EditBrand, CreateNewMainCategory, CreateNewSubCategory, EditMainCategory, EditSubCategory
-from app.models import Product, Category, Brand, SubCategory, MainCategory
+from .forms import CreateNewProduct, EditProduct, CategoryForm, BrandsForm, CreateNewBrand, EditBrand, CreateNewCategory
+from app.models import Product, Category, Brand
 from app import db
 from werkzeug.utils import secure_filename
 import os
@@ -18,10 +18,9 @@ def create_new_product():
     form = CreateNewProduct()
     brands = db.session.query(Brand).all()
     form.brand.choices = [(brand.name, brand.name) for brand in brands]
-    maincategories = db.session.query(MainCategory).all()
-    form.maincategory.choices = [(maincategory.id, maincategory.name) for maincategory in maincategories]
-    subcategories = db.session.query(SubCategory).all()
-    form.subcategory.choices = [(subcategory.id, subcategory.name) for subcategory in subcategories]
+    categories = db.session.query(Category).all()
+    form.category.choices = [(category.id, category.name) for category in db.session.query(Category).filter_by(parent_id=None).all()]
+    form.subcategory.choices = [(subcategory.id, subcategory.name) for category in categories for subcategory in category.subcategories]
     if form.validate_on_submit():
         image = request.files['image']
         if image:
@@ -35,7 +34,7 @@ def create_new_product():
                 picture.save(os.path.join(current_app.config['PRODUCT_IMAGE_FOLDER'], picture_filename))
                 picture_filenames.append(picture_filename)
         brand = db.session.query(Brand).filter_by(name=form.brand.data).first()
-        product = Product(name=form.name.data, price=form.price.data, description=form.description.data, image=image_filename, pictures=json.dumps(picture_filenames), instructions=form.instructions.data, ingredients=form.ingredients.data, size=form.size.data, weight=form.weight.data, ean=form.ean.data, category_id=form.category.data, brand=brand,videos=form.videos.data, subcategory=form.subcategory.data, discount=form.discount.data,maincategory=form.maincategory.data)
+        product = Product(name=form.name.data, price=form.price.data, description=form.description.data, image=image_filename, pictures=json.dumps(picture_filenames), instructions=form.instructions.data, ingredients=form.ingredients.data, size=form.size.data, weight=form.weight.data, ean=form.ean.data, category_id=form.category.data, brand=brand,videos=form.videos.data, discount=form.discount.data,subcategory_id=form.subcategory.data)
         db.session.add(product)
         db.session.commit()
         flash('Product created successfully', 'success')
@@ -155,11 +154,9 @@ def edit_product(id):
     form = EditProduct(obj=product)
     brands = db.session.query(Brand).all()
     form.brand.choices = [(brand.name, brand.name) for brand in brands]
-    maincategories = db.session.query(MainCategory).all()
-    form.maincategory.choices = [(maincategory.id, maincategory.name) for maincategory in maincategories]
-    subcategories = db.session.query(SubCategory).all()
-    form.subcategory.choices = [(subcategory.id, subcategory.name) for subcategory in subcategories]
-    
+    categories = db.session.query(Category).all()
+    form.category.choices = [(category.id, category.name) for category in db.session.query(Category).filter_by(parent_id=None).all()]
+    form.subcategory.choices = [(subcategory.id, subcategory.name) for category in categories for subcategory in category.subcategories]
     if form.validate_on_submit():
         image = request.files["image"]
         if image:
@@ -177,8 +174,7 @@ def edit_product(id):
             picture_filenames = json.loads(product.pictures)
         
         brand = db.session.query(Brand).filter_by(name=form.brand.data).first()
-        maincategory = db.session.query(MainCategory).get(form.maincategory.data)
-        subcategory = db.session.query(SubCategory).get(form.subcategory.data)
+
         product.brand_id = brand.id
         product.name = form.name.data
         product.price = form.price.data
@@ -189,12 +185,11 @@ def edit_product(id):
         product.size = form.size.data
         product.weight = form.weight.data
         product.ean = form.ean.data
-        product.subcategory_id = form.subcategory.data
         product.videos = form.videos.data
         product.discount = form.discount.data
         product.category_id = form.category.data
-        product.maincategory_id = maincategory.id
-        product.subcategory_id = subcategory.id
+        product.subcategory_id = form.subcategory.data
+
 
         # Commit the changes
         db.session.commit()
@@ -203,20 +198,12 @@ def edit_product(id):
     elif request.method == "GET":
         
         brand = db.session.query(Brand).get(product.brand_id)
-        maincategory = db.session.query(MainCategory).get(product.maincategory_id)
-        subcategory = db.session.query(SubCategory).get(product.subcategory_id)
-        
-        print("Main category:", maincategory, "Sub category:", subcategory)
+
         
         if brand:
             form.brand.data = brand.name
-        if maincategory:
-            form.maincategory.data = maincategory.id
-        if subcategory:
-            form.subcategory.data = subcategory.id
 
-        form.maincategory.data = maincategory.id if maincategory else None
-        form.subcategory.data = subcategory.id if subcategory else None
+
         form.name.data = product.name
         form.price.data = product.price
         form.description.data = product.description
@@ -226,6 +213,7 @@ def edit_product(id):
         form.weight.data = product.weight
         form.ean.data = product.ean
         form.category.data = product.category_id
+        form.subcategory.data = product.subcategory_id
         form.videos.data = product.videos
         form.discount.data = product.discount
 
@@ -257,7 +245,7 @@ def product(id):
 @products.route("/category/<string:category_name>", methods=["GET", "POST"])
 def category(category_name):
     form = CategoryForm()
-    categories = db.session.query(Category).all()
+    categories = db.session.query(Category).filter_by(parent_id=None).all()
     form.category.choices = [(c.name, c.name) for c in categories]
     category = db.session.query(Category).filter_by(name=category_name).first()
     
@@ -359,29 +347,24 @@ def edit_brand(id):
         form.description.data = brand.description
     return render_template("products/edit_brand.html", form=form, brand=brand)
 
-@products.route("/new_maincategory", methods=["GET", "POST"])
-@login_required
-@admin_required
-def new_maincategory():
-    form = CreateNewMainCategory()
-    if form.validate_on_submit():
-        category = MainCategory(name=form.name.data)
-        db.session.add(category)
-        db.session.commit()
-        flash("Main category created successfully", "success")
-        return redirect(url_for("main.index"))
-    return render_template("products/new_maincategory.html", form=form)
 
-@products.route("/new_subcategory", methods=["GET", "POST"])
+@products.route("/add_new_category", methods=["GET", "POST"])
 @login_required
 @admin_required
-def new_subcategory():
-    form = CreateNewSubCategory()
+def add_new_category():
+    form = CreateNewCategory()
+    form.parent_id.choices = [(0, "None")] + [(c.id, c.name) for c in db.session.query(Category).filter_by(parent_id=None).all()] 
     if form.validate_on_submit():
-        category = SubCategory(name=form.name.data)
-        db.session.add(category)
-        db.session.commit()
-        flash("Sub category created successfully", "success")
-        return redirect(url_for("products.new_subcategory"))
-    return render_template("products/new_subcategory.html", form=form)
-    
+        category_name = form.name.data
+        parent_id = form.parent_id.data
+        exicting_category = db.session.query(Category).filter_by(name=category_name).first()
+        if not exicting_category:
+            category = Category(name=category_name, parent_id=parent_id)
+            db.session.add(category)
+            db.session.commit()
+            flash("Category created successfully", "success")
+            return redirect(url_for("products.add_new_category"))
+        else:
+            flash("Category already exists", "danger")
+    return render_template("products/add_new_category.html", form=form)
+

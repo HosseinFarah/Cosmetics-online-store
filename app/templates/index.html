@@ -7,6 +7,7 @@
 </div>
 <!-- end loading... -->
 {% for category in categories %}
+{% if category.parent_id == None and category.products|length > 0 %}
 <hr>
 <h2 class="text-center text-primary">{{ category.name }}</h2>
 <div class="row">
@@ -157,6 +158,7 @@
   </div>
 </div>
 {% endif %}
+{% endif %}
 {% endfor %}
 
 
@@ -174,11 +176,7 @@
         ><i class="fa fa-plus"></i> Create New Product</a>
       <a href="{{ url_for('products.new_brand') }}" class="btn btn-primary"
         ><i class="fa fa-plus"></i> Create New Brand</a>
-        <!-- Create new Main category -->
-      <a href="{{ url_for('products.new_maincategory') }}" class="btn btn-primary"
-        ><i class="fa fa-plus"></i> Create New Main Category</a>
-        <a href="{{ url_for('products.new_subcategory') }}" class="btn btn-primary"
-        ><i class="fa fa-plus"></i> Create New Sub Category</a>
+      <a href="{{ url_for('products.add_new_category') }}" class="btn btn-primary" ><i class="fa fa-plus"></i> Create New Category</a>
     </div>
     {% endif %}
   </div>
