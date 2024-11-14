@@ -208,7 +208,68 @@ class Todo(db.Model):
     def __repr__(self) -> str:
         return '<Todo %r>' % self.title
 
+    
+class Category(db.Model):
+    __tablename__ = 'categories'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False, index=True)
+    created_at = db.Column(db.DateTime, default=datetime.now(timezone('Europe/Helsinki')))
+    updated_at = db.Column(db.DateTime, default=datetime.now(timezone('Europe/Helsinki')))
+    default = db.Column(db.Boolean, default=False)
+    #default Subcategories
+    parent_id = db.Column(db.Integer, db.ForeignKey('categories.id'), nullable=True)
+    parent = db.relationship('Category', remote_side=[id], backref='subcategories')
+    
+    def __repr__(self) -> str:
+        return self.name
+    
+    @staticmethod
+    def insert_category():
+        categories = ['Makeup','Skin care','The scents','Hair','Gentlemen','ProSkin by Skincity','Care']
+        default_category = 'Makeup'
+        for c in categories:
+            category = Category.query.filter_by(name=c).first()
+            if category is None:
+                category = Category(name=c)
+            # Assign default category check
+            category.default = (category.name == default_category)
+            db.session.add(category)
+        db.session.commit()
+    
+    #get all subcategories
+    def get_all_subcategories(self):
+        subcategories = []
+        for subcategory in self.subcategories:
+            subcategories.append(subcategory)
+            subcategories.extend(subcategory.get_all_subcategories())
+        return subcategories
 
+    @staticmethod
+    def get_subcategories(parent_id):
+        return Category.query.filter_by(parent_id=parent_id).all()
+
+    # Check if category has products
+    def has_products(self):
+        return len(self.products) > 0
+
+        
+
+class Brand(db.Model):
+    __tablename__ = 'brands'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False, index=True)
+    summary = db.Column(db.Text, nullable=False)
+    logo = db.Column(db.String(255), nullable=False)
+    description = db.Column(db.Text, nullable=False)
+    video = db.Column(db.Text, nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.now(timezone('Europe/Helsinki')))
+    updated_at = db.Column(db.DateTime, default=datetime.now(timezone('Europe/Helsinki')))
+    
+    def __repr__(self) -> str:
+        return self.name
+    
+
+        
 class Product(db.Model):
     __tablename__ = 'products'
     id = db.Column(db.Integer, primary_key=True)
@@ -217,8 +278,32 @@ class Product(db.Model):
     image = db.Column(db.String(255), nullable=False)
     pictures = db.Column(db.Text, nullable=False)
     description = db.Column(db.Text, nullable=False)
+    instructions = db.Column(db.Text, nullable=False)
+    ingredients = db.Column(db.Text, nullable=False)
+    size = db.Column(db.String(100), nullable=False)
+    weight = db.Column(db.String(100), nullable=False)
+    ean = db.Column(db.String(100), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.now(timezone('Europe/Helsinki')))
     updated_at = db.Column(db.DateTime, default=datetime.now(timezone('Europe/Helsinki')))
+    videos = db.Column(db.Text, nullable=False)
+    brand_id= db.Column(db.Integer, db.ForeignKey('brands.id'))
+    discount = db.Column(db.Float, nullable=False, default=0)
+    brand = db.relationship('Brand', backref='products')
+    category_id = db.Column(db.Integer, db.ForeignKey('categories.id'),default=2)
+    subcategory_id = db.Column(db.Integer, db.ForeignKey('categories.id'), nullable=True)
+    category = db.relationship('Category', foreign_keys=[category_id], backref='products')
+    subcategory = db.relationship('Category', foreign_keys=[subcategory_id])
+
+
     
     def __repr__(self) -> str:
         return '<Product %r>' % self.name
+    
+    def get_discount_price(self):
+        return self.price - (self.price * self.discount / 100)
+    
+    def get_discount_amount(self):
+        return self.price * self.discount / 100
+    
+    def get_discount_percent(self):
+        return self.discount

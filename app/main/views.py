@@ -3,7 +3,7 @@ from  flask import render_template, redirect, url_for, request, flash, current_a
 from flask_login import login_user, logout_user, login_required, current_user
 from app.models import User, Todo
 from app import db
-from app.models import Product
+from app.models import Product, Category
 
 # @main.route('/')
 # @main.route('/index')
@@ -16,4 +16,6 @@ from app.models import Product
 @main.route("/index")
 def index():
     products = db.session.query(Product).all()
-    return render_template("index.html", products=products)
+    categories = db.session.query(Category).all()
+    sliders = ['(1).webp', '(2).webp', '(3).webp', '(4).webp']
+    return render_template("index.html", products=products, categories=categories, sliders=sliders)

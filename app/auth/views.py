@@ -169,7 +169,10 @@ def update_profile():
             if image:
                 filename = secure_filename(image.filename)
                 filename = f"{current_user.id}_{filename}"
-                image.save(os.path.join(current_app.config['UPLOAD_FOLDER'], filename))
+                upload_path = current_app.config['UPLOAD_FOLDER']
+                if not os.path.exists(upload_path):
+                    os.makedirs(upload_path)
+                image.save(os.path.join(upload_path, filename))
                 current_image_path = os.path.join(current_app.config['UPLOAD_FOLDER'], current_user.image)
                 if current_user.image != 'default.jpg' and current_user.image != filename:
                     if os.path.exists(current_image_path):

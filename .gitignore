@@ -5,6 +5,7 @@
 .flaskenv
 *.log
 app.log
+logger_config.txt
 # User uploads
 app/static/uploads/users/*
 !app/static/uploads/users/default.jpg

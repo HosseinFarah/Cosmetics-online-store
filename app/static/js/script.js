@@ -95,3 +95,50 @@
             })
             .catch(error => console.error('Error fetching cities:', error));
     });
+
+    // loader
+    document.addEventListener("DOMContentLoaded", function() {
+      var loader = document.getElementById("loader");
+      var productDetails = document.getElementById("product-details");
+
+      // Show the loader
+    loader.style.display = "flex";
+    loader.style.justifyContent = "center";
+    loader.style.alignItems = "center";
+    loader.style.position = "fixed";
+    loader.style.background = "rgba(255, 255, 255, 0.8)";
+    loader.style.width = "100%";
+    loader.style.height = "100%";
+    loader.style.zIndex = "9999";
+    loader.style.top = "0";
+    loader.style.left = "0";
+      
+
+      // Simulate loading time
+      setTimeout(function() {
+          // Hide the loader
+          loader.style.display = "none";
+
+          // Show the product details
+          productDetails.style.display = "block";
+      }, 500); // Adjust the timeout as needed
+  });
+
+  
+
+
+  // get the brands from the server and populate the brand select element
+  document.addEventListener('DOMContentLoaded', function() {
+    fetch('/products/brands')
+        .then(response => response.json())
+        .then(data => {
+            const brandSelect = document.getElementById('brand');
+            data.forEach(brand => {
+                const option = document.createElement('option');
+                option.value = brand;
+                option.textContent = brand;
+                brandSelect.appendChild(option);
+            });
+        })
+        .catch(error => console.error('Error fetching brands:', error));
+});

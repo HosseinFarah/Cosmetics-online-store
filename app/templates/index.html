@@ -1,54 +1,184 @@
 {% extends 'base.html' %} {% block content %}
+<!-- loading... -->
+<div id="loader" style="display: none">
+  <div class="spinner-grow text-danger" role="status"></div>
+  <div class="spinner-grow text-warning" role="status"></div>
+  <div class="spinner-grow text-info" role="status"></div>
+</div>
+<!-- end loading... -->
+{% for category in categories %}
+{% if category.parent_id == None and category.products|length > 0 %}
+<hr>
+<h2 class="text-center text-primary">{{ category.name }}</h2>
+<div class="row">
+  <div id="{{ category.name }}" class="carousel slide" data-bs-ride="carousel">
+    <ol class="carousel-indicators">
+      {% for product_batch in category.products|batch(5) %}
+      <li
+        data-bs-target="#{{ category.name }}"
+        data-bs-slide-to="{{ loop.index0 }}"
+        class="{% if loop.first %}active{% endif %}"
+      ></li>
+      {% endfor %}
+    </ol>
+    <div class="carousel-inner">
+      {% for product_batch in category.products|batch(5) %}
+      <div class="carousel-item {% if loop.first %}active{% endif %} mb-5">
+        <div class="row d-flex justify-content-center">
+          {% for product in product_batch %}
+          <div class="col-md-2 position-relative">
+            <div class="card shadow-lg  mb-5 rounded bg-gradient shine-effect">
+              <img
+                src="{{ url_for('static', filename='uploads/products/' + product.image) }}"
+                class="card-img-top"
+                alt="{{ product.name }}"
+                style="max-height: 250px; object-fit: contain; background-color: #fcf5f3"
+              />
+              <div class="position-absolute bg-brand text-white p-1 top-0 end-0 shadow rounded-start-top"
+
+              >
+                <a href="{{ url_for('products.brand', brand_name=product.brand.name) }}"
+                 class="brand-link"
+                 >{{ product.brand.name }}</a>
+            </div>
+              <div class="card-header">
+                <h5 class="card-title">{{ product.name }}</h5>
+              </div>
+              <div class="card-body">
+                {% if product.size %}
+                <p class="card-text">
+                  <i class="fa fa-expand text-secondary"></i> {{ product.size }}
+                </p>
+                {% endif %}
+                {% if product.weight %}
+                <p class="card-text">
+                  <i class="fa fa-weight text-secondary"></i> {{ product.weight }}
+                </p>
+                {% endif %}
+                {% if product.discount %}
+                <p class="card-text">
+                    <i class="fa fa-percent text-info"></i> <span class="badge bg-info text-light">{{ product.get_discount_percent() }}%</span>
+                </p>
+                <p class="card-text">
+                    <i class="fa fa-euro-sign text-secondary"></i> 
+                    <span class="text-decoration-line-through">{{ product.price }} €</span>
+                    <span class="text-success fs-4">{{ product.get_discount_price() | round(2) }} €</span>
+                </p>
+            {% else %}
+                <p class="card-text">
+                    <i class="fa fa-euro-sign text-secondary"></i> {{ product.price }} €
+                </p>
+            {% endif %}
+                <a
+                  href="{{ url_for('products.product', id=product.id) }}"
+                  class="btn btn-light d-flex justify-content-end"
+                  ><i class="fa fa-info-circle text-danger m-1"></i>
+                  <span class="badge bg-danger text-light m-1">Details</span></a
+                >
+              </div>
+              <div class="card-footer">
+                <a
+                  href="{{ url_for('products.add_to_basket', id=product.id) }}"
+                  class="btn btn-success"
+                  ><i class="fa fa-shopping-cart"></i> <i class="fa fa-plus"></i></a
+                >
+                {% if current_user.is_administrator() %}
+                <a
+                  href="{{ url_for('products.edit_product', id=product.id) }}"
+                  class="btn btn-warning"
+                  ><i class="fa fa-edit"></i></a
+                >
+                <a
+                  href="{{ url_for('products.delete_product', id=product.id) }}"
+                  class="btn btn-danger"
+                  onclick="return confirm('Are you sure you want to delete {{ product.name }}?')"
+                  ><i class="fa fa-trash"></i></a
+                >
+                {% endif %}
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    <a
+      class="carousel-control-prev text-dark"
+      href="#{{ category.name }}"
+      role="button"
+      data-bs-slide="prev"
+    >
+      <i class="fa fa-chevron-left fs-3 text-primary g-4"></i>
+    </a>
+    <a
+      class="carousel-control-next text-dark"
+      href="#{{ category.name }}"
+      role="button"
+      data-bs-slide="next"
+    >
+      <i class="fa fa-chevron-right fs-3 text-primary g-4"></i>
+    </a>
+  </div>
+</div>
+{% if category.name == 'Electronics' %}
+<div class="parallax">
+    <div class="col video-container">
+        <video autoplay loop muted playsinline>
+            <source src="{{ url_for('static', filename='uploads/videos/01.mp4') }}" type="video/mp4" />
+        </video>
+    </div>
+</div>
+{% elif category.name == 'Toiletries' %}
+<div class="parallax">
+    <div class="col video-container">
+        <video autoplay loop muted playsinline>
+            <source src="{{ url_for('static', filename='uploads/videos/02.mp4') }}" type="video/mp4" />
+        </video>
+    </div>
+</div>
+{% elif category.name == 'Cosmetics' %}
+<div class="carousel-container">
+  <div id="carouselExampleInterval" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-inner">
+      {% for slider in sliders %}
+      <div class="carousel-item {% if loop.first %}active{% endif %}" data-bs-interval="2500">
+        <img src="{{ url_for('static', filename='uploads/slider/' + slider) }}" class="d-block w-100" alt="{{ slider }}" style="max-height: 300px; object-fit: cover">
+      </div>
+      {% endfor %}
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+  </div>
+</div>
+{% endif %}
+{% endif %}
+{% endfor %}
+
+
+
+
+
 <h2>Products</h2>
 <div class="container">
   <div class="row">
     {% if current_user.is_administrator() %}
-    <div class="col-md-4">
+    <div class="col-md-12">
       <a
         href="{{ url_for('products.create_new_product') }}"
         class="btn btn-primary"
-        ><i class="fa fa-plus"></i> Create New Product</a
-      >
+        ><i class="fa fa-plus"></i> Create New Product</a>
+      <a href="{{ url_for('products.new_brand') }}" class="btn btn-primary"
+        ><i class="fa fa-plus"></i> Create New Brand</a>
+      <a href="{{ url_for('products.add_new_category') }}" class="btn btn-primary" ><i class="fa fa-plus"></i> Create New Category</a>
     </div>
     {% endif %}
   </div>
-
-  <div class="row">
-    {% for product in products %}
-    <div class="col-md-4">
-      <div class="card mt-3">
-        <img
-          src="{{ url_for('static', filename='uploads/products/' + product.image) }}"
-          class="card-img-top"
-          alt="{{ product.name }}"
-            style="max-width: 500px; object-fit: cover"
-        />
-        <div class="card-header">
-          <h5 class="card-title">{{ product.name }}</h5>
-        </div>
-        <div class="card-body">
-          <p class="card-text">{{ product.description }}</p>
-          <p class="card-text">Price: ${{ product.price }}</p>
-        </div>
-        <div class="card-footer">
-          <a
-            href="{{ url_for('products.add_to_basket', id=product.id) }}"
-            class="btn btn-primary"
-            >Add to Basket</a>
-            {% if current_user.is_administrator() %}
-            <a href="{{ url_for('products.edit_product', id=product.id) }}"
-              class="btn btn-warning"><i class="fa fa-edit"></i></a>
-            <a href="{{ url_for('products.delete_product', id=product.id) }}"
-              class="btn btn-danger" onclick="return confirm('Are you sure you want to delete {{ product.name }}?')"><i class="fa fa-trash"></i></a>
-
-              {% endif %}
-        </div>
-        </div>
-        </div>
-        {% endfor %}
-        </div>
-        </div>
-        {% endblock %}
-        
-
-
+</div>
+{% endblock %}
