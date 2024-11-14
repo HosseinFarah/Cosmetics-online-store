@@ -10,6 +10,8 @@ logger_config.txt
 app/static/uploads/users/*
 !app/static/uploads/users/default.jpg
 app/static/uploads/products/*
+app/static/uploads/brands/*
+app/static/uploads/videos/*
 # Python
 *.pyc
 __pycache__/
