@@ -3,7 +3,7 @@
 {% block content %}
     <div class="container">
         <div class="row">
-            <div class="col-md-6 col-md-offset-3">
+            <div class="col-md-5 col-md-offset-3">
                 <div class="card">
                     <div class="card-header bg-info">
                         <h3 class="card-title">Profile</h3>
@@ -27,5 +27,41 @@
                 </div>
             </div>
         </div>
+    </div>
+    <div class="row d-flex justify-content-center mt-5 ">
+        <h1 class="text-center badge bg-info fs-3 shadow">My Orders</h1>
+        {% if my_orders %}
+            <div class="col-md-12">
+                <div class="table-responsive">
+                    <table class="table table-striped-bordered table-hover shadow mt-2 mb-5">
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Order Date</th>
+                                <th>Products</th>
+                                <th>Total Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for order in my_orders %}
+                                <tr class="shadow border-bottom border-danger">
+                                    <td>{{ order.id }}</td>
+                                    <td><span class="badge bg-secondary">{{ order.created_at }}</span></td>
+                                    <td>
+                                        {% for product in purchased_products %}
+                                           <span class="badge bg-primary">{{loop.index}}</span> <strong >{{ product.name }}</strong> <span class="badge bg-success">{{ product.quantity }}</span> | Price Per Unit: : {% if product.discount %} <del class="badge bg-danger">{{ product.price }}</del> {{ product.price * (1 - product.discount / 100) }} {% else %} {{ product.price }} {% endif %} <hr>
+                                        {% endfor %}
+                                    </td>
+                                    <td><span class="badge bg-success fs-3">{{ order.total_amount }} €</span></td>
+                                    
+                                </tr>
+                                {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+    </div>
     </div>
 {% endblock %}

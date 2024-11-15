@@ -88,23 +88,23 @@ def stripe_webhook():
     endpoint_secret = current_app.config['STRIPE_ENDPOINT_SECRET']
     event = None
 
-    print("Webhook received")
+    # print("Webhook received")
 
     try:
         event = stripe.Webhook.construct_event(
             payload, sig_header, endpoint_secret
         )
-        print(f"Received event: {event['type']}")
+        # print(f"Received event: {event['type']}")
     except ValueError as e:
-        print("Invalid payload")
+        # print("Invalid payload")
         return 'Invalid payload', 400
     except stripe.error.SignatureVerificationError as e:
-        print("Invalid signature")
+        # print("Invalid signature")
         return 'Invalid signature', 400
 
     if event['type'] == 'checkout.session.completed':
         checkout_session = event['data']['object']
-        print(f"Checkout session completed: {checkout_session}")
+        # print(f"Checkout session completed: {checkout_session}")
         handle_checkout_session(checkout_session)
 
     return '', 200
@@ -125,17 +125,13 @@ def handle_checkout_session(checkout_session):
         item['quantity'] * (item['price'] * (1 - item['discount'] / 100)) if item.get('discount') else item['quantity'] * item['price']
         for item in basket
     )
-    order_details = json.dumps(basket)
-    bought_products = [item['name'] for item in basket]
-    quantity_of_each_order = [item['quantity'] for item in basket]
+    purchased_products = [{'name': item['name'], 'price': item['price'], 'discount': item.get('discount', 0), 'quantity': item['quantity']} for item in basket]
 
     order = Order(
         payment_id=checkout_session['id'],
         user_id=user_id,
         total_amount=total_amount,
-        order_details=order_details,
-        bought_products=json.dumps(bought_products),
-        quantity_of_each_order=json.dumps(quantity_of_each_order),
+        purchased_products=json.dumps(purchased_products),
         status='completed'
     )
     db.session.add(order)
@@ -192,7 +188,7 @@ def add_to_basket(id):
     
     if product:
         # Debugging statement to check the contents of session["basket"]
-        print("Basket contents before adding:", session["basket"])
+        # print("Basket contents before adding:", session["basket"])
         
         # Check if the product is already in the basket
         for item in session["basket"]:
