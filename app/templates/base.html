@@ -21,7 +21,7 @@
         <!-- navbar with Home,Login,Register,Logout,Profile -->
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container">
-                <a class="navbar-brand" href="{{ url_for('main.index') }}"
+                <a class="navbar-brand" href="{{ url_for('main.index') }}"data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Main Page"
                     >Main Page</a
                 >
 
@@ -40,65 +40,103 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ms-auto">
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('products.category', category_name='Makeup') }}"
-                            >Categories</a
-                        >
+                            <a class="nav-link {{ 'navactive rounded shadow' if request.endpoint == 'products.category' else 'navdeactive' }}" href="{{ url_for('products.category', category_name='Makeup') }}">
+                                Categories
+                            </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('products.brand', brand_name='FILORGA') }}"
-                            >All Brands</a>
+                            <a class="nav-link {{ 'navactive rounded shadow' if request.endpoint == 'products.brand' else 'navdeactive' }}" href="{{ url_for('products.brand', brand_name='FILORGA') }}">
+                                All Brands
+                            </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('products.all_discounted_products') }}"
-                            >Discounted Products</a>
+                            <a class="nav-link {{ 'navactive rounded shadow' if request.endpoint == 'products.all_discounted_products' else 'navdeactive' }}" href="{{ url_for('products.all_discounted_products') }}">
+                                Discounted Products
+                            </a>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link{{'active' if request.endpoint =='products.basket'else ''}}" href="{{ url_for('products.basket') }}"
-                                ><i class="fas fa-shopping-basket"></i><span class="{{ 'badge bg-success' if session['basket']|length else 'badge bg-danger' }}">
+                            <a class="nav-link {{ 'navactive rounded shadow' if request.endpoint == 'products.basket' else 'navdeactive' }}" href="{{ url_for('products.basket') }}">
+                                <i class="fas fa-shopping-basket"></i>
+                                <span class="{{ 'badge bg-primary' if session['basket']|length else 'badge bg-danger' }}">
                                     {{ session['basket']|length }}
                                 </span>
                             </a>
                         </li>
                         {% if current_user.is_administrator()%}
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('auth.all_users') }}"
-                                >All Users</a>
+                            <a class="nav-link {{ 'navactive rounded shadow' if request.endpoint == 'auth.all_users' else 'navdeactive' }}" href="{{ url_for('auth.all_users') }}">
+                                All Users
+                            </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('auth.activate_users') }}"
-                                >Active Users</a>
+                            <a class="nav-link {{ 'navactive rounded shadow' if request.endpoint == 'auth.activate_users' else 'navdeactive' }}" href="{{ url_for('auth.activate_users') }}">
+                                Active Users
+                            </a>
                         </li>
                         {% endif %}
                         {% if current_user.is_authenticated %}
                         <li class="nav-item">
-                          <a class="nav-link {{ 'active' if request.endpoint == 'auth.profile' else '' }}" href="{{ url_for('auth.profile') }}">
+                          <a class="nav-link {{ 'navactive rounded shadow' if request.endpoint == 'auth.profile' else 'navdeactive' }}" href="{{ url_for('auth.profile') }}">
                             Profile</a
                             >
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('auth.logout') }}"
-                                >Logout</a
-                            >
+                            <a class="nav-link {{ 'navactive rounded shadow' if request.endpoint == 'auth.logout' else 'navdeactive' }}" href="{{ url_for('auth.logout') }}">
+                                Logout
+                            </a>
                         </li>
 
                         {% else %}
                         <li class="nav-item">
-                            <a class="nav-link{{'active' if request.endpoint =='auth/login'else ''}}" href="{{ url_for('auth.login') }}"
-                                >Login</a
-                            >
+                            <a class="nav-link {{ 'navactive rounded shadow' if request.endpoint == 'auth.login' else 'navdeactive' }}" href="{{ url_for('auth.login') }}">
+                                Login
+                            </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link{{'active' if request.endpoint =='auth/register'else ''}}" href="{{ url_for('auth.register') }}"
-                                >Register</a
-                            >
+                            <a class="nav-link {{ 'navactive rounded shadow' if request.endpoint == 'auth.register' else 'navdeactive' }}" href="{{ url_for('auth.register') }}">
+                                Register
+                            </a>
                         </li>
                        
                         {% endif %}
                     </ul>
+                    <!-- Search Form -->
+                    <form method="POST" action="{{ url_for('main.search') }}" class="d-flex ms-auto">
+                        {{ form.hidden_tag() }}
+                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="search">
+                        <button class="btn btn-outline-success" type="submit"><i class="fa fa-search"></i></button>
+                    </form>
+                    <!-- End Search Form -->
                 </div>
+                
             </div>
+            
         </nav>
+
+        <!-- admin section -->
+        {% if current_user.is_administrator() %}
+            <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions"><i class="fa fa-cog"></i> </button>
+            <div class="offcanvas offcanvas-top" data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions" aria-labelledby="offcanvasWithBothOptionsLabel">
+                <div class="offcanvas-header">
+                    <h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel">Admin</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <a
+              href="{{ url_for('products.create_new_product') }}"
+              class="btn btn-primary mt-2"
+              ><i class="fa fa-plus"></i> Create New Product</a>
+            <a href="{{ url_for('products.new_brand') }}" class="btn btn-primary mt-2"
+              ><i class="fa fa-plus"></i> Create New Brand</a>
+              <a href="{{ url_for('products.add_new_category') }}" class="btn btn-primary mt-2" ><i class="fa fa-plus"></i> Create New Category</a>
+            </div>
+        </div>
+        {% endif %}
+
+
+
+<!-- end loading... -->
 
         {% if title %}
         <title>{{ title }}</title>

@@ -75,15 +75,39 @@ body > footer {
     transition: all 0.3s;
 }
 .login-btn:hover {
-  background-color: #16658d;
+    background-color: #16658d;
     color: #ffffff;
     box-shadow: 0 0 3px #ff2461, 0 0 5px #ff2461, 0 0 15px #ff2461;
+}
+
+.navactive{
+  background: #ff3971;
+  color: #ffffff;
+}
+.navdeactive {
+  background: #ffffff00;
+  transition: all 0.3s;
+}
+
+.navdeactive:hover{
+  background: #069fc5;
+  color: #ffffff;
+  border-radius: 9px;
 }
 
 .bg-brand{
   background-color: #ff3971;
   font-size: 11px;
   font-weight: bolder;
+  transition: all 0.3s;
+}
+
+.bg-brand:hover{
+  background-color: #0088c7d3;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: bolder;
+  box-shadow:  0 0 3px #ff2461,  0 0 5px #ff2461,  0 0 15px #ff2461;
 }
 
 

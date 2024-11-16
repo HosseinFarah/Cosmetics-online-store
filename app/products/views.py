@@ -125,7 +125,7 @@ def handle_checkout_session(checkout_session):
         item['quantity'] * (item['price'] * (1 - item['discount'] / 100)) if item.get('discount') else item['quantity'] * item['price']
         for item in basket
     )
-    purchased_products = [{'name': item['name'], 'price': item['price'], 'discount': item.get('discount', 0), 'quantity': item['quantity']} for item in basket]
+    purchased_products = [{'id':item['id'],'name': item['name'], 'price': item['price'], 'discount': item.get('discount', 0), 'quantity': item['quantity']} for item in basket]
 
     order = Order(
         payment_id=checkout_session['id'],
