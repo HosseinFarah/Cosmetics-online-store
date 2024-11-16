@@ -9,6 +9,7 @@ from werkzeug.utils import secure_filename
 import os
 import json
 import stripe
+from app.forms import SearchForm
 
 # Stripe Payment Gateway Start
 
@@ -495,7 +496,10 @@ def all_discounted_products():
     products = db.session.query(Product).filter(Product.discount > 0).all()
     # Sort products by discount percentage in descending order
     sorted_products = sorted(products, key=lambda p: p.get_discount_percent(), reverse=True)
-    return render_template("products/all_discounted_products.html", products=sorted_products)
+    form = SearchForm()
+    return render_template("products/all_discounted_products.html", products=sorted_products, form=form)
+
+
 
 @products.route("/brands", methods=["GET"])
 def brands():

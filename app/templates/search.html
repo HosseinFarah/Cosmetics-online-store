@@ -102,15 +102,6 @@
 </ul>
 {% endif %}
 
-{% if categories %}
-<h3>Categories</h3>
-<ul>
-  {% for category in categories %}
-  <li><a href="{{ url_for('products.category', category_name=category.name) }}">{{ category.name }}</a></li>
-  {% endfor %}
-</ul>
-{% endif %}
-
 {% if not products and not brands and not categories %}
 <p>No results found.</p>
 {% endif %}

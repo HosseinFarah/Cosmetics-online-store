@@ -40,5 +40,4 @@ def search():
             )
         ).all()
         brands = db.session.query(Brand).filter(Brand.name.ilike(f'%{search}%')).all()
-        categories = db.session.query(Category).filter(Category.name.ilike(f'%{search}%')).all()
-    return render_template('search.html', products=products, brands=brands, categories=categories, form=form)
+    return render_template('search.html', products=products, brands=brands, form=form)
