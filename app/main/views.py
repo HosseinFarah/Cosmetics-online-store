@@ -18,7 +18,6 @@ def inject_search_form():
     return dict(form=SearchForm())
 
 @main.route("/")
-@login_required
 def index():
     products = Product.query.all()
     categories = Category.query.all()

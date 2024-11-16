@@ -14,11 +14,11 @@
 <h2 class="text-center text-danger ">{{ category.name }}</h2>
 <hr>
 <div class="row">
-  <div id="{{ category.name }}" class="carousel slide" data-bs-ride="carousel">
+  <div id="carousel-{{ category.id }}" class="carousel slide" data-bs-ride="carousel">
     <ol class="carousel-indicators">
       {% for product_batch in category.products|batch(5) %}
       <li
-        data-bs-target="#{{ category.name }}"
+        data-bs-target="#carousel-{{ category.id }}"
         data-bs-slide-to="{{ loop.index0 }}"
         class="{% if loop.first %}active{% endif %}"
       ></li>
@@ -108,7 +108,7 @@
     </div>
     <a
       class="carousel-control-prev text-dark"
-      href="#{{ category.name }}"
+      href="#carousel-{{ category.id }}"
       role="button"
       data-bs-slide="prev"
     >
@@ -116,7 +116,7 @@
     </a>
     <a
       class="carousel-control-next text-dark"
-      href="#{{ category.name }}"
+      href="#carousel-{{ category.id }}"
       role="button"
       data-bs-slide="next"
     >
