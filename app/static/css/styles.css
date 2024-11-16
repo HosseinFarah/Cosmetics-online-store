@@ -153,3 +153,11 @@ a.brand-link:hover{
   font-size: 15px;
   background: #0880c5;
 }
+
+.tooltip-inner {
+  background-color: #077ead !important;
+  box-shadow: 0 0 3px #077ead, 0 0 5px #0655bd, 0 0 15px #04a4b9;
+}
+.tooltip-arrow::before {
+  border-top-color: #077ead !important;
+}

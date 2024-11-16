@@ -74,7 +74,7 @@ def payment_success():
         checkout_session = stripe.checkout.Session.retrieve(checkout_session_id)
         handle_checkout_session(checkout_session)
     session.pop('basket', None)
-    return redirect(url_for('main.index'))
+    return redirect(url_for('auth.profile'))
 
 @products.route('/payment-cancel')
 @login_required
@@ -496,8 +496,7 @@ def all_discounted_products():
     products = db.session.query(Product).filter(Product.discount > 0).all()
     # Sort products by discount percentage in descending order
     sorted_products = sorted(products, key=lambda p: p.get_discount_percent(), reverse=True)
-    form = SearchForm()
-    return render_template("products/all_discounted_products.html", products=sorted_products, form=form)
+    return render_template("products/all_discounted_products.html", products=sorted_products)
 
 
 

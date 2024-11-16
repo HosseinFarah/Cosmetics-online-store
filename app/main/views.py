@@ -12,16 +12,18 @@ from sqlalchemy import or_
 # def index():
 #     return render_template('index.html', title='Todo App' , todos=Todo.query.filter_by(user_id=current_user.id).all())
 
+# Search form in the base.html
+@main.app_context_processor
+def inject_search_form():
+    return dict(form=SearchForm())
 
 @main.route("/")
-@main.route("/index")
+@login_required
 def index():
-    products = db.session.query(Product).all()
-    categories = db.session.query(Category).all()
+    products = Product.query.all()
+    categories = Category.query.all()
     sliders = ['(1).webp', '(2).webp', '(3).webp', '(4).webp']
-    form = SearchForm()
-    return render_template("index.html", products=products, categories=categories, sliders=sliders, form=form)
-
+    return render_template("index.html", products=products, categories=categories, sliders=sliders, title='Home')
 
 @main.route('/search', methods=['GET', 'POST'])
 def search():
