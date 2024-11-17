@@ -225,7 +225,7 @@ class Category(db.Model):
     
     @staticmethod
     def insert_category():
-        categories = ['Makeup','Skin care','The scents','Hair','Gentlemen','ProSkin by Skincity','Care']
+        categories = ['Makeup','Skin care','The scents','Hair','Gentlemen','ProSkin by Skincity','Care','Ladies']
         default_category = 'Makeup'
         for c in categories:
             category = Category.query.filter_by(name=c).first()
@@ -307,3 +307,17 @@ class Product(db.Model):
     
     def get_discount_percent(self):
         return self.discount
+
+class Order(db.Model):
+    __tablename__ = 'orders'
+    id = db.Column(db.Integer, primary_key=True)
+    payment_id = db.Column(db.String(255), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
+    total_amount = db.Column(db.Float, nullable=False)
+    purchased_products = db.Column(db.Text, nullable=False)
+    status = db.Column(db.String(50), nullable=False, default='pending')
+    created_at = db.Column(db.DateTime, default=datetime.now(timezone('Europe/Helsinki')))
+    updated_at = db.Column(db.DateTime, default=datetime.now(timezone('Europe/Helsinki')))
+
+    def __repr__(self) -> str:
+        return f'<Order {self.id}>'

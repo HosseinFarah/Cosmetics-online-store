@@ -14,16 +14,13 @@ body > footer {
   border-radius: 50%;
 }
 
-.col-md-1-7 {
-  flex: 0 0 14.285714%;
-  max-width: 14.285714%;
-}
+
 .carousel-control-prev {
-  width: 6%;
+  width: 3%;
   left: 0;
 }
 .carousel-control-next {
-  width: 6%;
+  width: 3%;
   right: 0;
 }
 
@@ -75,15 +72,39 @@ body > footer {
     transition: all 0.3s;
 }
 .login-btn:hover {
-  background-color: #16658d;
+    background-color: #16658d;
     color: #ffffff;
     box-shadow: 0 0 3px #ff2461, 0 0 5px #ff2461, 0 0 15px #ff2461;
+}
+
+.navactive{
+  background: #ff3971;
+  color: #ffffff;
+}
+.navdeactive {
+  background: #ffffff00;
+  transition: all 0.3s;
+}
+
+.navdeactive:hover{
+  background: #069fc5;
+  color: #ffffff;
+  border-radius: 9px;
 }
 
 .bg-brand{
   background-color: #ff3971;
   font-size: 11px;
   font-weight: bolder;
+  transition: all 0.3s;
+}
+
+.bg-brand:hover{
+  background-color: #0088c7d3;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: bolder;
+  box-shadow:  0 0 3px #ff2461,  0 0 5px #ff2461,  0 0 15px #ff2461;
 }
 
 
@@ -128,4 +149,18 @@ a.brand-link:hover{
   text-decoration: none;
   font-size: 15px;
   background: #0880c5;
+}
+
+.tooltip-inner {
+  background-color: #077ead !important;
+  box-shadow: 0 0 3px #077ead, 0 0 5px #0655bd, 0 0 15px #04a4b9;
+}
+.tooltip-arrow::before {
+  border-top-color: #077ead !important;
+}
+
+.card {
+  width: 18rem; /* Set a fixed width for all cards */
+  height: 40rem; /* Set a fixed height for all cards */
+  background-color: #fcf5f3;
 }

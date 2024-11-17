@@ -24,6 +24,8 @@ class Config:
     JSON_FOLDER= os.path.join(basedir, 'app/static/js')
     PRODUCT_IMAGE_FOLDER = os.environ.get('PRODUCT_IMAGE_FOLDER') or os.path.join(basedir, 'app/static/uploads/products')
     BRAND_FOLDER= os.environ.get('BRAND_FOLDER') or os.path.join(basedir, 'app/static/uploads/brands')
+    STRIPE_SECRET_KEY= os.environ.get('STRIPE_SECRET_KEY')
+    STRIPE_ENDPOINT_SECRET= os.environ.get('STRIPE_ENDPOINT_SECRET')
 
     @staticmethod
     def init_app(app):

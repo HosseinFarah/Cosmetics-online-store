@@ -102,9 +102,6 @@ class ResetEmailRequestForm(FlaskForm):
         if user is not None and user.email != current_user.email:
             raise ValidationError('This email is already in use. Please choose a different one.')
 
-
-        
-        
 class ResetEmailForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
     submit = SubmitField('Reset Email')
@@ -113,9 +110,7 @@ class ResetEmailForm(FlaskForm):
         user = User.query.filter_by(email=email.data).first()
         if user:
             raise ValidationError('Email already in use. Please choose a different one.')
-        
 
-    
 class UpdateUserByAdmin(FlaskForm):
     firstname = StringField('First Name', validators=[DataRequired(), Length(min=2, max=100), Regexp("^[a-zåäöA-ZÅÄÖ'\\-]+$", message='Only letters, hyphens and apostrophes allowed')])
     lastname = StringField('Last Name', validators=[DataRequired(), Length(min=2, max=100), Regexp("^[a-zåäöA-ZÅÄÖ'\\-]+$", message='Only letters, hyphens and apostrophes allowed')])
@@ -125,12 +120,7 @@ class UpdateUserByAdmin(FlaskForm):
     role = SelectField('Role', choices=[('User', 'User'), ('Moderator', 'Moderator'), ('Administrator', 'Administrator')], validators=[DataRequired()])
     is_active = BooleanField('is_active')
     submit = SubmitField('Update')
-    
-    
-    
 
-     
-        
 class SearchForm(FlaskForm):
     search = StringField('Search', validators=[DataRequired()])
     submit = SubmitField('Search')
@@ -139,10 +129,9 @@ class SearchForm(FlaskForm):
         if search.data == '':
             raise ValidationError('You must enter a search term.')
 
-
 class UpdatePasswordForm(FlaskForm):
     old_password = PasswordField('Old Password', validators=[DataRequired()])
     new_password = PasswordField('New Password',validators=[DataRequired(),Regexp(r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{}|;:'\",.<>?/])[A-Za-z\d!@#$%^&*()_+\-=\[\]{}|;:'\",.<>?/]{8,}$",message='Password must contain at least one uppercase letter, one lowercase letter, one number, one special character, and be at least 8 characters long')])
     confirm_password = PasswordField('Confirm New Password', validators=[DataRequired(), EqualTo('new_password')])
     submit = SubmitField('Update Password')
-        
+

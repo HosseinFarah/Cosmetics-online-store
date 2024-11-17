@@ -103,3 +103,7 @@ class CreateNewCategory(FlaskForm):
         # Populate parent categories (root categories)
         self.parent_id.choices = [(None, 'Root Category')] + [(category.id, category.name) for category in Category.query.filter_by(parent_id=None).all()]
 
+# STRIPE Payment
+class CheckoutForm(FlaskForm):
+    submit = SubmitField('Proceed to Payment')
+

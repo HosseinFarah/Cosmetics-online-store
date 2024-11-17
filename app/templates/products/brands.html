@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+  <h1>All Brands</h1>
+  <hr>
+  {% for brand in brands %}
+    <div class="row">
+        <div class="col-md-12">
+        <h1>{{ brand.name }}</h1>
+        <hr>
+        </div>
+    </div>
+    {% for product in brand.products %}
+    <div class="row">
+      <div class="col-md-3">
+        <div class="card">
+          <img src="{{ url_for('static', filename='images/' + product.image) }}" class="card-img-top" alt="{{ product.name }}">
+          <div class="card-header">
+            <h5 class="card-title">{{ product.name }}</h5>
+          </div>
+          <div class="card-body">
+            <p class="card-text badge bg-primary text-light">{{ product.price }} €</p>
+          </div>
+          <div class="card-footer">
+            <a
+              href="{{ url_for('products.add_to_basket', id=product.id) }}"
+              class="btn btn-primary"
+              ><i class="fa fa-plus"></i> <i class="fa fa-shopping-cart"></i></a>
+              {% if session['basket'] | length > 0 %}
+              <a href="{{ url_for('products.basket') }}" class="btn btn-success"
+                ><i class="fa fa-eye"></i> <i class="fa fa-shopping-basket"></i></a>
+              <hr>
+            
+            <a href="{{ url_for('main.index') }}" class="btn btn-light d-flex justify-content-end"
+                ><i class="fa fa-home text-secondary"></i> </a>
+                <hr>
+                <a href="{{ url_for('products.product', id=product.id) }}" class="btn btn-light d-flex justify-content-end"
+                ><i class="fa fa-info-circle text-danger m-1"></i>
+                <span class="badge bg-danger text-light m-1">Details</span></a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  {% endfor %}
+</div>
+{% endblock %}

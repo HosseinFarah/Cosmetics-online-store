@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- Search Form -->
+<form method="POST" action="{{ url_for('main.search') }}" class="d-flex mb-4">
+  {{ form.hidden_tag() }}
+  <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="search">
+  <button class="btn btn-outline-success" type="submit">Search</button>
+</form>
+<!-- End Search Form -->
+
+<h2>Search Results</h2>
+
+{% if products %}
+<h3>Products</h3>
+<div class="container">
+<div class="row">
+  {% for product in products %}
+  <div class="col-md-3">
+    <div class="card shadow-lg  mb-5 rounded bg-gradient shine-effect">
+        <img
+          src="{{ url_for('static', filename='uploads/products/' + product.image) }}"
+          class="card-img-top"
+          alt="{{ product.name }}"
+          style="max-height: 250px; object-fit: contain; background-color: #fcf5f3"
+        />
+        <div class="position-absolute bg-brand text-white p-1 top-0 end-0 shadow rounded-start-top"
+
+        >
+          <a href="{{ url_for('products.brand', brand_name=product.brand.name) }}"
+           class="brand-link"
+           >{{ product.brand.name }}</a>
+      </div>
+        <div class="card-header">
+          <h5 class="card-title">{{ product.name }}</h5>
+        </div>
+        <div class="card-body">
+          {% if product.size %}
+          <p class="card-text">
+            <i class="fa fa-expand text-secondary"></i> {{ product.size }}
+          </p>
+          {% endif %}
+          {% if product.weight %}
+          <p class="card-text">
+            <i class="fa fa-weight text-secondary"></i> {{ product.weight }}
+          </p>
+          {% endif %}
+          {% if product.discount %}
+          <p class="card-text">
+              <i class="fa fa-percent text-info"></i> <span class="badge bg-info text-light">{{ product.get_discount_percent() }}%</span>
+          </p>
+          <p class="card-text">
+              <i class="fa fa-euro-sign text-secondary"></i> 
+              <span class="text-decoration-line-through">{{ product.price }} €</span>
+              <span class="text-success fs-4">{{ product.get_discount_price() | round(2) }} €</span>
+          </p>
+      {% else %}
+          <p class="card-text">
+              <i class="fa fa-euro-sign text-secondary"></i> {{ product.price }} €
+          </p>
+      {% endif %}
+          <a
+            href="{{ url_for('products.product', id=product.id) }}"
+            class="btn btn-light d-flex justify-content-end"
+            ><i class="fa fa-info-circle text-danger m-1"></i>
+            <span class="badge bg-danger text-light m-1">Details</span></a
+          >
+        </div>
+        <div class="card-footer">
+          <a
+            href="{{ url_for('products.add_to_basket', id=product.id) }}"
+            class="btn btn-success"
+            ><i class="fa fa-shopping-cart"></i> <i class="fa fa-plus"></i></a
+          >
+          {% if current_user.is_administrator() %}
+          <a
+            href="{{ url_for('products.edit_product', id=product.id) }}"
+            class="btn btn-warning"
+            ><i class="fa fa-edit"></i></a
+          >
+          <a
+            href="{{ url_for('products.delete_product', id=product.id) }}"
+            class="btn btn-danger"
+            onclick="return confirm('Are you sure you want to delete {{ product.name }}?')"
+            ><i class="fa fa-trash"></i></a
+          >
+          {% endif %}
+        </div>
+      </div>
+  </div>
+  {% endfor %}
+</div>
+
+{% endif %}
+
+{% if brands %}
+<h3>Brands</h3>
+<ul>
+  {% for brand in brands %}
+  <li><a href="{{ url_for('products.brand', brand_name=brand.name) }}">{{ brand.name }}</a></li>
+  {% endfor %}
+</ul>
+{% endif %}
+
+{% if not products and not brands and not categories %}
+<p>No results found.</p>
+{% endif %}
+</div>
+{% endblock %}
