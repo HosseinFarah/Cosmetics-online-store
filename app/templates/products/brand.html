@@ -1,10 +1,27 @@
 {% extends 'base.html' %} {% block content %}
 <div class="container">
-<nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='%236c757d'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
+  <nav
+    style="
+      --bs-breadcrumb-divider: url(
+        &#34;data:image/svg + xml,
+        %3Csvgxmlns='http://www.w3.org/2000/svg'width='8'height='8'%3E%3Cpathd='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z'fill='%236c757d'/%3E%3C/svg%3E&#34;
+      );
+    "
+    aria-label="breadcrumb"
+  >
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="{{ url_for('main.index') }}">Home</a></li>
-      <li class="breadcrumb-item"><a href="{{ url_for('products.category', category_name=product.category) }}">{{ product.category }}</a></li>
-      <li class="breadcrumb-item active" aria-current="page">{{ product.name }}</li>
+      <li class="breadcrumb-item">
+        <a href="{{ url_for('main.index') }}">Home</a>
+      </li>
+      <li class="breadcrumb-item">
+        <a
+          href="{{ url_for('products.category', category_name=product.category) }}"
+          >{{ product.category }}</a
+        >
+      </li>
+      <li class="breadcrumb-item active" aria-current="page">
+        {{ product.name }}
+      </li>
     </ol>
   </nav>
   <!-- loading... -->
@@ -28,113 +45,169 @@
   <div class="row">
     <div class="col-md-4">
       <img
-      src="{{ url_for('static', filename='uploads/brands/' + brand.logo) }}"
-      class="img-fluid rounded m-1 shadow-lg"
+        src="{{ url_for('static', filename='uploads/brands/' + brand.logo) }}"
+        class="img-fluid rounded m-1 shadow-lg"
         alt="{{ brand }}"
-        style="max-height: 150px;max-width: 150px; object-fit: contain;top: 0; left: 0;"
+        style="
+          max-height: 150px;
+          max-width: 150px;
+          object-fit: contain;
+          top: 0;
+          left: 0;
+        "
       />
-      
-      <hr>
-      <p class="text-muted mt-5">
-        {{brand.summary}}
-      </p>
+
+      <hr />
+      <p class="text-muted mt-5">{{brand.summary}}</p>
     </div>
     <div class="col-md-7 d-flex justify-content-end">
       <p class="text-muted mt-1 text-justify">
-        <i class="fa fa-quote-left"></i> {{brand.description}} <i class="fa fa-quote-right"></i>
+        <i class="fa fa-quote-left"></i> {{brand.description}}
+        <i class="fa fa-quote-right"></i>
       </p>
       <video
-      src="{{ url_for('static', filename='uploads/brands/' + brand.video) }}"
-      class="img-fluid rounded m-1 shadow-lg"
-      alt="{{ brand }}"
-      style="max-height: 250px; object-fit: contain;"
-      autoplay
-      loop
-      playsinline
-      muted
+        src="{{ url_for('static', filename='uploads/brands/' + brand.video) }}"
+        class="img-fluid rounded m-1 shadow-lg"
+        alt="{{ brand }}"
+        style="max-height: 250px; object-fit: contain"
+        autoplay
+        loop
+        playsinline
+        muted
       ></video>
     </div>
     <div class="row m-2">
       <div class="col-md-3 ms-auto">
         {% if current_user.is_administrator() %}
-        <a href="{{ url_for('products.edit_brand', id=brand.id) }}" class="btn btn-warning"
-          ><i class="fa fa-edit"></i> Edit Brand</a>
-          {% endif %}
+        <a
+          href="{{ url_for('products.edit_brand', id=brand.id) }}"
+          class="btn btn-warning"
+          ><i class="fa fa-edit"></i> Edit Brand</a
+        >
+        {% endif %}
       </div>
     </div>
-    <h1 class="badge bg-brand text-white p-1 rounded-start top-0 end-0">{{ brand }}</h1>
+    <h1 class="badge bg-brand text-white p-1 rounded-start top-0 end-0">
+      {{ brand }}
+    </h1>
   </div>
 
-
-  <div class="row d-flex justify-content-center">
+  <div class="row d-flex ms-5 justify-content-baseline">
     <h1>{{ brand.name }}</h1>
-    {% for product in products %}
-    {% if product.brand_id == brand.id %}
-    <div class="col-md-3">
-      <div class="card m-1 position-relative shine-effect">
+    {% for product in products %} {% if product.brand_id == brand.id %}
+    <div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3 position-relative">
+      <div class="card shadow-lg mb-5 rounded bg-gradient shine-effect">
         <img
           src="{{ url_for('static', filename='uploads/products/' + product.image) }}"
-          class="card-img-center align-self-center"
+          class="card-img-top"
           alt="{{ product.name }}"
-          style="max-height: 200px; object-fit: contain;background-color: #fcf5f3"
+          style="
+            max-height: 250px;
+            object-fit: contain;
+            background-color: #fcf5f3;
+          "
         />
-        <div class="position-absolute bg-brand text-white p-2 rounded-start top-0 end-0">
-          {{ brand.name }}
+        <div
+          class="position-absolute bg-brand text-white p-1 top-0 end-0 shadow rounded-start-top"
+        >
+          <a
+            href="{{ url_for('products.brand', brand_name=product.brand.name) }}"
+            class="brand-link"
+            >{{ product.brand.name }}</a
+          >
         </div>
         <div class="card-header">
           <h5 class="card-title">{{ product.name }}</h5>
         </div>
         <div class="card-body">
-          <p class="card-text badge bg-primary text-light">{{ product.price }} €</p>
-        </div>
-        <div class="card-footer">
-          <a
-            href="{{ url_for('products.add_to_basket', id=product.id) }}"
-            class="btn btn-primary"
-            ><i class="fa fa-plus"></i> <i class="fa fa-shopping-cart"></i></a>
-            {% if session['basket'] | length > 0 %}
-            <a href="{{ url_for('products.basket') }}" class="btn btn-success"
-              ><i class="fa fa-eye"></i> <i class="fa fa-shopping-basket"></i></a>
-            <hr>
-          
-          <a href="{{ url_for('main.index') }}" class="btn btn-light d-flex justify-content-end"
-              ></i> <i class="fa fa-home text-secondary"></i> </a>
-            <hr>
+          {% if product.size %}
+          <p class="card-text">
+            <i class="fa fa-expand text-secondary"></i> {{ product.size }}
+          </p>
+          {% endif %} {% if product.weight %}
+          <p class="card-text">
+            <i class="fa fa-weight text-secondary"></i> {{ product.weight }}
+          </p>
+          {% endif %} {% if product.discount %}
+          <p class="card-text">
+            <i class="fa fa-percent text-info"></i>
+            <span class="badge bg-info text-light"
+              >{{ product.get_discount_percent() }}%</span
+            >
+          </p>
+          <p class="card-text">
+            <i class="fa fa-euro-sign text-secondary"></i>
+            <span class="text-decoration-line-through"
+              >{{ product.price }} €</span
+            >
+            <span class="text-success fs-4"
+              >{{ product.get_discount_price() | round(2) }} €</span
+            >
+          </p>
+          {% else %}
+          <p class="card-text">
+            <i class="fa fa-euro-sign text-secondary"></i> {{ product.price }} €
+          </p>
+          {% endif %}
           <a
             href="{{ url_for('products.product', id=product.id) }}"
             class="btn btn-light d-flex justify-content-end"
             ><i class="fa fa-info-circle text-danger m-1"></i>
             <span class="badge bg-danger text-light m-1">Details</span></a
           >
+        </div>
+        <div class="card-footer">
+          <a
+            href="{{ url_for('products.add_to_basket', id=product.id) }}"
+            class="btn btn-success"
+            data-bs-toggle="tooltip"
+            data-bs-placement="top"
+            data-bs-title="Add to basket"
+            ><i class="fa fa-shopping-cart"></i> <i class="fa fa-plus"></i
+          ></a>
+          {% if current_user.is_administrator() %}
+          <a
+            href="{{ url_for('products.edit_product', id=product.id) }}"
+            data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Update ({{ product.name }})"
+            class="btn btn-warning"
+            ><i class="fa fa-edit"></i
+          ></a>
+          <a
+            href="{{ url_for('products.delete_product', id=product.id) }}"
+            data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Delete ({{ product.name }})"
+            class="btn btn-danger"
+            onclick="return confirm('Are you sure you want to delete {{ product.name }}?')"
+            ><i class="fa fa-trash"></i
+          ></a>
           {% endif %}
         </div>
       </div>
     </div>
-    {% endif %}
-    {% endfor %}
-</div>
-<hr>
-<div class="row">
-  <div class="col-md-12">
+    {% endif %} {% endfor %}
+  </div>
+  <hr />
+  <div class="row">
+    <div class="col-md-12">
       <h1>All Brands</h1>
-      <hr>
+      <hr />
       <h1>Brands</h1>
       {% for letter, brands in grouped_brands|dictsort %}
-          <h2>{{ letter }}</h2>
-          <div class="row">
-              {% for brand in brands %}
-                  <div class="col-md-3">
-                      <a href="{{ url_for('products.brand', brand_name=brand.name) }}" class="btn btn-outline-primary m-1">
-                          <i class="fa fa-eye"></i> {{ brand.name }}
-                      </a>
-                  </div>
-              {% endfor %}
-          </div>
+      <h2>{{ letter }}</h2>
+      <div class="row">
+        {% for brand in brands %}
+        <div class="col-md-3">
+          <a
+            href="{{ url_for('products.brand', brand_name=brand.name) }}"
+            class="btn btn-outline-primary m-1"
+          >
+            <i class="fa fa-eye"></i> {{ brand.name }}
+          </a>
+        </div>
+        {% endfor %}
+      </div>
       {% endfor %}
+    </div>
   </div>
 </div>
-  </div>
 
-
-  {% endblock %}
-
+{% endblock %}

@@ -221,7 +221,7 @@ def add_to_basket(id):
         flash("Product not found", "danger")
         print(f"Product with id {id} not found.")
         
-    return redirect(url_for("main.index"))
+    return redirect(url_for("products.brand", brand_name=product.brand.name) if product else url_for("main.index"))
 
 
 @products.route("/basket/increment/<int:id>")

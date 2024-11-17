@@ -13,10 +13,9 @@
 <hr>
 <h2 class="text-center text-danger ">{{ category.name }}</h2>
 <hr>
-<div class="row">
-  <div id="carousel-{{ category.id }}" class="carousel slide" data-bs-ride="carousel">
+  <div id="carousel-{{ category.id }}"  data-bs-ride="carousel" class="carousel slide ">
     <ol class="carousel-indicators">
-      {% for product_batch in category.products|batch(5) %}
+      {% for product_batch in category.products|batch(4) %}
       <li
         data-bs-target="#carousel-{{ category.id }}"
         data-bs-slide-to="{{ loop.index0 }}"
@@ -25,12 +24,12 @@
       {% endfor %}
     </ol>
     <div class="carousel-inner">
-      {% for product_batch in category.products|batch(5) %}
+      {% for product_batch in category.products|batch(4) %}
       <div class="carousel-item {% if loop.first %}active{% endif %} mb-5">
-        <div class="row d-flex justify-content-center">
+        <div class="row ms-5 ps-5 d-flex align-items-baseline justify-content-baseline">
           {% for product in product_batch %}
-          <div class="col-md-2 position-relative">
-            <div class="card shadow-lg  mb-5 rounded bg-gradient shine-effect">
+          <div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3 position-relative">
+            <div class="card shadow-lg rounded bg-gradient shine-effect">
               <img
                 src="{{ url_for('static', filename='uploads/products/' + product.image) }}"
                 class="card-img-top"
@@ -123,7 +122,7 @@
       <i class="fa fa-chevron-right fs-3 text-primary g-4"></i>
     </a>
   </div>
-</div>
+
 {% if category.name == 'Hair' %}
 <div class="parallax shadow">
     <div class="col video-container">
