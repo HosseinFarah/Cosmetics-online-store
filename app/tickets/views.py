@@ -76,7 +76,6 @@ def view_ticket(ticket_id):
         message = TicketMessage(ticket_id=ticket.id, user_id=current_user.id, message=form.answer.data)
         db.session.add(message)
         db.session.commit()
-        flash('Your message has been sent!', 'success')
         return redirect(url_for('tickets.view_ticket', ticket_id=ticket.id))
     return render_template('tickets/view_ticket.html', title='Ticket', ticket=ticket, messages=messages, form=form)
 
@@ -104,7 +103,6 @@ def answer_ticket(ticket_id):
         message = TicketMessage(ticket_id=ticket.id, user_id=current_user.id, message=form.answer.data)
         db.session.add(message)
         db.session.commit()
-        flash('Your message has been sent!', 'success')
         return redirect(url_for('tickets.view_ticket', ticket_id=ticket.id))
     return render_template('tickets/answer_ticket.html', title='Answer Ticket', form=form, ticket=ticket)
 

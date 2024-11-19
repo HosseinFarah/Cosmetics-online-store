@@ -1,6 +1,7 @@
-{% extends "base.html" %} {% block content %}
+{% extends "base.html" %} 
+{% block content %}
 <div class="container">
-  <div class="row d-flex justify-content-center bg-secondary text-white p-2">
+  <div class="row d-flex justify-content-center bg-secondary text-white p-2 rounded">
     <div class="col-md-8">
       <h2>Update Ticket</h2>
       <form method="POST" enctype="multipart/form-data">
@@ -30,7 +31,10 @@
           class="img-thumbnail"
           style="max-width: 300px"
         />
-        {% endif %} {{ form.submit(class="btn btn-primary mb-5") }}
+        {% endif %} 
+        <div class="form-group mt-2 mb-5">
+            {{ form.submit(class="btn btn-primary mb-5") }}
+        </div>
       </form>
     </div>
   </div>
