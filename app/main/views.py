@@ -1,7 +1,7 @@
 from . import main
 from flask import render_template, redirect, url_for, request, flash, current_app, session
 from flask_login import login_user, logout_user, login_required, current_user
-from app.models import User, Todo, Product, Category, Brand
+from app.models import User, Todo, Product, Category, Brand, Ticket
 from app import db
 from app.forms import SearchForm
 from sqlalchemy import or_
@@ -16,6 +16,18 @@ from sqlalchemy import or_
 @main.app_context_processor
 def inject_search_form():
     return dict(form=SearchForm())
+
+# Open tickets count in the base.html
+@main.app_context_processor
+def inject_open_tickets_count():
+    if current_user.is_administrator():
+        open_tickets_count = Ticket.query.filter_by(status='open').count()
+    elif current_user.is_authenticated:
+        open_tickets_count = Ticket.query.filter_by(status='open', user_id=current_user.id).count()
+    else:
+        open_tickets_count = None
+
+    return dict(open_tickets_count=open_tickets_count)
 
 @main.route("/")
 def index():

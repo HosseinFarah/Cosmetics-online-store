@@ -321,3 +321,31 @@ class Order(db.Model):
 
     def __repr__(self) -> str:
         return f'<Order {self.id}>'
+
+class Ticket(db.Model):
+    __tablename__ = 'tickets'
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(100), nullable=False, index=True)
+    description = db.Column(db.Text, nullable=False)
+    status = db.Column(db.String(20), nullable=False, default='open', index=True)
+    image = db.Column(db.String(255), nullable=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    created_at = db.Column(db.DateTime, default=datetime.now(timezone('Europe/Helsinki')))
+    updated_at = db.Column(db.DateTime, default=datetime.now(timezone('Europe/Helsinki')))
+    user = db.relationship('User', backref='tickets')
+    messages = db.relationship('TicketMessage', backref='ticket', cascade='all, delete-orphan')
+
+    def __repr__(self) -> str:
+        return '<Ticket %r>' % self.title
+
+class TicketMessage(db.Model):
+    __tablename__ = 'ticket_messages'
+    id = db.Column(db.Integer, primary_key=True)
+    ticket_id = db.Column(db.Integer, db.ForeignKey('tickets.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    message = db.Column(db.Text, nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.now(timezone('Europe/Helsinki')))
+    user = db.relationship('User', backref='messages')
+
+    def __repr__(self) -> str:
+        return '<TicketMessage %r>' % self.message

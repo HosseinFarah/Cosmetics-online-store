@@ -51,5 +51,8 @@ def create_app(config_name='default'):
     
     from app.products import products as products_blueprint
     app.register_blueprint(products_blueprint, url_prefix='/products')
+    
+    from app.tickets import tickets as tickets_blueprint
+    app.register_blueprint(tickets_blueprint, url_prefix='/tickets')
 
     return app

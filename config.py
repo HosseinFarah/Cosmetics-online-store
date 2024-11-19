@@ -26,6 +26,7 @@ class Config:
     BRAND_FOLDER= os.environ.get('BRAND_FOLDER') or os.path.join(basedir, 'app/static/uploads/brands')
     STRIPE_SECRET_KEY= os.environ.get('STRIPE_SECRET_KEY')
     STRIPE_ENDPOINT_SECRET= os.environ.get('STRIPE_ENDPOINT_SECRET')
+    TICKET_IMAGE_FOLDER = os.path.join(basedir, 'app/static/uploads/tickets')
 
     @staticmethod
     def init_app(app):

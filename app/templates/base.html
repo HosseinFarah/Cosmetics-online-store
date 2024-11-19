@@ -82,6 +82,12 @@
                             >
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link {{ 'navactive rounded shadow' if request.endpoint == 'tickets.view_tickets' else 'navdeactive' }}" href="{{ url_for('tickets.view_tickets') }}">
+                                Tickets<span class="badge bg-primary">{{ open_tickets_count }}</span>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
                             <a class="nav-link {{ 'navactive rounded shadow' if request.endpoint == 'auth.logout' else 'navdeactive' }}" href="{{ url_for('auth.logout') }}">
                                 Logout
                             </a>
