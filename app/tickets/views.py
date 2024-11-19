@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, redirect, url_for, flash, request,
 from flask_login import login_required, current_user
 from app import db
 from app.models import Ticket, User, TicketMessage
-from .forms import TicketForm, UpdateTicketForm, AnswerTicketForm
+from .forms import TicketForm, UpdateTicketForm, AnswerTicketForm, UpdateTicketFormUser
 import os
 from werkzeug.utils import secure_filename
 from . import tickets
@@ -31,26 +31,28 @@ def update_ticket(ticket_id):
     ticket = Ticket.query.get_or_404(ticket_id)
     if ticket.user != current_user and not current_user.is_administrator():
         abort(403)
-    form = UpdateTicketForm()
-    if request.method == 'GET':
-        form.title.data = ticket.title
-        form.description.data = ticket.description
-        form.image.data = ticket.image
-        form.status.data = ticket.status
-        if not current_user.is_administrator():
-            form.status.render_kw = {'disabled': True}
+    if current_user.is_administrator():
+        form = UpdateTicketForm()
+    else:
+        form = UpdateTicketFormUser()
+        
     if form.validate_on_submit():
+        ticket.title = form.title.data
+        ticket.description = form.description.data
         if form.image.data:
             filename = secure_filename(form.image.data.filename)
             form.image.data.save(os.path.join(current_app.config['TICKET_IMAGE_FOLDER'], filename))
             ticket.image = filename
-        ticket.title = form.title.data
-        ticket.description = form.description.data
         if current_user.is_administrator():
             ticket.status = form.status.data
         db.session.commit()
         flash('Your ticket has been updated!', 'success')
-        return redirect(url_for('tickets.view_ticket', ticket_id=ticket.id))
+        return redirect(url_for('tickets.view_tickets'))
+    elif request.method == 'GET':
+        form.title.data = ticket.title
+        form.description.data = ticket.description
+        if current_user.is_administrator():
+            form.status.data = ticket.status  # Ensure status is always set for admin
     return render_template('tickets/update_ticket.html', title='Update Ticket', form=form, ticket=ticket)
 
 @tickets.route('/view_tickets')

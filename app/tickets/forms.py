@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, TextAreaField, SelectField
+from wtforms import StringField, SubmitField, TextAreaField, SelectField, HiddenField
 from wtforms.validators import DataRequired, Length, ValidationError
 from flask_wtf.file import FileField, FileAllowed
 import os
@@ -27,6 +27,14 @@ class UpdateTicketForm(FlaskForm):
     status = SelectField('Status', choices=[('open', 'Open'), ('in_progress', 'In Progress'), ('resolved', 'Resolved')], validators=[DataRequired()])
     image = FileField('Update Image', validators=[FileAllowed(['jpg', 'png', 'jpeg', 'gif'], 'Only jpg, png, jpeg and gif files allowed'), img_size(1*1024*1024, message='Image size must be less than 1MB')])
     submit = SubmitField('Update')
+
+class UpdateTicketFormUser(FlaskForm):
+    title = StringField('Title', validators=[DataRequired(), Length(min=2, max=100)])
+    description = TextAreaField('Description', validators=[DataRequired()])
+    status = HiddenField('Status')
+    image = FileField('Update Image', validators=[FileAllowed(['jpg', 'png', 'jpeg', 'gif'], 'Only jpg, png, jpeg and gif files allowed'), img_size(1*1024*1024, message='Image size must be less than 1MB')])
+    submit = SubmitField('Update')
+
 
 class AnswerTicketForm(FlaskForm):
     answer = TextAreaField('Answer', validators=[DataRequired()])

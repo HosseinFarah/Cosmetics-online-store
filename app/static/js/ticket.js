@@ -9,9 +9,9 @@ function fetchMessages(ticketId) {
         const messageDiv = document.createElement('div');
         messageDiv.classList.add('message');
         messageDiv.innerHTML = `
-          <strong>${message.user}:</strong>
+          <strong class="text-primary">${message.user}:</strong>
           <p>${message.message}</p>
-          <small>${message.created_at}</small>
+          <span class="text-secondary">${message.created_at}</span>
         `;
         messagesDiv.appendChild(messageDiv);
       });
