@@ -1,0 +1,152 @@
+# English translations for PROJECT.
+# Copyright (C) 2024 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2024-11-20 15:21+0200\n"
+"PO-Revision-Date: 2024-11-20 15:19+0200\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: en\n"
+"Language-Team: en <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.16.0\n"
+
+#: app/templates/base.html:25
+msgid "Main Page"
+msgstr "Main Page"
+
+#: app/templates/base.html:26 app/templates/base.html:207
+msgid "Helmi Shop"
+msgstr "Helmi Shop"
+
+#: app/templates/base.html:44 app/templates/base.html:204
+msgid "Categories"
+msgstr "Categories"
+
+#: app/templates/base.html:49
+msgid "All Brands"
+msgstr "All Brands"
+
+#: app/templates/base.html:54
+msgid "Discounted Products"
+msgstr "Discounted Products"
+
+#: app/templates/base.html:69
+msgid "All Users"
+msgstr "All Users"
+
+#: app/templates/base.html:74
+msgid "Active Users"
+msgstr "Active Users"
+
+#: app/templates/base.html:81 app/templates/base.html:193
+msgid "Profile"
+msgstr "Profile"
+
+#: app/templates/base.html:86
+msgid "Tickets"
+msgstr "Tickets"
+
+#: app/templates/base.html:92 app/templates/base.html:192
+msgid "Logout"
+msgstr "Logout"
+
+#: app/templates/base.html:99 app/templates/base.html:195
+msgid "Login"
+msgstr "Login"
+
+#: app/templates/base.html:104 app/templates/base.html:196
+msgid "Register"
+msgstr "Register"
+
+#: app/templates/base.html:113
+msgid "Search"
+msgstr "Search"
+
+#: app/templates/base.html:126
+msgid "Language"
+msgstr "Language"
+
+#: app/templates/base.html:129
+msgid "English"
+msgstr "English"
+
+#: app/templates/base.html:130
+msgid "Suomi"
+msgstr "Finnish"
+
+#: app/templates/base.html:139
+msgid "Admin"
+msgstr "Admin"
+
+#: app/templates/base.html:146
+msgid "Create New Product"
+msgstr "Create New Product"
+
+#: app/templates/base.html:148
+msgid "Create New Brand"
+msgstr "Create New Brand"
+
+#: app/templates/base.html:149
+msgid "Create New Category"
+msgstr "Create New Category"
+
+#: app/templates/base.html:161
+msgid "Kosmetiikka verkkokauppa"
+msgstr "Cosmetics online store"
+
+#: app/templates/base.html:172
+msgid "Close"
+msgstr "Close"
+
+#: app/templates/base.html:182
+msgid "Kaupamme"
+msgstr "Our Shop"
+
+#: app/templates/base.html:184
+msgid "Pysy Kauniina"
+msgstr "Stay Beautiful"
+
+#: app/templates/base.html:185
+msgid ""
+"was created with the aim of offering our customers the best and highest "
+"quality products. The Helmi Shop cosmetics store offers a wide selection "
+"of famous brands for beauty lovers. In this online store, you can find "
+"all kinds of cosmetic products, including creams, cosmetics, perfumes, "
+"and skin and hair care products. You can safely buy your beauty products "
+"and benefit from high-quality products and services."
+msgstr ""
+"was created with the aim of offering our customers the best and highest "
+"quality products. The Helmi Shop cosmetics store offers a wide selection "
+"of famous brands for beauty lovers. In this online store, you can find "
+"all kinds of cosmetic products, including creams, cosmetics, perfumes, "
+"and skin and hair care products. You can safely buy your beauty products "
+"and benefit from high-quality products and services."
+
+#: app/templates/base.html:189
+msgid "My Account"
+msgstr "My Account"
+
+#: app/templates/base.html:201
+msgid "Information"
+msgstr "Information"
+
+#: app/templates/base.html:203
+msgid "Home"
+msgstr "Home"
+
+#: app/templates/base.html:205
+msgid "Brands"
+msgstr "Brands"
+
+#: app/templates/base.html:213
+msgid "Design by"
+msgstr "Design by"
+
