@@ -83,7 +83,7 @@ def register():
         if image:
             filename = secure_filename(image.filename)
             image.save(os.path.join(current_app.config['UPLOAD_FOLDER'], filename))
-        user = User(firstname=form.firstname.data, lastname=form.lastname.data, email=form.email.data, password=form.password.data, address=form.address.data, zipcode=form.zipcode.data, phone=form.phone.data, image=filename)
+        user = User(firstname=form.firstname.data, lastname=form.lastname.data, email=form.email.data, password=form.password.data, address=form.address.data, zipcode=form.zipcode.data, phone=form.phone.data, image=filename, city=form.city.data)
         db.session.add(user)
         db.session.commit()
         token = user.generate_confirmation_token()

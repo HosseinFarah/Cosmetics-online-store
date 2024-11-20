@@ -4,10 +4,8 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'hard to guess string'
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True
-    FLASKY_MAIL_SUBJECT_PREFIX = '[Todo-APP]'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    FLASKY_MAIL_SENDER = 'Todo-APP Admin <' + os.environ.get('MAIL_SENDER') + '>'
-    TODO_ADMIN = os.environ.get('TODO_ADMIN')
+    SHOP_ADMIN = os.environ.get('SHOP_ADMIN')
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or os.path.join(basedir, 'site.db')
     UPLOAD_FOLDER = os.path.join(basedir, 'app/static/uploads/users')
     MAX_CONTRENT_LENGTH = 2 * 1024 * 1024  # 2MB
@@ -17,8 +15,8 @@ class Config:
     MAIL_USE_TLS = True
     MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
     MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
-    FLASKY_MAIL_SUBJECT_PREFIX= '[Todo-APP]'
-    FLASKY_MAIL_SENDER = 'Todo-APP Admin <' + os.environ.get('MAIL_SENDER') + '>'
+    FLASKY_MAIL_SUBJECT_PREFIX= '[Helmi shop]'
+    FLASKY_MAIL_SENDER = 'Helmi shop Admin <' + os.environ.get('MAIL_SENDER') + '>'
     #for role 
     ADMIN_EMAIL= os.environ.get('ADMIN_EMAIL')
     JSON_FOLDER= os.path.join(basedir, 'app/static/js')
