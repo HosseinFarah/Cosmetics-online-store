@@ -8,11 +8,11 @@ app.log
 logger_config.txt
 babel.txt
 # User uploads
-app/static/uploads/users/*
+app/static/uploads/users/
 !app/static/uploads/users/default.jpg
-app/static/uploads/products/*
-app/static/uploads/brands/*
-app/static/uploads/videos/*
+app/static/uploads/products/
+app/static/uploads/brands/
+app/static/uploads/videos/
 # Python
 *.pyc
 __pycache__/
