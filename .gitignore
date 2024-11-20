@@ -6,6 +6,7 @@
 *.log
 app.log
 logger_config.txt
+babel.txt
 # User uploads
 app/static/uploads/users/*
 !app/static/uploads/users/default.jpg
@@ -73,4 +74,6 @@ coverage.xml
 # Windows
 Thumbs.db
 ehthumbs.db
+
+# txt
 

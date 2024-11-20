@@ -25,8 +25,11 @@ class Config:
     STRIPE_SECRET_KEY= os.environ.get('STRIPE_SECRET_KEY')
     STRIPE_ENDPOINT_SECRET= os.environ.get('STRIPE_ENDPOINT_SECRET')
     TICKET_IMAGE_FOLDER = os.path.join(basedir, 'app/static/uploads/tickets')
+    # for translation
     BABEL_DEFAULT_LOCALE = 'fi'
+    # for translation
     BABEL_SUPPORTED_LOCALES = ['fi', 'en']
+    # for translation
     BABEL_TRANSLATION_DIRECTORIES = os.path.join(basedir, '/translations') or '../translations'
 
     @staticmethod

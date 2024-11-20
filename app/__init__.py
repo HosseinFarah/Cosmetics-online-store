@@ -18,6 +18,7 @@ bootstrap = Bootstrap()
 csrf = CSRFProtect()
 babel = Babel()
 
+# for translation
 def get_locale():
     # Check if a language is stored in the session
     if 'lang' in session:
@@ -33,7 +34,11 @@ def create_app(config_name='default'):
     app.config.from_object(config[config_name])
     config[config_name].init_app(app)
     
-
+    
+    # for translation
+    # Set the directory for translation files
+    app.config['BABEL_TRANSLATION_DIRECTORIES'] = '../translations'
+    app.config['BABEL_SUPPORTED_LOCALES'] = ['en', 'fi']
     
     # Initialize extensions
     db.init_app(app)
@@ -43,9 +48,11 @@ def create_app(config_name='default'):
     bootstrap.init_app(app)
     csrf.init_app(app)
     
+    # for translation
     # Initialize Babel with the locale selector
     babel.init_app(app, locale_selector=get_locale)
     
+    # for translation
     # Register get_locale as a template global
     app.jinja_env.globals['get_locale'] = get_locale
     

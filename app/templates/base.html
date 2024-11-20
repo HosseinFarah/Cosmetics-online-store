@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- for translation -->
 <html lang="{{ get_locale() }}">
     <head>
         <meta charset="UTF-8" />
@@ -107,30 +108,34 @@
                        
                         {% endif %}
                     </ul>
-                    <!-- Search Form -->
-                    <form method="POST" action="{{ url_for('main.search') }}" class="d-flex ms-auto">
-                        {{ form.hidden_tag() }}
-                        <input class="form-control me-2" type="search" placeholder="{{ _('Search') }}" aria-label="{{ _('Search') }}" name="search">
-                        <button class="btn btn-outline-success" type="submit"><i class="fa fa-search"></i></button>
-                    </form>
-                    <!-- End Search Form -->
                 </div>
                 
             </div>
+            <!-- Search Form -->
+            <div class="row d-flex justify-content-start ms-5">
+                <form method="POST" action="{{ url_for('main.search') }}" class="d-flex ms-auto">
+                    {{ form.hidden_tag() }}
+                    <input class="form-control me-2" type="search" placeholder="{{ _('Search') }}" aria-label="{{ _('Search') }}" name="search">
+                    <button class="btn btn-outline-success" type="submit"><i class="fa fa-search"></i></button>
+                </form>
+            </div>
+            <!-- End Search Form -->
             
+            <!-- Language selection dropdown for translation -->
+            <div class="row d-flex justify-content-end me-5">
+                <form method="POST" action="{{ url_for('main.set_language') }}" class="dropdown">
+                    {{ form.hidden_tag() }}
+                    <button class="btn btn-light dropdown-toggle" type="button" id="languageDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        {{ _('Language') }}
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="languageDropdown">
+                        <li><button class="dropdown-item" type="submit" name="lang_code" value="en">{{ _('English') }}</button></li>
+                        <li><button class="dropdown-item" type="submit" name="lang_code" value="fi">{{ _('Suomi') }}</button></li>
+                    </ul>
+                </form>
+            </div>
         </nav>
 
-        <!-- Language selection dropdown -->
-        <form method="POST" action="{{ url_for('main.set_language') }}" class="dropdown ms-auto">
-            {{ form.hidden_tag() }}
-            <button class="btn btn-secondary dropdown-toggle" type="button" id="languageDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                {{ _('Language') }}
-            </button>
-            <ul class="dropdown-menu" aria-labelledby="languageDropdown">
-                <li><button class="dropdown-item" type="submit" name="lang_code" value="en">{{ _('English') }}</button></li>
-                <li><button class="dropdown-item" type="submit" name="lang_code" value="fi">{{ _('Suomi') }}</button></li>
-            </ul>
-        </form>
 
         <!-- admin section -->
         {% if current_user.is_administrator() %}

@@ -45,7 +45,7 @@ def before_request():
     
     
     
-
+# for translation
 @main.route('/set_language', methods=['POST'])
 def set_language():
     lang_code = request.form.get('lang_code')
