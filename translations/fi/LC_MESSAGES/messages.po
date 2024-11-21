@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-11-20 15:21+0200\n"
+"POT-Creation-Date: 2024-11-21 14:05+0200\n"
 "PO-Revision-Date: 2024-11-20 15:19+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fi\n"
@@ -18,103 +18,103 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.16.0\n"
 
-#: app/templates/base.html:25
+#: app/templates/base.html:26
 msgid "Main Page"
 msgstr "Etusivu"
 
-#: app/templates/base.html:26 app/templates/base.html:207
+#: app/templates/base.html:27 app/templates/base.html:213
 msgid "Helmi Shop"
 msgstr "Helmi Kauppa"
 
-#: app/templates/base.html:44 app/templates/base.html:204
+#: app/templates/base.html:45 app/templates/base.html:210
 msgid "Categories"
 msgstr "Kategoriat"
 
-#: app/templates/base.html:49
+#: app/templates/base.html:50
 msgid "All Brands"
 msgstr "Kaikki Brändit"
 
-#: app/templates/base.html:54
+#: app/templates/base.html:55
 msgid "Discounted Products"
 msgstr "Alennetut Tuotteet"
 
-#: app/templates/base.html:69
+#: app/templates/base.html:70
 msgid "All Users"
 msgstr "Kaikki Käyttäjät"
 
-#: app/templates/base.html:74
+#: app/templates/base.html:75
 msgid "Active Users"
 msgstr "Aktiiviset Käyttäjät"
 
-#: app/templates/base.html:81 app/templates/base.html:193
+#: app/templates/base.html:82 app/templates/base.html:199
 msgid "Profile"
 msgstr "Profiili"
 
-#: app/templates/base.html:86
+#: app/templates/base.html:87
 msgid "Tickets"
 msgstr "Liput"
 
-#: app/templates/base.html:92 app/templates/base.html:192
+#: app/templates/base.html:93 app/templates/base.html:198
 msgid "Logout"
 msgstr "Kirjaudu Ulos"
 
-#: app/templates/base.html:99 app/templates/base.html:195
+#: app/templates/base.html:100 app/templates/base.html:201
 msgid "Login"
 msgstr "Kirjaudu Sisään"
 
-#: app/templates/base.html:104 app/templates/base.html:196
+#: app/templates/base.html:105 app/templates/base.html:202
 msgid "Register"
 msgstr "Rekisteröidy"
 
-#: app/templates/base.html:113
+#: app/templates/base.html:118
 msgid "Search"
 msgstr "Haku"
 
-#: app/templates/base.html:126
+#: app/templates/base.html:129
 msgid "Language"
 msgstr "Kieli"
 
-#: app/templates/base.html:129
+#: app/templates/base.html:132
 msgid "English"
 msgstr "Englanti"
 
-#: app/templates/base.html:130
+#: app/templates/base.html:133
 msgid "Suomi"
 msgstr "Suomi"
 
-#: app/templates/base.html:139
+#: app/templates/base.html:145
 msgid "Admin"
 msgstr "Ylläpitäjä"
 
-#: app/templates/base.html:146
+#: app/templates/base.html:152
 msgid "Create New Product"
 msgstr "Luo Uusi Tuote"
 
-#: app/templates/base.html:148
+#: app/templates/base.html:154
 msgid "Create New Brand"
 msgstr "Luo Uusi Brändi"
 
-#: app/templates/base.html:149
+#: app/templates/base.html:155
 msgid "Create New Category"
 msgstr "Luo Uusi Kategoria"
 
-#: app/templates/base.html:161
+#: app/templates/base.html:167
 msgid "Kosmetiikka verkkokauppa"
 msgstr "Kosmetiikka Verkkokauppa"
 
-#: app/templates/base.html:172
+#: app/templates/base.html:178
 msgid "Close"
 msgstr "Sulje"
 
-#: app/templates/base.html:182
+#: app/templates/base.html:188
 msgid "Kaupamme"
 msgstr "Kauppamme"
 
-#: app/templates/base.html:184
+#: app/templates/base.html:190
 msgid "Pysy Kauniina"
 msgstr "Pysy Kauniina"
 
-#: app/templates/base.html:185
+#: app/templates/base.html:191
 msgid ""
 "was created with the aim of offering our customers the best and highest "
 "quality products. The Helmi Shop cosmetics store offers a wide selection "
@@ -130,23 +130,79 @@ msgstr ""
 "hajuvedet ja ihon- ja hiustenhoitotuotteet. Voit turvallisesti ostaa "
 "kauneustuotteesi ja hyötyä korkealaatuisista tuotteista ja palveluista."
 
-#: app/templates/base.html:189
+#: app/templates/base.html:195
 msgid "My Account"
 msgstr "Oma Tili"
 
-#: app/templates/base.html:201
+#: app/templates/base.html:207
 msgid "Information"
 msgstr "Tietoa"
 
-#: app/templates/base.html:203
+#: app/templates/base.html:209
 msgid "Home"
 msgstr "Koti"
 
-#: app/templates/base.html:205
+#: app/templates/base.html:211
 msgid "Brands"
 msgstr "Brändit"
 
-#: app/templates/base.html:213
+#: app/templates/base.html:219
 msgid "Design by"
 msgstr "Suunnittelu"
+
+#: app/templates/tickets/view_ticket.html:11
+msgid "Ticket Image"
+msgstr "Lipun Kuva"
+
+#: app/templates/tickets/view_ticket.html:16
+msgid "Messages"
+msgstr "Viestit"
+
+#: app/templates/tickets/view_ticket.html:39
+msgid "Back"
+msgstr "Takaisin"
+
+#: app/templates/tickets/view_tickets.html:4
+msgid "Your Tickets"
+msgstr "Sinun Lippusi"
+
+#: app/templates/tickets/view_tickets.html:5
+msgid "Create Ticket"
+msgstr "Luo Lippu"
+
+#: app/templates/tickets/view_tickets.html:11
+msgid "Ticket ID"
+msgstr "Lipun ID"
+
+#: app/templates/tickets/view_tickets.html:12
+msgid "User"
+msgstr "Käyttäjä"
+
+#: app/templates/tickets/view_tickets.html:13
+msgid "Title"
+msgstr "Otsikko"
+
+#: app/templates/tickets/view_tickets.html:14
+msgid "Status"
+msgstr "Tila"
+
+#: app/templates/tickets/view_tickets.html:15
+msgid "Actions"
+msgstr "Toiminnot"
+
+#: app/templates/tickets/view_tickets.html:29
+msgid "View Ticket"
+msgstr "Näytä Lippu"
+
+#: app/templates/tickets/view_tickets.html:35
+msgid "Update Ticket"
+msgstr "Päivitä Lippu"
+
+#: app/templates/tickets/view_tickets.html:41
+msgid "Are you sure you want to delete this ticket?"
+msgstr "Oletko varma, että haluat poistaa tämän lipun?"
+
+#: app/templates/tickets/view_tickets.html:42
+msgid "Delete Ticket"
+msgstr "Poista Lippu"
 
