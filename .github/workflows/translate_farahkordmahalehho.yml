@@ -66,4 +66,4 @@ jobs:
         with:
           app-name: 'farahkordmahalehho'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_10081FB0492742598244C4C9534013EF }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_310AD54428C9437499B7C4A5AAAD2C31 }}
