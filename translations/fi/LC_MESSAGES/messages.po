@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-11-22 15:39+0200\n"
+"POT-Creation-Date: 2024-11-23 00:36+0200\n"
 "PO-Revision-Date: 2024-11-20 15:19+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fi\n"
@@ -30,7 +30,7 @@ msgstr "Helmi Kauppa"
 msgid "Categories"
 msgstr "Kategoriat"
 
-#: app/templates/base.html:50
+#: app/templates/base.html:50 app/templates/products/brand.html:191
 msgid "All Brands"
 msgstr "Kaikki Brändit"
 
@@ -99,7 +99,6 @@ msgid "Create New Category"
 msgstr "Luo Uusi Kategoria"
 
 #: app/templates/base.html:157
-#, fuzzy
 msgid "Create New Translation"
 msgstr "Luo Uusi Käännös"
 
@@ -143,17 +142,50 @@ msgstr "Oma Tili"
 msgid "Information"
 msgstr "Tietoa"
 
-#: app/templates/base.html:212
+#: app/templates/base.html:212 app/templates/products/brand.html:14
 msgid "Home"
 msgstr "Koti"
 
-#: app/templates/base.html:214
+#: app/templates/base.html:214 app/templates/products/brand.html:193
 msgid "Brands"
 msgstr "Brändit"
 
 #: app/templates/base.html:222
 msgid "Design by"
 msgstr "Suunnittelu"
+
+#: app/templates/products/all_discounted_products.html:63
+#: app/templates/products/brand.html:156
+msgid "Details"
+msgstr "Yksityiskohdat"
+
+#: app/templates/products/all_discounted_products.html:72
+#: app/templates/products/brand.html:165
+msgid "Add to basket"
+msgstr "Lisää koriin"
+
+#: app/templates/products/all_discounted_products.html:78
+#: app/templates/products/brand.html:171
+msgid "Update"
+msgstr "Päivitä"
+
+#: app/templates/products/all_discounted_products.html:84
+#: app/templates/products/brand.html:177
+msgid "Delete"
+msgstr "Poista"
+
+#: app/templates/products/all_discounted_products.html:86
+#: app/templates/products/brand.html:179
+msgid "Are you sure you want to delete"
+msgstr "Oletko varma, että haluat poistaa"
+
+#: app/templates/products/brand.html:40
+msgid "Filter"
+msgstr "Suodata"
+
+#: app/templates/products/brand.html:85
+msgid "Edit Brand"
+msgstr "Muokkaa Brändiä"
 
 #: app/templates/tickets/view_ticket.html:11
 msgid "Ticket Image"

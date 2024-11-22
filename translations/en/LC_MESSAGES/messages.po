@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-11-22 15:39+0200\n"
+"POT-Creation-Date: 2024-11-23 00:36+0200\n"
 "PO-Revision-Date: 2024-11-20 15:19+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -30,7 +30,7 @@ msgstr "Helmi Shop"
 msgid "Categories"
 msgstr "Categories"
 
-#: app/templates/base.html:50
+#: app/templates/base.html:50 app/templates/products/brand.html:191
 msgid "All Brands"
 msgstr "All Brands"
 
@@ -99,7 +99,6 @@ msgid "Create New Category"
 msgstr "Create New Category"
 
 #: app/templates/base.html:157
-#, fuzzy
 msgid "Create New Translation"
 msgstr "Create New Translation"
 
@@ -143,17 +142,50 @@ msgstr "My Account"
 msgid "Information"
 msgstr "Information"
 
-#: app/templates/base.html:212
+#: app/templates/base.html:212 app/templates/products/brand.html:14
 msgid "Home"
 msgstr "Home"
 
-#: app/templates/base.html:214
+#: app/templates/base.html:214 app/templates/products/brand.html:193
 msgid "Brands"
 msgstr "Brands"
 
 #: app/templates/base.html:222
 msgid "Design by"
 msgstr "Design by"
+
+#: app/templates/products/all_discounted_products.html:63
+#: app/templates/products/brand.html:156
+msgid "Details"
+msgstr "Details"
+
+#: app/templates/products/all_discounted_products.html:72
+#: app/templates/products/brand.html:165
+msgid "Add to basket"
+msgstr "Add to basket"
+
+#: app/templates/products/all_discounted_products.html:78
+#: app/templates/products/brand.html:171
+msgid "Update"
+msgstr "Update"
+
+#: app/templates/products/all_discounted_products.html:84
+#: app/templates/products/brand.html:177
+msgid "Delete"
+msgstr "Delete"
+
+#: app/templates/products/all_discounted_products.html:86
+#: app/templates/products/brand.html:179
+msgid "Are you sure you want to delete"
+msgstr "Are you sure you want to delete"
+
+#: app/templates/products/brand.html:40
+msgid "Filter"
+msgstr "Filter"
+
+#: app/templates/products/brand.html:85
+msgid "Edit Brand"
+msgstr "Edit Brand"
 
 #: app/templates/tickets/view_ticket.html:11
 msgid "Ticket Image"

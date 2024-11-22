@@ -20,20 +20,20 @@
           <a
             href="{{ url_for('products.brand', brand_name=product.brand.name) }}"
             class="brand-link"
-            >{{ product.brand.name }}</a
+            >{{ _(product.brand.name) }}</a
           >
         </div>
         <div class="card-header">
-          <h5 class="card-title">{{ product.name }}</h5>
+          <h5 class="card-title">{{ _(product.name) }}</h5>
         </div>
         <div class="card-body">
           {% if product.size %}
           <p class="card-text">
-            <i class="fa fa-expand text-secondary"></i> {{ product.size }}
+            <i class="fa fa-expand text-secondary"></i> {{ _(product.size) }}
           </p>
           {% endif %} {% if product.weight %}
           <p class="card-text">
-            <i class="fa fa-weight text-secondary"></i> {{ product.weight }}
+            <i class="fa fa-weight text-secondary"></i> {{ _(product.weight) }}
           </p>
           {% endif %} {% if product.discount %}
           <p class="card-text">
@@ -60,7 +60,7 @@
             href="{{ url_for('products.product', id=product.id) }}"
             class="btn btn-light d-flex justify-content-end"
             ><i class="fa fa-info-circle text-danger m-1"></i>
-            <span class="badge bg-danger text-light m-1">Details</span></a
+            <span class="badge bg-danger text-light m-1">{{ _('Details') }}</span></a
           >
         </div>
         <div class="card-footer">
@@ -69,21 +69,21 @@
             class="btn btn-success"
             data-bs-toggle="tooltip"
             data-bs-placement="top"
-            data-bs-title="Add to basket"
+            data-bs-title="{{ _('Add to basket') }}"
             ><i class="fa fa-shopping-cart"></i> <i class="fa fa-plus"></i
           ></a>
           {% if current_user.is_administrator() %}
           <a
             href="{{ url_for('products.edit_product', id=product.id) }}"
-            data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Update ({{ product.name }})"
+            data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="{{ _('Update') }} ({{ product.name }})"
             class="btn btn-warning"
             ><i class="fa fa-edit"></i
           ></a>
           <a
             href="{{ url_for('products.delete_product', id=product.id) }}"
-            data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Delete ({{ product.name }})"
+            data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="{{ _('Delete') }} ({{ product.name }})"
             class="btn btn-danger"
-            onclick="return confirm('Are you sure you want to delete {{ product.name }}?')"
+            onclick="return confirm('{{ _('Are you sure you want to delete') }} {{ product.name }}?')"
             ><i class="fa fa-trash"></i
           ></a>
           {% endif %}

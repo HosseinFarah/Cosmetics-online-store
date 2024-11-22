@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-11-22 15:39+0200\n"
+"POT-Creation-Date: 2024-11-23 00:36+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -29,7 +29,7 @@ msgstr ""
 msgid "Categories"
 msgstr ""
 
-#: app/templates/base.html:50
+#: app/templates/base.html:50 app/templates/products/brand.html:191
 msgid "All Brands"
 msgstr ""
 
@@ -135,16 +135,49 @@ msgstr ""
 msgid "Information"
 msgstr ""
 
-#: app/templates/base.html:212
+#: app/templates/base.html:212 app/templates/products/brand.html:14
 msgid "Home"
 msgstr ""
 
-#: app/templates/base.html:214
+#: app/templates/base.html:214 app/templates/products/brand.html:193
 msgid "Brands"
 msgstr ""
 
 #: app/templates/base.html:222
 msgid "Design by"
+msgstr ""
+
+#: app/templates/products/all_discounted_products.html:63
+#: app/templates/products/brand.html:156
+msgid "Details"
+msgstr ""
+
+#: app/templates/products/all_discounted_products.html:72
+#: app/templates/products/brand.html:165
+msgid "Add to basket"
+msgstr ""
+
+#: app/templates/products/all_discounted_products.html:78
+#: app/templates/products/brand.html:171
+msgid "Update"
+msgstr ""
+
+#: app/templates/products/all_discounted_products.html:84
+#: app/templates/products/brand.html:177
+msgid "Delete"
+msgstr ""
+
+#: app/templates/products/all_discounted_products.html:86
+#: app/templates/products/brand.html:179
+msgid "Are you sure you want to delete"
+msgstr ""
+
+#: app/templates/products/brand.html:40
+msgid "Filter"
+msgstr ""
+
+#: app/templates/products/brand.html:85
+msgid "Edit Brand"
 msgstr ""
 
 #: app/templates/tickets/view_ticket.html:11
