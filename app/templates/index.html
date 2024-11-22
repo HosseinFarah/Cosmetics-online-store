@@ -134,7 +134,7 @@
 {% if category.name == 'Hair' %}
 <div class="parallax">
     <div class="col video-container"
-    style="border-radius: 90% 90% 0% 0% / 90% 90% 0% 0%;box-shadow: 0 0 10px 5px #c5c5c5bd;"
+    
     >
         <video autoplay loop muted playsinline>
             <source src="{{ url_for('static', filename='uploads/videos/01.mp4') }}" type="video/mp4" />
@@ -144,7 +144,6 @@
 {% elif category.name == 'Makeup' %}
 <div class="parallax">
     <div class="col video-container"
-    style="border-radius: 0% 0% 90% 90% / 0% 0% 90% 90%;box-shadow: 0 0 10px 5px #c5c5c5bd;"
     >
         <video autoplay loop muted playsinline>
             <source src="{{ url_for('static', filename='uploads/videos/02.mp4') }}" type="video/mp4" />
@@ -155,7 +154,6 @@
 <div class="carousel-container ">
   <div id="carouselExampleInterval" class="carousel slide" data-bs-ride="carousel">
     <div class="carousel-inner"
-    style="border-radius:20px / 20px;box-shadow: 0 0 10px 5px #c5c5c5bd;"
     >
       {% for slider in sliders %}
       <div class="carousel-item {% if loop.first %}active{% endif %}" data-bs-interval="2500">

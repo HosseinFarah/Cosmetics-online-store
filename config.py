@@ -30,7 +30,7 @@ class Config:
     # for translation
     BABEL_SUPPORTED_LOCALES = ['fi', 'en']
     # for translation
-    BABEL_TRANSLATION_DIRECTORIES = os.path.join(basedir, '/translations') or '../translations'
+    BABEL_TRANSLATION_DIRECTORIES = os.path.join(basedir, 'translations') or '../translations'
 
     @staticmethod
     def init_app(app):

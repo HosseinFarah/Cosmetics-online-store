@@ -22,23 +22,15 @@ babel = Babel()
 def get_locale():
     # Check if a language is stored in the session
     if 'lang' in session:
-        current_app.logger.info(f"Locale from session: {session['lang']}")
         return session['lang']
     # Use the `Accept-Language` header as a fallback
     locale = request.accept_languages.best_match(current_app.config.get('BABEL_SUPPORTED_LOCALES'))
-    current_app.logger.info(f"Locale from Accept-Language header: {locale}")
     return locale
 
 def create_app(config_name='default'):
     app = Flask(__name__, template_folder='templates', static_folder='static')
     app.config.from_object(config[config_name])
     config[config_name].init_app(app)
-    
-    
-    # for translation
-    # Set the directory for translation files
-    app.config['BABEL_TRANSLATION_DIRECTORIES'] = '../translations'
-    app.config['BABEL_SUPPORTED_LOCALES'] = ['en', 'fi']
     
     # Initialize extensions
     db.init_app(app)

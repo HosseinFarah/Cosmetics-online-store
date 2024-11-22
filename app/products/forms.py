@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, TextAreaField, MultipleFileField, SelectField, DecimalField, FloatField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
-from app.models import Product, Brand, Category
+from app.models import Product, Brand, Category,Translation
 from flask_wtf.file import FileField, FileAllowed, FileRequired
 
 class CreateNewProduct(FlaskForm):
@@ -107,3 +107,17 @@ class CreateNewCategory(FlaskForm):
 class CheckoutForm(FlaskForm):
     submit = SubmitField('Proceed to Payment')
 
+# for translation from db
+class CreateTranslation(FlaskForm):
+    language = SelectField('Language', coerce=str, validators=[DataRequired()])
+    field = SelectField('Field', coerce=str, validators=[DataRequired()])
+    text= TextAreaField('Text', validators=[DataRequired()])
+    product_id = SelectField('Product', coerce=int, validators=[DataRequired()])
+    submit = SubmitField('Add Translation')
+    
+class EditTranslation(FlaskForm):
+    language = SelectField('Language', coerce=str, validators=[DataRequired()])
+    field = SelectField('Field', coerce=str, validators=[DataRequired()])
+    text= TextAreaField('Text', validators=[DataRequired()])
+    product_id = SelectField('Product', coerce=int, validators=[DataRequired()])
+    submit = SubmitField('Update Translation')

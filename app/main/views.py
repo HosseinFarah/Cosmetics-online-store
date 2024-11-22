@@ -36,7 +36,7 @@ def inject_open_tickets_count():
 @main.before_app_request
 def before_request():
     g.locale = babel_get_locale()
-    current_app.logger.info(f"Current locale: {g.locale}")
+    # current_app.logger.info(f"Current locale: {g.locale}")
     if 'lang' in session:
         g.locale = session['lang']
     else:

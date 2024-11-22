@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-11-21 14:05+0200\n"
+"POT-Creation-Date: 2024-11-22 15:39+0200\n"
 "PO-Revision-Date: 2024-11-20 15:19+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fi\n"
@@ -22,11 +22,11 @@ msgstr ""
 msgid "Main Page"
 msgstr "Etusivu"
 
-#: app/templates/base.html:27 app/templates/base.html:213
+#: app/templates/base.html:27 app/templates/base.html:216
 msgid "Helmi Shop"
 msgstr "Helmi Kauppa"
 
-#: app/templates/base.html:45 app/templates/base.html:210
+#: app/templates/base.html:45 app/templates/base.html:213
 msgid "Categories"
 msgstr "Kategoriat"
 
@@ -46,7 +46,7 @@ msgstr "Kaikki Käyttäjät"
 msgid "Active Users"
 msgstr "Aktiiviset Käyttäjät"
 
-#: app/templates/base.html:82 app/templates/base.html:199
+#: app/templates/base.html:82 app/templates/base.html:202
 msgid "Profile"
 msgstr "Profiili"
 
@@ -54,15 +54,15 @@ msgstr "Profiili"
 msgid "Tickets"
 msgstr "Liput"
 
-#: app/templates/base.html:93 app/templates/base.html:198
+#: app/templates/base.html:93 app/templates/base.html:201
 msgid "Logout"
 msgstr "Kirjaudu Ulos"
 
-#: app/templates/base.html:100 app/templates/base.html:201
+#: app/templates/base.html:100 app/templates/base.html:204
 msgid "Login"
 msgstr "Kirjaudu Sisään"
 
-#: app/templates/base.html:105 app/templates/base.html:202
+#: app/templates/base.html:105 app/templates/base.html:205
 msgid "Register"
 msgstr "Rekisteröidy"
 
@@ -98,23 +98,28 @@ msgstr "Luo Uusi Brändi"
 msgid "Create New Category"
 msgstr "Luo Uusi Kategoria"
 
-#: app/templates/base.html:167
+#: app/templates/base.html:157
+#, fuzzy
+msgid "Create New Translation"
+msgstr "Luo Uusi Käännös"
+
+#: app/templates/base.html:170
 msgid "Kosmetiikka verkkokauppa"
 msgstr "Kosmetiikka Verkkokauppa"
 
-#: app/templates/base.html:178
+#: app/templates/base.html:181
 msgid "Close"
 msgstr "Sulje"
 
-#: app/templates/base.html:188
+#: app/templates/base.html:191
 msgid "Kaupamme"
 msgstr "Kauppamme"
 
-#: app/templates/base.html:190
+#: app/templates/base.html:193
 msgid "Pysy Kauniina"
 msgstr "Pysy Kauniina"
 
-#: app/templates/base.html:191
+#: app/templates/base.html:194
 msgid ""
 "was created with the aim of offering our customers the best and highest "
 "quality products. The Helmi Shop cosmetics store offers a wide selection "
@@ -130,23 +135,23 @@ msgstr ""
 "hajuvedet ja ihon- ja hiustenhoitotuotteet. Voit turvallisesti ostaa "
 "kauneustuotteesi ja hyötyä korkealaatuisista tuotteista ja palveluista."
 
-#: app/templates/base.html:195
+#: app/templates/base.html:198
 msgid "My Account"
 msgstr "Oma Tili"
 
-#: app/templates/base.html:207
+#: app/templates/base.html:210
 msgid "Information"
 msgstr "Tietoa"
 
-#: app/templates/base.html:209
+#: app/templates/base.html:212
 msgid "Home"
 msgstr "Koti"
 
-#: app/templates/base.html:211
+#: app/templates/base.html:214
 msgid "Brands"
 msgstr "Brändit"
 
-#: app/templates/base.html:219
+#: app/templates/base.html:222
 msgid "Design by"
 msgstr "Suunnittelu"
 

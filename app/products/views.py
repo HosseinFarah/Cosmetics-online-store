@@ -2,8 +2,8 @@ from . import products
 from flask import render_template, redirect, url_for, request, flash, current_app, session, jsonify
 from flask_login import login_user, logout_user, login_required, current_user
 from ..decorators import admin_required
-from .forms import CreateNewProduct, EditProduct, CategoryForm, BrandsForm, CreateNewBrand, EditBrand, CreateNewCategory, CheckoutForm
-from app.models import Product, Category, Brand, Order
+from .forms import CreateNewProduct, EditProduct, CategoryForm, BrandsForm, CreateNewBrand, EditBrand, CreateNewCategory, CheckoutForm, CreateTranslation, EditTranslation
+from app.models import Product, Category, Brand, Order, Translation
 from app import db
 from werkzeug.utils import secure_filename
 import os
@@ -504,4 +504,45 @@ def all_discounted_products():
 def brands():
     brands = db.session.query(Brand).all()
     return render_template("products/brands.html", brands=brands)
+
+
+# for translation from db
+@products.route("/create_translation", methods=["GET", "POST"])
+@login_required
+@admin_required
+def create_translation():
+    form = CreateTranslation()
+    form.language.choices = [("en", "English"), ("fi", "Suomi"), ("sv", "Svenska"), ("fr", "Français"), ("de", "Deutsch")]
+    form.field.choices = [("name", "Name"), ("description", "Description"), ("instructions", "Instructions"), ("ingredients", "Ingredients")]
+    products = db.session.query(Product).all()
+    form.product_id.choices = [(product.id, product.name) for product in products]
+    
+    if form.validate_on_submit():
+        product = db.session.query(Product).get(form.product_id.data)
+        translation = Translation(language=form.language.data, field=form.field.data, text=form.text.data, product_id=product.id)
+        db.session.add(translation)
+        db.session.commit()
+        flash("Translation added successfully", "success")
+        return redirect(url_for("products.create_translation"))
+    return render_template("products/create_translation.html", form=form)
+
+
+@products.route("/edit_translation/<int:id>", methods=["GET", "POST"])
+@login_required
+@admin_required
+def edit_translation(id):
+    translation = db.session.query(Translation).get(id)
+    form = EditTranslation(obj=translation)
+    if form.validate_on_submit():
+        translation.language = form.language.data
+        translation.field = form.field.data
+        translation.text = form.text.data
+        db.session.commit()
+        flash("Translation updated successfully", "success")
+        return redirect(url_for("products.create_translation"))
+    return render_template("products/edit_translation.html", form=form, translation=translation)
+
+
+
+
 
