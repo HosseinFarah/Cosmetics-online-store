@@ -345,6 +345,7 @@ class Order(db.Model):
     status = db.Column(db.String(50), nullable=False, default='pending')
     created_at = db.Column(db.DateTime, default=datetime.now(timezone('Europe/Helsinki')))
     updated_at = db.Column(db.DateTime, default=datetime.now(timezone('Europe/Helsinki')))
+    user = db.relationship('User', backref='orders')
 
     def __repr__(self) -> str:
         return f'<Order {self.id}>'

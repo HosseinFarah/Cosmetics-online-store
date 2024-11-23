@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 mt-3">
+                <form action="{{ url_for('products.all_orders') }}" method="get">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="{{ _('Search') }}" name="search" value="{{ search }}" />
+                        <div class="input-group-append">
+                            <button class="btn btn-secondary" type="submit"><i class="fa fa-search"></i></button>
+                            <button class="btn btn-secondary" type="button" onclick="window.location.href='{{ url_for('products.all_orders', search='', page=1) }}'"><i class="fa fa-sync"></i></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- pagination -->
+        <nav aria-label="{{ _('Page navigation') }}">
+            <ul class="pagination">
+                <li class="page-item {% if orders.page == 1 %}disabled{% endif %}">
+                    <a class="page-link" href="{{ url_for('products.all_orders', search=search, page=1) }}">{{ _('First') }}</a>
+                </li>
+                <li class="page-item {% if orders.page == 1 %}disabled{% endif %}">
+                    <a class="page-link" href="{{ url_for('products.all_orders', search=search, page=orders.prev_num) }}">{{ _('Previous') }}</a>
+                </li>
+                <li class="page-item {% if orders.page == orders.pages %}disabled{% endif %}">
+                    <a class="page-link" href="{{ url_for('products.all_orders', search=search, page=orders.next_num) }}">{{ _('Next') }}</a>
+                </li>
+                <li class="page-item {% if orders.page == orders.pages %}disabled{% endif %}">
+                    <a class="page-link" href="{{ url_for('products.all_orders', search=search, page=orders.pages) }}">{{ _('Last') }}</a>
+                </li>
+            </ul>
+        </nav>
+    
+
+    <h1>All Orders <span class="badge bg-primary">{{ all_orders_count }}</span></h1>
+</div>
+    <table class="table table-striped overflow-auto">
+        <thead>
+            <tr>
+                <th>Order ID</th>
+                <th>Payment ID </th>
+                <th>User</th>
+                <th>Total Amount</th>
+                <th>Purchased products</th>
+                <th>Order Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in orders.items %}
+                <tr>
+                    <td>{{ order.id }}</td>
+                    <td>{{ order.payment_id }}</td>
+                    <td>{{ order.user.firstname }} {{ order.user.lastname }}</td>
+                    <td>{{ order.total_amount }}</td>
+                    <td>
+                        {% set purchased_products = json.loads(order.purchased_products) %}
+                        {% for product in purchased_products %}
+                        <span class="badge bg-primary">{{loop.index}}</span> <strong >{{ product.name }} </strong> <span class="badge bg-success">{{ product.quantity }}</span> | {{ _('Price Per Unit:') }} {% if product.discount %} <del class="badge bg-danger">{{ product.price }}</del> {{ (product.price * (1 - product.discount / 100))| round(2)  }} {% else %} {{ product.price }} {% endif %} 
+                        <a href="{{ url_for('products.product', id=product.id) }}" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="{{ _('View') }}" ><i class="fa fa-eye"></i> </a><br>
+                        {% endfor %}
+                    </td>
+                    <td>{{ order.created_at }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

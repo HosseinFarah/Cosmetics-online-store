@@ -10,9 +10,9 @@
         novalidate
       >
         {{ form.hidden_tag() }}
-        <h3 class="card-title">Update Profile</h3>
+        <h3 class="card-title">{{ _('Update Profile') }}</h3>
         <a href="{{ url_for('auth.profile') }}" class="btn btn-danger mt-3"
-          ><i class="fa fa-arrow-left"></i> Back</a
+          ><i class="fa fa-arrow-left"></i> {{ _('Back') }}</a
         >
         <img
           src="{{ url_for('static', filename='uploads/users/' + current_user.image) }}"
@@ -52,7 +52,7 @@
           {{ form.city.label(class="form-label") }}
           {{ form.city(class="form-control" ,id = "city") }}
 
-          <div class="invalid-feedback">Please enter your city.</div>
+          <div class="invalid-feedback">{{ _('Please enter your city.') }}</div>
           {% for error in form.city.errors %}
           <span class="text-danger">{{ error }}</span>
           {% endfor %}
@@ -91,7 +91,7 @@
             class="btn btn-outline-secondary btn-sm"
             onclick="remove_img('image')"
           >
-            <i class="fa fa-trash"></i>
+            <i class="fa fa-trash"></i> {{ _('Remove') }}
           </button>
         </div>
 

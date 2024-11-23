@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>Reset Password</h1>
+    <h1>{{ _('Reset Password') }}</h1>
     <div class="container">
         <div class="row">
             <div class="col-md-6 col-md-offset-3">
@@ -15,7 +15,7 @@
                         {% endfor %}
                     </div>
                     {{ form.submit(class="btn btn-primary mt-2") }}
-                    <a href="{{ url_for('auth.profile') }}" class="btn btn-secondary mt-2">Back</a>
+                    <a href="{{ url_for('auth.profile') }}" class="btn btn-secondary mt-2">{{ _('Back') }}</a>
                 </form>
             </div>
         </div>

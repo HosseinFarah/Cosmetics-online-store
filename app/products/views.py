@@ -3,7 +3,7 @@ from flask import render_template, redirect, url_for, request, flash, current_ap
 from flask_login import login_user, logout_user, login_required, current_user
 from ..decorators import admin_required
 from .forms import CreateNewProduct, EditProduct, CategoryForm, BrandsForm, CreateNewBrand, EditBrand, CreateNewCategory, CheckoutForm, CreateTranslation, EditTranslation
-from app.models import Product, Category, Brand, Order, Translation
+from app.models import Product, Category, Brand, Order, Translation, User
 from app import db
 from werkzeug.utils import secure_filename
 import os
@@ -132,7 +132,7 @@ def handle_checkout_session(checkout_session):
         payment_id=checkout_session['id'],
         user_id=user_id,
         total_amount=total_amount,
-        purchased_products=json.dumps(purchased_products),
+        purchased_products=json.dumps(purchased_products),  # Ensure this is stored as a JSON string
         status='completed'
     )
     db.session.add(order)
@@ -541,6 +541,40 @@ def edit_translation(id):
         flash("Translation updated successfully", "success")
         return redirect(url_for("products.create_translation"))
     return render_template("products/edit_translation.html", form=form, translation=translation)
+
+
+@products.route("/all_orders", methods=["GET", "POST"])
+@login_required
+@admin_required
+def all_orders():
+    orders = db.session.query(Order).all()
+    search = request.args.get('search', '').strip()
+    page = request.args.get('page', 1, type=int)
+    per_page = 2
+    all_orders_count = len(orders)
+    if search:
+        query = Order.query.join(Order.user).filter(
+            Order.payment_id.like(f"%{search}%") |
+            User.firstname.like(f"%{search}%") |
+            User.lastname.like(f"%{search}%") |
+            (User.firstname + " " + User.lastname).like(f"%{search}%") |
+            Order.created_at.like(f"%{search}%")
+        )
+    else:
+        query = Order.query
+
+    sort_by = request.args.get('sort_by', 'created_at')
+    order_by = request.args.get('order_by', 'desc')
+
+    if order_by == 'asc':
+        query = query.order_by(getattr(Order, sort_by).asc())
+    else:
+        query = query.order_by(getattr(Order, sort_by).desc())
+
+    orders = query.paginate(page=page, per_page=per_page)
+
+    return render_template("products/all_orders.html", orders=orders, search=search, all_orders_count=all_orders_count, json=json)
+
 
 
 
