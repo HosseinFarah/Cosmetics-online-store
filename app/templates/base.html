@@ -158,6 +158,8 @@
                 <a href="{{ url_for('products.all_orders') }}" class="btn btn-primary mt-2" ><i class="fa fa-shopping-cart"></i> {{ _('All Orders') }}</a>
                 <a href="{{ url_for('auth.all_users') }}" class="btn btn-primary mt-2" ><i class="fa fa-users"></i> {{ _('All Users') }}</a>
                 <a href="{{ url_for('auth.activate_users') }}" class="btn btn-primary mt-2" ><i class="fa fa-user-check"></i> {{ _('Active Users') }}</a>
+                <a href="{{ url_for('products.all_products') }}" class="btn btn-primary mt-2" ><i class="fa fa-list"></i> {{ _('All Products') }}</a>
+                <a href="{{ url_for('tickets.view_tickets') }}" class="btn btn-primary mt-2" ><i class="fa fa-ticket-alt"></i> {{ _('All Tickets') }}</a>
             </div>
         </div>
         {% endif %}

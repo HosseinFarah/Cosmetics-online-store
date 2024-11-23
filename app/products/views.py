@@ -577,6 +577,42 @@ def all_orders():
 
 
 
+@products.route("/all_products", methods=["GET", "POST"])
+@login_required
+@admin_required
+def all_products():
+    products = db.session.query(Product).all()
+    search = request.args.get('search', '').strip()
+    page = request.args.get('page', 1, type=int)
+    per_page = 5
+    all_products_count = len(products)
+    if search:
+        query = Product.query.filter(
+            Product.name.like(f"%{search}%") |
+            Product.description.like(f"%{search}%") |
+            Product.instructions.like(f"%{search}%") |
+            Product.ingredients.like(f"%{search}%") |
+            Product.size.like(f"%{search}%") |
+            Product.weight.like(f"%{search}%") |
+            Product.ean.like(f"%{search}%") 
+        )
+        
+    else:
+        query = Product.query
+
+    sort_by = request.args.get('sort_by', 'created_at')
+    order_by = request.args.get('order_by', 'desc')
+
+    if order_by == 'asc':
+        query = query.order_by(getattr(Product, sort_by).asc())
+    else:
+        query = query.order_by(getattr(Product, sort_by).desc())
+
+    products = query.paginate(page=page, per_page=per_page)
+
+    return render_template("products/all_products.html", products=products, search=search, all_products_count=all_products_count)
+
+
 
 
 

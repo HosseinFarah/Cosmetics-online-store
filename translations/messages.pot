@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-11-23 13:14+0200\n"
+"POT-Creation-Date: 2024-11-24 00:32+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -35,7 +35,7 @@ msgstr ""
 #: app/templates/auth/register.html:113
 #: app/templates/auth/reset_password.html:25
 #: app/templates/auth/reset_password_request.html:20
-#: app/templates/base.html:100 app/templates/base.html:205
+#: app/templates/base.html:100 app/templates/base.html:207
 msgid "Login"
 msgstr ""
 
@@ -215,6 +215,7 @@ msgstr ""
 
 #: app/forms.py:124 app/forms.py:125 app/templates/auth/all_users.html:10
 #: app/templates/base.html:118 app/templates/products/all_orders.html:9
+#: app/templates/products/all_products.html:8
 msgid "Search"
 msgstr ""
 
@@ -243,11 +244,11 @@ msgstr ""
 msgid "Main Page"
 msgstr ""
 
-#: app/templates/base.html:27 app/templates/base.html:217
+#: app/templates/base.html:27 app/templates/base.html:219
 msgid "Helmi Shop"
 msgstr ""
 
-#: app/templates/base.html:45 app/templates/base.html:214
+#: app/templates/base.html:45 app/templates/base.html:216
 msgid "Categories"
 msgstr ""
 
@@ -260,15 +261,16 @@ msgid "Discounted Products"
 msgstr ""
 
 #: app/templates/auth/all_users.html:55 app/templates/base.html:70
+#: app/templates/base.html:159
 msgid "All Users"
 msgstr ""
 
-#: app/templates/base.html:75
+#: app/templates/base.html:75 app/templates/base.html:160
 msgid "Active Users"
 msgstr ""
 
 #: app/templates/auth/profile.html:9 app/templates/base.html:82
-#: app/templates/base.html:203
+#: app/templates/base.html:205
 msgid "Profile"
 msgstr ""
 
@@ -277,12 +279,12 @@ msgid "Tickets"
 msgstr ""
 
 #: app/templates/auth/unconfirmed.html:15 app/templates/base.html:93
-#: app/templates/base.html:202
+#: app/templates/base.html:204
 msgid "Logout"
 msgstr ""
 
 #: app/templates/auth/login.html:49 app/templates/auth/register.html:5
-#: app/templates/base.html:105 app/templates/base.html:206
+#: app/templates/base.html:105 app/templates/base.html:208
 msgid "Register"
 msgstr ""
 
@@ -322,23 +324,27 @@ msgstr ""
 msgid "All Orders"
 msgstr ""
 
-#: app/templates/base.html:171
+#: app/templates/base.html:161 app/templates/products/all_products.html:35
+msgid "All Products"
+msgstr ""
+
+#: app/templates/base.html:173
 msgid "Kosmetiikka verkkokauppa"
 msgstr ""
 
-#: app/templates/base.html:182
+#: app/templates/base.html:184
 msgid "Close"
 msgstr ""
 
-#: app/templates/base.html:192
+#: app/templates/base.html:194
 msgid "Kaupamme"
 msgstr ""
 
-#: app/templates/base.html:194
+#: app/templates/base.html:196
 msgid "Pysy Kauniina"
 msgstr ""
 
-#: app/templates/base.html:195
+#: app/templates/base.html:197
 msgid ""
 "was created with the aim of offering our customers the best and highest "
 "quality products. The Helmi Shop cosmetics store offers a wide selection "
@@ -348,23 +354,23 @@ msgid ""
 "and benefit from high-quality products and services."
 msgstr ""
 
-#: app/templates/base.html:199
+#: app/templates/base.html:201
 msgid "My Account"
 msgstr ""
 
-#: app/templates/base.html:211
+#: app/templates/base.html:213
 msgid "Information"
 msgstr ""
 
-#: app/templates/base.html:213 app/templates/products/brand.html:14
+#: app/templates/base.html:215 app/templates/products/brand.html:14
 msgid "Home"
 msgstr ""
 
-#: app/templates/base.html:215 app/templates/products/brand.html:193
+#: app/templates/base.html:217 app/templates/products/brand.html:193
 msgid "Brands"
 msgstr ""
 
-#: app/templates/base.html:223
+#: app/templates/base.html:225
 msgid "Design by"
 msgstr ""
 
@@ -389,28 +395,33 @@ msgstr ""
 #: app/templates/auth/activate_users.html:50
 #: app/templates/auth/all_users.html:24
 #: app/templates/products/all_orders.html:19
+#: app/templates/products/all_products.html:18
 msgid "Page navigation"
 msgstr ""
 
 #: app/templates/auth/activate_users.html:57
 #: app/templates/auth/all_users.html:35
 #: app/templates/products/all_orders.html:25
+#: app/templates/products/all_products.html:24
 msgid "Previous"
 msgstr ""
 
 #: app/templates/auth/activate_users.html:80
 #: app/templates/auth/all_users.html:42
 #: app/templates/products/all_orders.html:28
+#: app/templates/products/all_products.html:27
 msgid "Next"
 msgstr ""
 
 #: app/templates/auth/all_users.html:28
 #: app/templates/products/all_orders.html:22
+#: app/templates/products/all_products.html:21
 msgid "First"
 msgstr ""
 
 #: app/templates/auth/all_users.html:49
 #: app/templates/products/all_orders.html:31
+#: app/templates/products/all_products.html:30
 msgid "Last"
 msgstr ""
 
@@ -624,8 +635,58 @@ msgid "Delete"
 msgstr ""
 
 #: app/templates/products/all_discounted_products.html:86
+#: app/templates/products/all_products.html:69
 #: app/templates/products/brand.html:179
 msgid "Are you sure you want to delete"
+msgstr ""
+
+#: app/templates/products/all_products.html:39
+msgid "Product ID"
+msgstr ""
+
+#: app/templates/products/all_products.html:40
+msgid "Image"
+msgstr ""
+
+#: app/templates/products/all_products.html:41
+msgid "Name"
+msgstr ""
+
+#: app/templates/products/all_products.html:42
+msgid "Price"
+msgstr ""
+
+#: app/templates/products/all_products.html:43
+msgid "Discount"
+msgstr ""
+
+#: app/templates/products/all_products.html:44
+msgid "Size"
+msgstr ""
+
+#: app/templates/products/all_products.html:45
+msgid "Weight"
+msgstr ""
+
+#: app/templates/products/all_products.html:46
+msgid "Ean"
+msgstr ""
+
+#: app/templates/products/all_products.html:47
+msgid "Category"
+msgstr ""
+
+#: app/templates/products/all_products.html:48
+msgid "Subcategory"
+msgstr ""
+
+#: app/templates/products/all_products.html:49
+msgid "Brand"
+msgstr ""
+
+#: app/templates/products/all_products.html:50
+#: app/templates/tickets/view_tickets.html:15
+msgid "Actions"
 msgstr ""
 
 #: app/templates/products/brand.html:40
@@ -654,10 +715,6 @@ msgstr ""
 
 #: app/templates/tickets/view_tickets.html:11
 msgid "Ticket ID"
-msgstr ""
-
-#: app/templates/tickets/view_tickets.html:15
-msgid "Actions"
 msgstr ""
 
 #: app/templates/tickets/view_tickets.html:29

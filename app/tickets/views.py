@@ -58,11 +58,24 @@ def update_ticket(ticket_id):
 @tickets.route('/view_tickets')
 @login_required
 def view_tickets():
+    search = request.args.get('search', '').strip()
+    page = request.args.get('page', 1, type=int)
+    per_page = 5
+
     if current_user.is_administrator():
-        tickets = Ticket.query.order_by(Ticket.created_at.desc()).all()
+        query = Ticket.query
     else:
-        tickets = Ticket.query.filter_by(user_id=current_user.id).order_by(Ticket.created_at.desc()).all()    
-    return render_template('tickets/view_tickets.html', title='Tickets', tickets=tickets)
+        query = Ticket.query.filter_by(user_id=current_user.id)
+
+    if search:
+        query = query.filter(
+            Ticket.title.ilike(f'%{search}%') | 
+            Ticket.description.ilike(f'%{search}%') | 
+            Ticket.status.ilike(f'%{search}%')
+        )
+
+    tickets = query.order_by(Ticket.created_at.desc()).paginate(page=page, per_page=per_page)
+    return render_template('tickets/view_tickets.html', title='Tickets', tickets=tickets, search=search)
 
 @tickets.route('/view_ticket/<int:ticket_id>', methods=['GET', 'POST'])
 @login_required
@@ -117,3 +130,4 @@ def delete_ticket(ticket_id):
     db.session.commit()
     flash('Your ticket has been deleted!', 'success')
     return redirect(url_for('tickets.view_tickets'))
+
