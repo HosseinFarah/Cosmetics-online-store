@@ -1,4 +1,4 @@
-from . import db,login
+from . import db, get_locale,login
 import sqlalchemy as sa
 import sqlalchemy.orm as so
 from pytz import timezone
@@ -7,6 +7,7 @@ from flask_login import UserMixin, AnonymousUserMixin #for role
 from werkzeug.security import generate_password_hash, check_password_hash
 from itsdangerous import URLSafeTimedSerializer as Serializer
 from flask import current_app
+from flask_babel import lazy_gettext as _
 
 class User(UserMixin, db.Model):
     __tablename__ = 'users'
@@ -269,6 +270,18 @@ class Brand(db.Model):
         return self.name
     
 
+# for translation from db
+class Translation(db.Model):
+    __tablename__ = 'translations'
+    id = db.Column(db.Integer, primary_key=True)
+    language = db.Column(db.String(10), nullable=False)
+    field = db.Column(db.String(50), nullable=False)
+    text = db.Column(db.Text, nullable=False)
+    product_id = db.Column(db.Integer, db.ForeignKey('products.id'))
+
+    def __repr__(self) -> str:
+        return f'<Translation {self.language} - {self.field}>'
+
         
 class Product(db.Model):
     __tablename__ = 'products'
@@ -293,9 +306,10 @@ class Product(db.Model):
     subcategory_id = db.Column(db.Integer, db.ForeignKey('categories.id'), nullable=True)
     category = db.relationship('Category', foreign_keys=[category_id], backref='products')
     subcategory = db.relationship('Category', foreign_keys=[subcategory_id])
-
-
     
+    # for translation from db
+    translations = db.relationship('Translation', backref='product', lazy='dynamic')
+
     def __repr__(self) -> str:
         return '<Product %r>' % self.name
     
@@ -308,6 +322,19 @@ class Product(db.Model):
     def get_discount_percent(self):
         return self.discount
 
+    # for translation from db
+    def get_translation(self, field):
+        locale = get_locale()
+        # current_app.logger.info(f"Fetching translation for field '{field}' in locale '{locale}' for product '{self.name}' (ID: {self.id})")
+        translations = self.translations.all()
+        # current_app.logger.info(f"Translations available for product '{self.name}': {[t.language + '-' + t.field for t in translations]}")
+        translation = self.translations.filter_by(language=locale, field=field).first()
+        if translation:
+            # current_app.logger.info(f"Translation found: {translation.text}")
+            return translation.text
+        # current_app.logger.info(f"No translation found for field '{field}' in locale '{locale}', using default.")
+        return getattr(self, field)
+
 class Order(db.Model):
     __tablename__ = 'orders'
     id = db.Column(db.Integer, primary_key=True)
@@ -318,6 +345,35 @@ class Order(db.Model):
     status = db.Column(db.String(50), nullable=False, default='pending')
     created_at = db.Column(db.DateTime, default=datetime.now(timezone('Europe/Helsinki')))
     updated_at = db.Column(db.DateTime, default=datetime.now(timezone('Europe/Helsinki')))
+    user = db.relationship('User', backref='orders')
 
     def __repr__(self) -> str:
         return f'<Order {self.id}>'
+
+class Ticket(db.Model):
+    __tablename__ = 'tickets'
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(100), nullable=False, index=True)
+    description = db.Column(db.Text, nullable=False)
+    status = db.Column(db.String(20), nullable=False, default='open', index=True)
+    image = db.Column(db.String(255), nullable=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    created_at = db.Column(db.DateTime, default=datetime.now(timezone('Europe/Helsinki')))
+    updated_at = db.Column(db.DateTime, default=datetime.now(timezone('Europe/Helsinki')))
+    user = db.relationship('User', backref='tickets')
+    messages = db.relationship('TicketMessage', backref='ticket', cascade='all, delete-orphan')
+
+    def __repr__(self) -> str:
+        return '<Ticket %r>' % self.title
+
+class TicketMessage(db.Model):
+    __tablename__ = 'ticket_messages'
+    id = db.Column(db.Integer, primary_key=True)
+    ticket_id = db.Column(db.Integer, db.ForeignKey('tickets.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    message = db.Column(db.Text, nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.now(timezone('Europe/Helsinki')))
+    user = db.relationship('User', backref='messages')
+
+    def __repr__(self) -> str:
+        return '<TicketMessage %r>' % self.message

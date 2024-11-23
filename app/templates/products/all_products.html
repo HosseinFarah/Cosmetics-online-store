@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 mt-3">
+                <form action="{{ url_for('products.all_products') }}" method="get">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="{{ _('Search') }}" name="search" value="{{ search }}" />
+                        <div class="input-group-append">
+                            <button class="btn btn-secondary" type="submit"><i class="fa fa-search"></i></button>
+                            <button class="btn btn-secondary" type="button" onclick="window.location.href='{{ url_for('products.all_products', search='', page=1) }}'"><i class="fa fa-sync"></i></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- pagination -->
+        <nav aria-label="{{ _('Page navigation') }}">
+            <ul class="pagination">
+                <li class="page-item {% if products.page == 1 %}disabled{% endif %}">
+                    <a class="page-link" href="{{ url_for('products.all_products', search=search, page=1) }}">{{ _('First') }}</a>
+                </li>
+                <li class="page-item {% if products.page == 1 %}disabled{% endif %}">
+                    <a class="page-link" href="{{ url_for('products.all_products', search=search, page=products.prev_num) }}">{{ _('Previous') }}</a>
+                </li>
+                <li class="page-item {% if products.page == products.pages %}disabled{% endif %}">
+                    <a class="page-link" href="{{ url_for('products.all_products', search=search, page=products.next_num) }}">{{ _('Next') }}</a>
+                </li>
+                <li class="page-item {% if products.page == products.pages %}disabled{% endif %}">
+                    <a class="page-link" href="{{ url_for('products.all_products', search=search, page=products.pages) }}">{{ _('Last') }}</a>
+                </li>
+            </ul>
+        </nav>
+    
+    <h1>{{ _('All Products') }} <span class="badge bg-primary">{{ all_products_count }}</span></h1>
+    <table class="table table-striped overflow-auto">
+        <thead>
+            <tr>
+                <th>{{ _('Product ID') }}</th>
+                <th>{{ _('Image') }}</th>
+                <th>{{ _('Name') }}</th>
+                <th>{{ _('Price') }}</th>
+                <th>{{ _('Discount') }}</th>
+                <th>{{ _('Size') }}</th>
+                <th>{{ _('Weight') }}</th>
+                <th>{{ _('Ean') }}</th>
+                <th>{{ _('Category') }}</th>
+                <th>{{ _('Subcategory') }}</th>
+                <th>{{ _('Brand') }}</th>
+                <th>{{ _('Actions') }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in products.items %}
+            <tr>
+                    <td>{{ product.id }}</td>
+                    <td><img src="{{ url_for('static', filename='uploads/products/' + product.image) }}" alt="{{ product.name }}" class="img-thumbnail" width="95px" height="95px" object-fit="contain"></td>
+                    <td>{{ product.name }}</td>
+                    <td>{{ product.price }}</td>
+                    <td>{{ product.discount }}</td>
+                    <td>{{ product.size }}</td>
+                    <td>{{ product.weight }}</td>
+                    <td>{{ product.ean }}</td>
+                    <td>{{ product.category.name }}</td>
+                    <td>{{ product.subcategory.name }}</td>
+                    <td>{{ product.brand.name }}</td>
+                    <td>
+                        <a href="{{ url_for('products.edit_product', id=product.id) }}" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i></a>
+                        <a href="{{ url_for('products.delete_product', id=product.id) }}" class="btn btn-danger btn-sm" onclick="return confirm('{{ _('Are you sure you want to delete') }} {{ product.name }}?')"><i class="fa fa-trash"></i></a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
+
+

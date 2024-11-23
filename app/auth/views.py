@@ -83,7 +83,7 @@ def register():
         if image:
             filename = secure_filename(image.filename)
             image.save(os.path.join(current_app.config['UPLOAD_FOLDER'], filename))
-        user = User(firstname=form.firstname.data, lastname=form.lastname.data, email=form.email.data, password=form.password.data, address=form.address.data, zipcode=form.zipcode.data, phone=form.phone.data, image=filename)
+        user = User(firstname=form.firstname.data, lastname=form.lastname.data, email=form.email.data, password=form.password.data, address=form.address.data, zipcode=form.zipcode.data, phone=form.phone.data, image=filename, city=form.city.data)
         db.session.add(user)
         db.session.commit()
         token = user.generate_confirmation_token()
@@ -223,12 +223,22 @@ def update_profile():
 @login_required
 @admin_required
 def all_users():
-    search = request.args.get('search', '')
-    page=request.args.get('page', 1, type=int)
+    search = request.args.get('search', '').strip()
+    page = request.args.get('page', 1, type=int)
     per_page = 15
     all_users_count = User.query.count()
     if search:
-        query = User.query.filter(User.firstname.like(f'%{search}%') | User.lastname.like(f'%{search}%') | User.email.like(f'%{search}%')| User.phone.like(f'%{search}%')| User.city.like(f'%{search}%')| User.address.like(f'%{search}%')| User.zipcode.like(f'%{search}%')| User.role.has(Role.name.like(f'%{search}%'))| User.firstname+User.lastname.like(f'%{search}%')) 
+        query = User.query.filter(
+            User.firstname.like(f'%{search}%') |
+            User.lastname.like(f'%{search}%') |
+            User.email.like(f'%{search}%') |
+            User.phone.like(f'%{search}%') |
+            User.city.like(f'%{search}%') |
+            User.address.like(f'%{search}%') |
+            User.zipcode.like(f'%{search}%') |
+            User.role.has(Role.name.like(f'%{search}%')) |
+            (User.firstname + ' ' + User.lastname).like(f'%{search}%')
+        )
     else:
         query = User.query
 
@@ -239,9 +249,9 @@ def all_users():
         query = query.order_by(getattr(User, sort_by).asc())
     else:
         query = query.order_by(getattr(User, sort_by).desc())
-    
+
     users = query.paginate(page=page, per_page=per_page, error_out=False)
-    return render_template('auth/all_users.html', users=users, search=search, page=page, pages=users.pages, all_users=all_users_count,order=order, sort_by=sort_by)
+    return render_template('auth/all_users.html', users=users, search=search, page=page, pages=users.pages, all_users=all_users_count, order=order, sort_by=sort_by)
 
 @auth.route('/edit_user_admin/<int:id>', methods=['GET', 'POST'])
 @login_required

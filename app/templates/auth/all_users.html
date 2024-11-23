@@ -7,7 +7,7 @@
           <input
             type="text"
             class="form-control"
-            placeholder="Search"
+            placeholder="{{ _('Search') }}"
             name="search"
             value="{{ search }}"
           />
@@ -21,71 +21,71 @@
   <div class="row d-flex justify-content-center overflow-auto">
     <div class="col-md-12">
         <!-- pagination -->
-      <nav aria-label="Page navigation">
+      <nav aria-label="{{ _('Page navigation') }}">
         <ul class="pagination">
           <li class="page-item {% if page == 1 %}disabled{% endif %}">
             <a class="page-link" href="{{ url_for('auth.all_users', page=1) }}"
-              >First</a
+              >{{ _('First') }}</a
             >
           </li>
           <li class="page-item {% if page == 1 %}disabled{% endif %}">
             <a
               class="page-link"
               href="{{ url_for('auth.all_users', page=page-1) }}"
-              >Previous</a
+              >{{ _('Previous') }}</a
             >
           </li>
           <li class="page-item {% if page == pages %}disabled{% endif %}">
             <a
               class="page-link"
               href="{{ url_for('auth.all_users', page=page+1) }}"
-              >Next</a
+              >{{ _('Next') }}</a
             >
           </li>
           <li class="page-item {% if page == pages %}disabled{% endif %}">
             <a
               class="page-link"
               href="{{ url_for('auth.all_users', page=pages) }}"
-              >Last</a
+              >{{ _('Last') }}</a
             >
           </li>
         </ul>
       </nav>
 
-      <h2 class="badge text-bg-primary">All Users | {{all_users}}</h2>
+      <h2 class="badge text-bg-primary">{{ _('All Users') }} | {{all_users}}</h2>
 
       <table class="table table-striped">
         <thead>
           <tr>
             <th>
-              <a href="{{ url_for('auth.all_users', sort_by='firstname', order='asc', search=search) }}"><i class="fa fa-sort-up"></i>Fullname</a>
+              <a href="{{ url_for('auth.all_users', sort_by='firstname', order='asc', search=search) }}"><i class="fa fa-sort-up"></i>{{ _('Fullname') }}</a>
               <a href="{{ url_for('auth.all_users', sort_by='firstname', order='desc', search=search) }}"><i class="fa fa-sort-down"></i></a>
             </th>
 
             <th>
-              Email
+              {{ _('Email') }}
             </th>
             <th>
-              <a href="{{ url_for('auth.all_users', sort_by='role_id', order='asc', search=search) }}"><i class="fa fa-sort-up"></i>Role</a>
+              <a href="{{ url_for('auth.all_users', sort_by='role_id', order='asc', search=search) }}"><i class="fa fa-sort-up"></i>{{ _('Role') }}</a>
               <a href="{{ url_for('auth.all_users', sort_by='role_id', order='desc', search=search) }}"><i class="fa fa-sort-down"></i></a>
             </th>
             <th>
-              Phone
+              {{ _('Phone') }}
             </th>
             <th>
-              <a href="{{ url_for('auth.all_users', sort_by='city', order='asc', search=search) }}"><i class="fa fa-sort-up"></i>City</a>
+              <a href="{{ url_for('auth.all_users', sort_by='city', order='asc', search=search) }}"><i class="fa fa-sort-up"></i>{{ _('City') }}</a>
               <a href="{{ url_for('auth.all_users', sort_by='city', order='desc', search=search) }}"><i class="fa fa-sort-down"></i></a>
             </th>
             <th>
-              Address
+              {{ _('Address') }}
             </th>
             <th>
-              Zipcode
+              {{ _('Zipcode') }}
             </th>
             <th>
-              Active
+              {{ _('Active') }}
             </th>
-            <th>Action</th>
+            <th>{{ _('Action') }}</th>
           </tr>
         </thead>
         <tbody>
@@ -107,7 +107,7 @@
                 class="text-primary"
                 ><i class="fa fa-edit fs-6"></i
               ></a>
-              <a href="{{ url_for('auth.delete_user_admin', id=user.id) }}"class="text-danger" onclick="return confirm('Are you sure you want to delete user: {{ user.firstname }} {{ user.lastname }}?')"><i class="fa fa-trash fs-6"></i></a>
+              <a href="{{ url_for('auth.delete_user_admin', id=user.id) }}"class="text-danger" onclick="return confirm('{{ _('Are you sure you want to delete user:') }} {{ user.firstname }} {{ user.lastname }}?')"><i class="fa fa-trash fs-6"></i></a>
               {% endif %}
             </td>
           </tr>
@@ -117,4 +117,5 @@
       
     </div>
   </div>
+</div>
 {% endblock %}

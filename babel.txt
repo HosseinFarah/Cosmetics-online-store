@@ -1,0 +1,13 @@
+# Extract messages
+pybabel extract -F babel.cfg -o translations/messages.pot .
+
+# Initialize translations
+pybabel init -i translations/messages.pot -d translations -l fi
+pybabel init -i translations/messages.pot -d translations -l en
+
+# Update translations (run this after making changes to source files)
+pybabel extract -F babel.cfg -o translations/messages.pot .
+pybabel update -i translations/messages.pot -d translations
+
+# Compile translations (run this after translating messages in .po files)
+pybabel compile -d translations
