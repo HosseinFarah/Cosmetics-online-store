@@ -1,24 +1,28 @@
-<!-- create csrf error template -->
-<!-- create csrf_error.html in app/templates/errors -->
+{% extends 'base.html' %} {% block content %}
+<section class="page_404">
+  <div class="container">
+    <div class="row d-flex justify-content-center">
+      <div class="col-sm-12">
+        <div class="col-sm-10 col-sm-offset-1 text-center">
+          <div class="four_zero_four_bg">
+            <h1 class="text-center">CSRF Error</h1>
+          </div>
+          <div class="contant_box_404">
+            <h3 class="h2">CSRF Error</h3>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CSRF Error</title>
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
-</head>
-<body>
-  <div class="container mt-5">
-    <div class="alert alert-danger" role="alert">
-      <h4 class="alert-heading">CSRF Error</h4>
-      <p>CSRF token is missing or incorrect. Please try again.</p>
-      <h5>{{ reason }}</h5>
-      <hr>
-
-      <p class="mb-0">Click <a href="{{ url_for('auth.login') }}">here</a> to go back to the login page.</p>
+            <p class="text-danger fs-4">
+              CSRF token is missing or incorrect. Please try again.
+            </p>
+            <h5>{{ reason }}</h5>
+            <a
+              href="{{ url_for('main.index') }}"
+              class="link_404 text-decoration-none"
+              ><i class="fa fa-home"></i> Go to Home</a
+            >
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-</body>
-</html>
+</section>
+{% endblock %} 

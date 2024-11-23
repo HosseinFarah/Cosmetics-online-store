@@ -41,11 +41,7 @@ def create_app(config_name='default'):
     csrf.init_app(app)
     
     # for translation
-    # Initialize Babel with the locale selector
     babel.init_app(app, locale_selector=get_locale)
-    
-    # for translation
-    # Register get_locale as a template global
     app.jinja_env.globals['get_locale'] = get_locale
     
     # logging
@@ -59,7 +55,7 @@ def create_app(config_name='default'):
     app.register_blueprint(main_blueprint)
     
     from app.errors import errors as errors_blueprint
-    app.register_blueprint(errors_blueprint)
+    app.register_blueprint(errors_blueprint, url_prefix='/errors')
     
     from app.todos import todos as todos_blueprint
     app.register_blueprint(todos_blueprint, url_prefix='/todos')
