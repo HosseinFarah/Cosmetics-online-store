@@ -75,7 +75,7 @@ This project is a Flask-based web application that provides user authentication,
 - **Login:** Registered users can log in using their email and password.
   ![Login](app/static/uploads/demo/07-payment.gif)
 - **Profile Management:** Users can update their profile information and change their password.
-  ![Profile Management](app/static/uploads/demo/09-update profile.gif)
+  ![Profile Management](app/static/uploads/demo/09-update%20profile.gif)
 - **Password Reset:** Users can request a password reset link via email.
   ![Password Reset](app/static/uploads/demo/15-resetpassword.gif)
 
@@ -84,7 +84,7 @@ This project is a Flask-based web application that provides user authentication,
   ![Create Product](app/static/uploads/demo/16-Admin-products.gif)
 - **Update Product:** Admins can update existing product details including discounts.
 - **Delete Product:** Admins can delete products from the database.
-  ![Delete Product](app/static/uploads/demo/16'Admin-other sections.gif)
+  ![Delete Product](app/static/uploads/demo/16-Admin-other%20sections.gif)
 - **View Products:** Users can view all products, filter by categories and brands, and search for specific products. The product categories include skincare products, scents, hair products, and other related products.
   ![View Products](app/static/uploads/demo/1-intro.gif)
 
@@ -97,15 +97,15 @@ This project is a Flask-based web application that provides user authentication,
 
 ### Ticketing System
 - **Create Ticket:** Users can create support tickets by providing a title, description, and optional image.
-  ![Create Ticket](app/static/uploads/demo/11-create ticket.gif)
+  ![Create Ticket](app/static/uploads/demo/11-create%20ticket.gif)
 - **View Tickets:** Users can view their tickets and admins can view all tickets.
 - **Update Ticket:** Users and admins can update ticket details.
 - **Answer Ticket:** Users and admins can add messages to tickets for communication.
-  ![Answer Ticket](app/static/uploads/demo/11-live msg system.gif)
+  ![Answer Ticket](app/static/uploads/demo/11-live%20msg%20system.gif)
 
 ### Admin Dashboard
 - **Manage Users:** Admins can view, update, and delete user accounts.
-  ![Manage Users](app/static/uploads/demo/16-Admin-all users.gif)
+  ![Manage Users](app/static/uploads/demo/16-Admin-all%20users.gif)
 - **Manage Orders:** Admins can view all orders and their details.
   ![Manage Orders](app/static/uploads/demo/16-Admin-orders.gif)
 - **Manage Tickets:** Admins can view and manage all support tickets.
