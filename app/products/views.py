@@ -371,6 +371,7 @@ def product(id):
     ratings = db.session.query(Rating).filter_by(product_id=id).all()
     existing_rating = db.session.query(Rating).filter_by(user_id=current_user.id, product_id=id).first()
     form = UpdateRatingForm(obj=existing_rating) if existing_rating else CreateRatingForm()
+    ratings_all = db.session.query(Rating).all()
     
     if form.validate_on_submit():
         if existing_rating:
@@ -390,7 +391,8 @@ def product(id):
             flash("Rating added successfully", "success")
         return redirect(url_for('products.product', id=id))
     
-    return render_template("products/product.html", product=product, pictures=json.loads(product.pictures), brand=brand, form=form, orders=orders, json=json, ratings=ratings)
+    
+    return render_template("products/product.html", product=product, pictures=json.loads(product.pictures), brand=brand, form=form, orders=orders, json=json, ratings=ratings, ratings_all=ratings_all)
 
 
 
@@ -411,7 +413,8 @@ def category(category_name):
     # Filter products based on the selected category
     products = db.session.query(Product).filter_by(category=category).all() if category else []
     brands = db.session.query(Brand).all()
-    return render_template("products/category.html", products=products, categories=categories, form=form, category=category, brands=brands)
+    ratings = db.session.query(Rating).all()
+    return render_template("products/category.html", products=products, categories=categories, form=form, category=category, brands=brands, ratings=ratings)
     
     
     
@@ -439,7 +442,8 @@ def brand(brand_name):
     product = db.session.query(Product).filter_by(brand=brand).first()
     
     products = db.session.query(Product).filter_by(brand=brand).all() if brand else []
-    return render_template("products/brand.html", products=products, brands=brands, form=form, brand=brand,grouped_brands=grouped_brands,product=product)
+    ratings = db.session.query(Rating).all()
+    return render_template("products/brand.html", products=products, brands=brands, form=form, brand=brand,grouped_brands=grouped_brands,product=product, ratings=ratings)
     
 
     
@@ -523,7 +527,8 @@ def all_discounted_products():
     products = db.session.query(Product).filter(Product.discount > 0).all()
     # Sort products by discount percentage in descending order
     sorted_products = sorted(products, key=lambda p: p.get_discount_percent(), reverse=True)
-    return render_template("products/all_discounted_products.html", products=sorted_products)
+    ratings = db.session.query(Rating).all()    
+    return render_template("products/all_discounted_products.html", products=sorted_products, ratings=ratings)
 
 
 

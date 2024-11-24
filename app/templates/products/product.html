@@ -75,6 +75,14 @@
             <i class="fa fa-tag text-secondary"></i> {{
             product.get_translation('description') }}
           </p>
+          {% set average_rating = product.get_average_rating_for_product(product.id) %}
+          {% set average_rating = average_rating if average_rating is not none else 4 %}
+          <p class="card-text">
+            {% for i in range(1, 6) %}
+              <i class="fa fa-star{% if i > average_rating %}-o{% endif %} text-warning"></i>
+            {% endfor %}
+          </p>
+          
           {% if product.size %}
           <p class="card-text">
             <i class="fa fa-expand text-secondary"></i> {{ product.size }}
