@@ -47,14 +47,14 @@
                             </thead>
                             <tbody>
                                 {% for order in my_orders %}
-                                    <tr class="shadow border-bottom border-danger">
+                                    <tr class="shadow border-bottom border-danger mt-3">
                                         <td>{{ order.id }}</td>
                                         <td><span class="badge bg-secondary">{{ order.created_at }}</span></td>
-                                        <td>
+                                        <td class="text-start mt-3">
+                                            {% set purchased_products = json.loads(order.purchased_products) %}
                                             {% for product in purchased_products %}
-                                               <span class="badge bg-primary">{{loop.index}}</span> <strong >{{ product.name }} </strong> <span class="badge bg-success">{{ product.quantity }}</span> | {{ _('Price Per Unit:') }} {% if product.discount %} <del class="badge bg-danger">{{ product.price }}</del> {{ (product.price * (1 - product.discount / 100))| round(2)  }} {% else %} {{ product.price }} {% endif %} 
-                                               <a href="{{ url_for('products.product', id=product.id) }}" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="{{ _('View') }}" ><i class="fa fa-eye"></i> </a>
-                                               <hr>
+                                            <span class="badge bg-primary">{{loop.index}}</span> <strong >{{ product.name }} </strong> <span class="badge bg-success">{{ product.quantity }}</span> | {{ _('Price Per Unit:') }} {% if product.discount %} <del class="badge bg-danger">{{ product.price }}</del> {{ (product.price * (1 - product.discount / 100))| round(2)  }} {% else %} {{ product.price }} {% endif %} 
+                                            <a href="{{ url_for('products.product', id=product.id) }}" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="{{ _('View') }}" ><i class="fa fa-eye"></i> </a><br><br>
                                             {% endfor %}
                                         </td>
                                         <td><span class="badge bg-success fs-3">{{ order.total_amount }} €</span></td>

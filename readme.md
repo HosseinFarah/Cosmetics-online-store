@@ -71,34 +71,49 @@ This project is a Flask-based web application that provides user authentication,
 
 ### User Authentication
 - **Register:** Users can register by providing their details including a profile picture.
+  - Demo GIF: `app/static/uploads/demo/12-registeration.gif`
 - **Login:** Registered users can log in using their email and password.
+  - Demo GIF: `app/static/uploads/demo/07-payment.gif`
 - **Profile Management:** Users can update their profile information and change their password.
+  - Demo GIF: `app/static/uploads/demo/09-update profile.gif`
 - **Password Reset:** Users can request a password reset link via email.
+  - Demo GIF: `app/static/uploads/demo/15-resetpassword.gif`
 
 ### Product Management
 - **Create Product:** Admins can create new products by providing details such as name, price, description, images, etc.
+  - Demo GIF: `app/static/uploads/demo/16-Admin-products.gif`
 - **Update Product:** Admins can update existing product details including discounts.
 - **Delete Product:** Admins can delete products from the database.
+  - Demo GIF: `app/static/uploads/demo/16'Admin-other sections.gif`
 - **View Products:** Users can view all products, filter by categories and brands, and search for specific products. The product categories include skincare products, scents, hair products, and other related products.
+  - Demo GIF: `app/static/uploads/demo/1-intro.gif`
 
 ### Shopping Basket and Checkout
 - **Add to Basket:** Users can add products to their shopping basket.
+  - Demo GIF: `app/static/uploads/demo/06-basket.gif`
 - **View Basket:** Users can view the contents of their basket and update quantities.
 - **Checkout:** Users can proceed to checkout and make payments using Stripe.
+  - Demo GIF: `app/static/uploads/demo/07-payment.gif`
 
 ### Ticketing System
 - **Create Ticket:** Users can create support tickets by providing a title, description, and optional image.
+  - Demo GIF: `app/static/uploads/demo/11-create ticket.gif`
 - **View Tickets:** Users can view their tickets and admins can view all tickets.
 - **Update Ticket:** Users and admins can update ticket details.
 - **Answer Ticket:** Users and admins can add messages to tickets for communication.
+  - Demo GIF: `app/static/uploads/demo/11-live msg system.gif`
 
 ### Admin Dashboard
 - **Manage Users:** Admins can view, update, and delete user accounts.
+  - Demo GIF: `app/static/uploads/demo/16-Admin-all users.gif`
 - **Manage Orders:** Admins can view all orders and their details.
+  - Demo GIF: `app/static/uploads/demo/16-Admin-orders.gif`
 - **Manage Tickets:** Admins can view and manage all support tickets.
+  - Demo GIF: `app/static/uploads/demo/16-Admin-tickets.gif`
 
 ### Multi-language Support
 The application supports multiple languages. Users can select their preferred language from the dropdown menu.
+  - Demo GIF: `app/static/uploads/demo/10-multilangual.gif`
 
 ## Contributing
 
