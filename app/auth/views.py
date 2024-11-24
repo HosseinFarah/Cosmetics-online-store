@@ -151,18 +151,9 @@ def profile():
     user=current_user
     member_since = datetime.now(timezone('Europe/Helsinki')) - user.created_at.replace(tzinfo=timezone('Europe/Helsinki'))
     my_orders= db.session.query(Order).filter(Order.user_id==user.id).all()
-    purchased_products = []
-    for order in my_orders:
-       try:
-           products = json.loads(order.purchased_products)
-           if isinstance(products, list):
-               for product in products:
-                   if isinstance(product, dict):
-                       purchased_products.append(product)
-       except Exception as e:
-              print(f"Error in parsing purchased products: {e}")
+
             
-    return render_template('auth/profile.html', title='Profile', user=user, member_since=member_since.days, my_orders=my_orders,purchased_products=purchased_products)
+    return render_template('auth/profile.html', title='Profile', user=user, member_since=member_since.days, my_orders=my_orders,json=json)
 
 @auth.route('/update_profile', methods=['GET', 'POST'])
 @login_required
