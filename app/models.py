@@ -377,3 +377,19 @@ class TicketMessage(db.Model):
 
     def __repr__(self) -> str:
         return '<TicketMessage %r>' % self.message
+
+
+class Rating(db.Model):
+    __tablename__ = 'ratings'
+    id = db.Column(db.Integer, primary_key=True)
+    product_id = db.Column(db.Integer, db.ForeignKey('products.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    rating = db.Column(db.Integer, nullable=False)
+    review = db.Column(db.Text, nullable=True)
+    created_at = db.Column(db.DateTime, default=datetime.now(timezone('Europe/Helsinki')))
+    updated_at = db.Column(db.DateTime, default=datetime.now(timezone('Europe/Helsinki')))
+    user = db.relationship('User', backref='ratings')
+    product = db.relationship('Product', backref='ratings')
+
+    def __repr__(self) -> str:
+        return '<Ratings %r>' % self.rating

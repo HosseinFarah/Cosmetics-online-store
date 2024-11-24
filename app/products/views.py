@@ -1,9 +1,10 @@
+from inspect import ismethod
 from . import products
 from flask import render_template, redirect, url_for, request, flash, current_app, session, jsonify
 from flask_login import login_user, logout_user, login_required, current_user
 from ..decorators import admin_required
-from .forms import CreateNewProduct, EditProduct, CategoryForm, BrandsForm, CreateNewBrand, EditBrand, CreateNewCategory, CheckoutForm, CreateTranslation, EditTranslation
-from app.models import Product, Category, Brand, Order, Translation, User
+from .forms import CreateNewProduct, EditProduct, CategoryForm, BrandsForm, CreateNewBrand, EditBrand, CreateNewCategory, CheckoutForm, CreateTranslation, EditTranslation,CreateRatingForm,UpdateRatingForm
+from app.models import Product, Category, Brand, Order, Translation, User, Rating
 from app import db
 from werkzeug.utils import secure_filename
 import os
@@ -361,11 +362,37 @@ def delete_product(id):
     flash("Product deleted successfully", "success")
     return redirect(url_for("main.index"))
 
-@products.route("/product/<int:id>")
+@products.route("/product/<int:id>", methods=["GET", "POST"])
 def product(id):
     product = db.session.query(Product).get(id)
     brand = product.brand
-    return render_template("products/product.html", product=product, pictures=json.loads(product.pictures), brand=brand)
+    # for ratings
+    orders = db.session.query(Order).all()
+    ratings = db.session.query(Rating).filter_by(product_id=id).all()
+    existing_rating = db.session.query(Rating).filter_by(user_id=current_user.id, product_id=id).first()
+    form = UpdateRatingForm(obj=existing_rating) if existing_rating else CreateRatingForm()
+    
+    if form.validate_on_submit():
+        if existing_rating:
+            existing_rating.rating = form.rating.data
+            existing_rating.review = form.review.data
+            db.session.commit()
+            flash("Rating updated successfully", "success")
+        else:
+            new_rating = Rating(
+                rating=form.rating.data,
+                user_id=current_user.id,
+                product_id=id,
+                review=form.review.data
+            )
+            db.session.add(new_rating)
+            db.session.commit()
+            flash("Rating added successfully", "success")
+        return redirect(url_for('products.product', id=id))
+    
+    return render_template("products/product.html", product=product, pictures=json.loads(product.pictures), brand=brand, form=form, orders=orders, json=json, ratings=ratings)
+
+
 
 
 @products.route("/category/<string:category_name>", methods=["GET", "POST"])

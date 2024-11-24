@@ -65,5 +65,5 @@ def create_app(config_name='default'):
     
     from app.tickets import tickets as tickets_blueprint
     app.register_blueprint(tickets_blueprint, url_prefix='/tickets')
-
+    
     return app
