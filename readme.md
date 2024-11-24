@@ -12,6 +12,11 @@ This project is a Flask-based web application that provides user authentication,
 - Ticketing System for User Support
 - Multi-language Support
 - Admin Dashboard for Managing Users, Products, Orders, and Tickets
+- **New Features:**
+  - Video support for brands and products
+  - Discount management for products
+  - Enhanced validation for user input
+  - Dynamic city and brand selection
 
 ## Installation
 
@@ -69,7 +74,7 @@ This project is a Flask-based web application that provides user authentication,
 
 ### Product Management
 - **Create Product:** Admins can create new products by providing details such as name, price, description, images, etc.
-- **Update Product:** Admins can update existing product details.
+- **Update Product:** Admins can update existing product details including discounts.
 - **Delete Product:** Admins can delete products from the database.
 - **View Products:** Users can view all products, filter by categories and brands, and search for specific products.
 
@@ -106,5 +111,9 @@ This project is licensed under the MIT License. See the LICENSE file for details
 - Bootstrap
 - Stripe
 - Flask-Babel
+- Font Awesome for icons
+- js libraries for form validation,image preview,dynamic city and brand selection,video support,discount management
+
+
 
 This documentation provides an overview of the project's features, installation steps, usage instructions, and other relevant information. For more details, please refer to the project's source code and documentation.
