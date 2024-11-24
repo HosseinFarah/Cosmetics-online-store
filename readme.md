@@ -2,6 +2,10 @@
 
 This project is a Flask-based web application that provides user authentication, product management, ticketing system, and e-commerce functionalities. The application supports multiple languages and includes features for both regular users and administrators.
 
+## Project Overview
+
+Helmi Shop was created with the aim of offering our customers the best and highest quality products. The Helmi Shop cosmetics store offers a wide selection of famous brands for beauty lovers. In this online store, you can find all kinds of cosmetic products, including creams, cosmetics, perfumes, and skin and hair care products. You can safely buy your beauty products and benefit from high-quality products and services.
+
 ## Features
 
 - User Authentication (Login, Registration, Password Reset)
@@ -76,7 +80,7 @@ This project is a Flask-based web application that provides user authentication,
 - **Create Product:** Admins can create new products by providing details such as name, price, description, images, etc.
 - **Update Product:** Admins can update existing product details including discounts.
 - **Delete Product:** Admins can delete products from the database.
-- **View Products:** Users can view all products, filter by categories and brands, and search for specific products.
+- **View Products:** Users can view all products, filter by categories and brands, and search for specific products. The product categories include skincare products, scents, hair products, and other related products.
 
 ### Shopping Basket and Checkout
 - **Add to Basket:** Users can add products to their shopping basket.
@@ -112,8 +116,6 @@ This project is licensed under the MIT License. See the LICENSE file for details
 - Stripe
 - Flask-Babel
 - Font Awesome for icons
-- js libraries for form validation,image preview,dynamic city and brand selection,video support,discount management
-
-
+- js libraries for form validation, image preview, dynamic city and brand selection, video support, discount management
 
 This documentation provides an overview of the project's features, installation steps, usage instructions, and other relevant information. For more details, please refer to the project's source code and documentation.
