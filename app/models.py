@@ -336,6 +336,9 @@ class Product(db.Model):
         # current_app.logger.info(f"No translation found for field '{field}' in locale '{locale}', using default.")
         return getattr(self, field)
 
+    def get_average_rating_for_product(self, product_id):
+        return db.session.query(func.avg(Rating.rating)).filter_by(product_id=product_id).scalar()
+
 class Order(db.Model):
     __tablename__ = 'orders'
     id = db.Column(db.Integer, primary_key=True)
