@@ -1,7 +1,7 @@
 from . import main
 from flask import render_template, redirect, url_for, request, flash, current_app, session, g
 from flask_login import login_user, logout_user, login_required, current_user
-from app.models import User, Todo, Product, Category, Brand, Ticket
+from app.models import User, Todo, Product, Category, Brand, Ticket, Rating
 from app import db
 from app.forms import SearchForm
 from sqlalchemy import or_
@@ -60,7 +60,8 @@ def index():
     products = Product.query.all()
     categories = Category.query.all()
     sliders = ['(1).webp', '(2).webp', '(3).webp', '(4).webp']
-    return render_template("index.html", products=products, categories=categories, sliders=sliders, title='Home')
+    ratings = db.session.query(Rating).all()
+    return render_template("index.html", products=products, categories=categories, sliders=sliders, title='Home', ratings=ratings)
 
 @main.route('/search', methods=['GET', 'POST'])
 def search():

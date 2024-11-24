@@ -8,6 +8,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from itsdangerous import URLSafeTimedSerializer as Serializer
 from flask import current_app
 from flask_babel import lazy_gettext as _
+from sqlalchemy.sql import func
 
 class User(UserMixin, db.Model):
     __tablename__ = 'users'
@@ -393,3 +394,7 @@ class Rating(db.Model):
 
     def __repr__(self) -> str:
         return '<Ratings %r>' % self.rating
+    
+    @staticmethod
+    def get_average_rating_for_product(product_id):
+        return db.session.query(func.avg(Rating.rating)).filter_by(product_id=product_id).scalar()

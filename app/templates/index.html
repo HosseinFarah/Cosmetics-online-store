@@ -45,6 +45,13 @@
             </div>
               <div class="card-header">
                 <h5 class="card-title">{{ product.name }}</h5>
+                {% set product_ratings = ratings|selectattr('product_id', 'equalto', product.id)|list %}
+                {% set average_rating = product_ratings|map(attribute='rating')|sum / product_ratings|length if product_ratings|length > 0 else 4 %}
+                <p class="card-text">
+                  {% for i in range(1, 6) %}
+                    <i class="fa fa-star{% if i > average_rating %}-o{% endif %} text-warning"></i>
+                  {% endfor %}
+                </p>
               </div>
               <div class="card-body">
                 {% if product.size %}
