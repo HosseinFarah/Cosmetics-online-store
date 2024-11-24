@@ -87,13 +87,17 @@ This project is a Flask-based web application that provides user authentication,
   ![Delete Product](app/static/uploads/demo/16-Admin-other%20sections.gif)
 - **View Products:** Users can view all products, filter by categories and brands, and search for specific products. The product categories include skincare products, scents, hair products, and other related products.
   ![View Products](app/static/uploads/demo/1-intro.gif)
+- **Product details:** Users can view all product details, including the product description, instructions, ingredients, pictures displayed as a slideshow, and other related product information.
+- **Categories:** Users can filter products based on their categories, view related products for each category, and see brand logos displayed for each category that includes the selected products.
+- **Brands:** Users can filter products based on their brands, view related products for each brand, and access detailed brand information, including the brand logo, a short announcement, and a description of the brand. Additionally, a complete list of brands is displayed, sorted alphabetically.
+- **Discounted products:** Users can filter products that have discounts, with discounted products sorted in ascending order, meaning from the highest discount to the lowest.
 
 ### Shopping Basket and Checkout
-- **Add to Basket:** Users can add products to their shopping basket.
+- **Basket:** Users can easily add their chosen products to the basket. If a selected product has already been added, its quantity is increased, and a related message is displayed. Users can view all selected products in the basket, with options to increase, decrease, or remove products. Pricing is calculated based on whether products have discounts, and the total price reflects the discounted prices where applicable.
   ![Add to Basket](app/static/uploads/demo/06-basket.gif)
-- **View Basket:** Users can view the contents of their basket and update quantities.
-- **Checkout:** Users can proceed to checkout and make payments using Stripe.
+- **Checkout with Stripe:** Users can proceed to checkout and make payments using Stripe.
   ![Checkout](app/static/uploads/demo/07-payment.gif)
+- **My-orders:** After successfully completing a payment, users can view all their orders in the profile section. Each order history includes the transaction date, details of purchased products (such as product name, quantity, and price), savings for discounted products, and the total price. Additionally, users can access links to each purchased product for further details.
 
 ### Ticketing System
 - **Create Ticket:** Users can create support tickets by providing a title, description, and optional image.
