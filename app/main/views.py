@@ -41,7 +41,7 @@ def before_request():
         g.locale = session['lang']
     else:
         g.locale = request.accept_languages.best_match(current_app.config['BABEL_SUPPORTED_LOCALES'])
-    current_app.logger.info(f"Locale set to: {g.locale}")
+    # current_app.logger.info(f"Locale set to: {g.locale}")
     
     
     
