@@ -8,6 +8,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from itsdangerous import URLSafeTimedSerializer as Serializer
 from flask import current_app
 from flask_babel import lazy_gettext as _
+from sqlalchemy.sql import func
 
 class User(UserMixin, db.Model):
     __tablename__ = 'users'
@@ -335,6 +336,9 @@ class Product(db.Model):
         # current_app.logger.info(f"No translation found for field '{field}' in locale '{locale}', using default.")
         return getattr(self, field)
 
+    def get_average_rating_for_product(self, product_id):
+        return db.session.query(func.avg(Rating.rating)).filter_by(product_id=product_id).scalar()
+
 class Order(db.Model):
     __tablename__ = 'orders'
     id = db.Column(db.Integer, primary_key=True)
@@ -377,3 +381,23 @@ class TicketMessage(db.Model):
 
     def __repr__(self) -> str:
         return '<TicketMessage %r>' % self.message
+
+
+class Rating(db.Model):
+    __tablename__ = 'ratings'
+    id = db.Column(db.Integer, primary_key=True)
+    product_id = db.Column(db.Integer, db.ForeignKey('products.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    rating = db.Column(db.Integer, nullable=False)
+    review = db.Column(db.Text, nullable=True)
+    created_at = db.Column(db.DateTime, default=datetime.now(timezone('Europe/Helsinki')))
+    updated_at = db.Column(db.DateTime, default=datetime.now(timezone('Europe/Helsinki')))
+    user = db.relationship('User', backref='ratings')
+    product = db.relationship('Product', backref='ratings')
+
+    def __repr__(self) -> str:
+        return '<Ratings %r>' % self.rating
+    
+    @staticmethod
+    def get_average_rating_for_product(product_id):
+        return db.session.query(func.avg(Rating.rating)).filter_by(product_id=product_id).scalar()

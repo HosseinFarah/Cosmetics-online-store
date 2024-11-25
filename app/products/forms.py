@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, TextAreaField, MultipleFileField, SelectField, DecimalField, FloatField
+from wtforms import StringField, SubmitField, TextAreaField, MultipleFileField, SelectField, DecimalField, FloatField, HiddenField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
 from app.models import Product, Brand, Category,Translation
 from flask_wtf.file import FileField, FileAllowed, FileRequired
@@ -121,3 +121,21 @@ class EditTranslation(FlaskForm):
     text= TextAreaField('Text', validators=[DataRequired()])
     product_id = SelectField('Product', coerce=int, validators=[DataRequired()])
     submit = SubmitField('Update Translation')
+
+
+
+class CreateRatingForm(FlaskForm):
+    rating = SelectField('Rating', choices=[('1', '1'), ('2', '2'), ('3', '3'), ('4', '4'), ('5', '5')], validators=[DataRequired()])
+    review = TextAreaField('Review', validators=[Length(min=0, max=500)])
+    product_id = HiddenField('Product ID')
+    user_id = HiddenField('User ID')
+    submit = SubmitField('Submit')
+
+
+class UpdateRatingForm(FlaskForm):
+    rating = SelectField('Rating', choices=[('1', '1'), ('2', '2'), ('3', '3'), ('4', '4'), ('5', '5')], validators=[DataRequired()])
+    review = TextAreaField('Review', validators=[Length(min=0, max=500)])
+    product_id = HiddenField('Product ID')
+    user_id = HiddenField('User ID')
+    submit = SubmitField('Submit')
+    

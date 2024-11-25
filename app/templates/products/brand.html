@@ -118,6 +118,13 @@
         </div>
         <div class="card-header">
           <h5 class="card-title">{{ _(product.name) }}</h5>
+          {% set average_rating = product.get_average_rating_for_product(product.id) %}
+          {% set average_rating = average_rating if average_rating is not none else 4 %}
+          <p class="card-text">
+            {% for i in range(1, 6) %}
+              <i class="fa fa-star{% if i > average_rating %}-o{% endif %} text-warning"></i>
+            {% endfor %}
+          </p>
         </div>
         <div class="card-body">
           {% if product.size %}

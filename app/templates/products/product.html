@@ -7,193 +7,404 @@
     <div class="spinner-grow text-info" role="status"></div>
   </div>
   <!-- end loading... -->
-  <nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='%236c757d'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
+  <nav
+    style="
+      --bs-breadcrumb-divider: url(
+        &#34;data:image/svg + xml,
+        %3Csvgxmlns='http://www.w3.org/2000/svg'width='8'height='8'%3E%3Cpathd='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z'fill='%236c757d'/%3E%3C/svg%3E&#34;
+      );
+    "
+    aria-label="breadcrumb"
+  >
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="{{ url_for('main.index') }}">Home</a></li>
-      <li class="breadcrumb-item"><a href="{{ url_for('products.category', category_name=product.category) }}">{{ product.category }}</a></li>
-      <li class="breadcrumb-item"><a href="{{ url_for('products.brand', brand_name=product.brand.name) }}">{{ product.brand.name }}</a></li>
-      <li class="breadcrumb-item active" aria-current="page">{{ product.name }}</li>
+      <li class="breadcrumb-item">
+        <a href="{{ url_for('main.index') }}">Home</a>
+      </li>
+      <li class="breadcrumb-item">
+        <a
+          href="{{ url_for('products.category', category_name=product.category) }}"
+          >{{ product.category }}</a
+        >
+      </li>
+      <li class="breadcrumb-item">
+        <a href="{{ url_for('products.brand', brand_name=product.brand.name) }}"
+          >{{ product.brand.name }}</a
+        >
+      </li>
+      <li class="breadcrumb-item active" aria-current="page">
+        {{ product.name }}
+      </li>
     </ol>
   </nav>
   <div class="row d-flex justify-content-center">
     <div class="col-md-6">
-      <h2 class="mt-3 badge bg-secondary fs-6">{{ product.get_translation('name') }}</h2>
-      <hr>
+      <h2 class="mt-3 badge bg-secondary fs-6">
+        {{ product.get_translation('name') }}
+      </h2>
+      <hr />
 
-
-      <div class="card shadow-lg  mb-5 rounded shine-effect w-100 h-100" style="height: 90% !important">
+      <div
+        class="card shadow-lg mb-5 rounded shine-effect w-100 h-100"
+        style="height: 90% !important"
+      >
         <img
           src="{{ url_for('static', filename='uploads/products/' + product.image) }}"
           class="card-img-top"
           alt="{{ product.get_translation('name') }}"
-          style="max-height: 250px; object-fit: contain; background-color: #fcf5f3"
+          style="
+            max-height: 250px;
+            object-fit: contain;
+            background-color: #fcf5f3;
+          "
         />
-        <div class="position-absolute bg-brand text-white p-1 top-0 end-0 shadow rounded-start-top">
-          <a href="{{ url_for('products.brand', brand_name=product.brand.name) }}"
-           class="brand-link"
-           >{{ product.brand.name }}</a>
-      </div>
+        <div
+          class="position-absolute bg-brand text-white p-1 top-0 end-0 shadow rounded-start-top"
+        >
+          <a
+            href="{{ url_for('products.brand', brand_name=product.brand.name) }}"
+            class="brand-link"
+            >{{ product.brand.name }}</a
+          >
+        </div>
         <div class="card-header">
           <h5 class="card-title">{{ product.get_translation('name') }}</h5>
         </div>
         <div class="card-body">
-          <p class="card-text" style="text-align: justify;">
+          <p class="card-text" style="text-align: justify">
             <!-- # for translation from db -->
-            <i class="fa fa-tag text-secondary"></i> {{ product.get_translation('description') }}
+            <i class="fa fa-tag text-secondary"></i> {{
+            product.get_translation('description') }}
           </p>
+          {% set average_rating = product.get_average_rating_for_product(product.id) %}
+          {% set average_rating = average_rating if average_rating is not none else 4 %}
+          <p class="card-text">
+            {% for i in range(1, 6) %}
+              <i class="fa fa-star{% if i > average_rating %}-o{% endif %} text-warning"></i>
+            {% endfor %}
+          </p>
+          
           {% if product.size %}
           <p class="card-text">
             <i class="fa fa-expand text-secondary"></i> {{ product.size }}
           </p>
-          {% endif %}
-          {% if product.weight %}
+          {% endif %} {% if product.weight %}
           <p class="card-text">
             <i class="fa fa-weight text-secondary"></i> {{ product.weight }}
           </p>
+          {% endif %} {% if product.discount %}
+          <p class="card-text">
+            <i class="fa fa-percent text-info"></i>
+            <span class="badge bg-info text-light"
+              >{{ product.get_discount_percent() }}%</span
+            >
+          </p>
+          <p class="card-text">
+            <i class="fa fa-euro-sign text-secondary"></i>
+            <span class="text-decoration-line-through"
+              >{{ product.price }} €</span
+            >
+            <span class="text-success fs-4"
+              >{{ product.get_discount_price() | round(2) }} €</span
+            >
+          </p>
+          {% else %}
+          <p class="card-text">
+            <i class="fa fa-euro-sign text-secondary"></i> {{ product.price }} €
+          </p>
           {% endif %}
-          {% if product.discount %}
-          <p class="card-text">
-              <i class="fa fa-percent text-info"></i> <span class="badge bg-info text-light">{{ product.get_discount_percent() }}%</span>
-          </p>
-          <p class="card-text">
-              <i class="fa fa-euro-sign text-secondary"></i> 
-              <span class="text-decoration-line-through">{{ product.price }} €</span>
-              <span class="text-success fs-4">{{ product.get_discount_price() | round(2) }} €</span>
-          </p>
-      {% else %}
-          <p class="card-text">
-              <i class="fa fa-euro-sign text-secondary"></i> {{ product.price }} €
-          </p>
-      {% endif %}
-
         </div>
         <div class="card-footer">
           <a
             href="{{ url_for('products.add_to_basket', id=product.id) }}"
-            class="btn btn-success" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Add to basket"
-            ><i class="fa fa-shopping-cart"></i> <i class="fa fa-plus"></i></a
-          >
+            class="btn btn-success"
+            data-bs-toggle="tooltip"
+            data-bs-placement="top"
+            data-bs-title="Add to basket"
+            ><i class="fa fa-shopping-cart"></i> <i class="fa fa-plus"></i
+          ></a>
           {% if current_user.is_administrator() %}
           <a
             href="{{ url_for('products.edit_product', id=product.id) }}"
-            data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Update ({{ product.get_translation('name') }})"
+            data-bs-toggle="tooltip"
+            data-bs-placement="top"
+            data-bs-title="Update ({{ product.get_translation('name') }})"
             class="btn btn-warning"
-            ><i class="fa fa-edit"></i></a
-          >
+            ><i class="fa fa-edit"></i
+          ></a>
           <a
             href="{{ url_for('products.delete_product', id=product.id) }}"
-            data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Delete ({{ product.get_translation('name') }})"
+            data-bs-toggle="tooltip"
+            data-bs-placement="top"
+            data-bs-title="Delete ({{ product.get_translation('name') }})"
             class="btn btn-danger"
             onclick="return confirm('Are you sure you want to delete {{ product.get_translation('name') }}?')"
-            ><i class="fa fa-trash"></i></a
-          >
+            ><i class="fa fa-trash"></i
+          ></a>
           {% endif %}
         </div>
       </div>
     </div>
     <div class="col-md-5 mt-5 ms-5">
       {% if pictures | length > 0 %}
-      <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel">
-          <div class="carousel-inner">
-              {% for picture in pictures %}
-              <div class="carousel-item {% if loop.first %}active{% endif %} shadow-lg">
-                  <img src="{{ url_for('static', filename='uploads/products/' + picture) }}" class="d-block w-100" alt="{{ product.get_translation('name') }}" style="max-height: 500px; object-fit: contain;">
-              </div>
-              {% endfor %}
-          </div>
-          <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
-              <span class="text-info" aria-hidden="true"><i class="fa fa-chevron-left"></i></span>
-              <span class="visually-hidden">Previous</span>
-          </button>
-          <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="next">
-              <span class="text-info" aria-hidden="true"><i class="fa fa-chevron-right"></i></span>
-              <span class="visually-hidden">Next</span>
-          </button>
-          <div class="carousel-indicators">
-              {% for picture in pictures %}
-              <button type="button"  data-bs-target="#carouselExampleAutoplaying" data-bs-slide-to="{{ loop.index0 }}" class="{% if loop.first %}active{% endif %}" aria-current="{% if loop.first %}true{% endif %}" aria-label="Slide {{ loop.index }}"></button>
-              {% endfor %}
-          </div>
-      </div>
-      <div class="row mt-3">
+      <div
+        id="carouselExampleAutoplaying"
+        class="carousel slide"
+        data-bs-ride="carousel"
+      >
+        <div class="carousel-inner">
           {% for picture in pictures %}
-          <div class="col-2">
-              <img src="{{ url_for('static', filename='uploads/products/' + picture) }}" class="img-thumbnail" alt="{{ product.get_translation('name') }}" data-bs-target="#carouselExampleAutoplaying" data-bs-slide-to="{{ loop.index0 }}">
+          <div
+            class="carousel-item {% if loop.first %}active{% endif %} shadow-lg"
+          >
+            <img
+              src="{{ url_for('static', filename='uploads/products/' + picture) }}"
+              class="d-block w-100"
+              alt="{{ product.get_translation('name') }}"
+              style="max-height: 500px; object-fit: contain"
+            />
           </div>
           {% endfor %}
+        </div>
+        <button
+          class="carousel-control-prev"
+          type="button"
+          data-bs-target="#carouselExampleAutoplaying"
+          data-bs-slide="prev"
+        >
+          <span class="text-info" aria-hidden="true"
+            ><i class="fa fa-chevron-left"></i
+          ></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button
+          class="carousel-control-next"
+          type="button"
+          data-bs-target="#carouselExampleAutoplaying"
+          data-bs-slide="next"
+        >
+          <span class="text-info" aria-hidden="true"
+            ><i class="fa fa-chevron-right"></i
+          ></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+        <div class="carousel-indicators">
+          {% for picture in pictures %}
+          <button
+            type="button"
+            data-bs-target="#carouselExampleAutoplaying"
+            data-bs-slide-to="{{ loop.index0 }}"
+            class="{% if loop.first %}active{% endif %}"
+            aria-current="{% if loop.first %}true{% endif %}"
+            aria-label="Slide {{ loop.index }}"
+          ></button>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="row mt-3">
+        {% for picture in pictures %}
+        <div class="col-2">
+          <img
+            src="{{ url_for('static', filename='uploads/products/' + picture) }}"
+            class="img-thumbnail"
+            alt="{{ product.get_translation('name') }}"
+            data-bs-target="#carouselExampleAutoplaying"
+            data-bs-slide-to="{{ loop.index0 }}"
+          />
+        </div>
+        {% endfor %}
       </div>
       {% endif %}
-      <hr>
-      <h3 class="badge bg-primary">brand : <i class="fa fa-tag"></i> <a href="{{ url_for('products.brand', brand_name=brand.name)}}" class="text-light">Filter by: {{ brand.name}}</a></h3>
-      <h3 class="badge bg-primary">category : <i class="fa fa-folder"></i> <a href="{{ url_for('products.category', category_name=product.category) }}" class="text-light">Filter by: {{ product.category }}</a></h3>
-  </div>
-  </div>
-  <!-- <div class="row">
-    {% if product.videos %}
-    {% set video_list = product.videos.split(',') %}
-    <div id="videoCarousel" class="carousel slide" data-ride="carousel">
-        <div class="carousel-inner">
-            {% for video in video_list %}
-            {% set embed_url = video.strip().replace("watch?v=", "embed/") %}
-            <div class="carousel-item {% if loop.first %}active{% endif %}">
-                <div class="embed-responsive embed-responsive-16by9">
-                    <iframe
-                        class="embed-responsive-item"
-                        src="{{ embed_url }}"
-                        allowfullscreen
-                    ></iframe>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
-        <a class="carousel-control-prev" href="#videoCarousel" role="button" data-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="sr-only">Previous</span>
-        </a>
-        <a class="carousel-control-next" href="#videoCarousel" role="button" data-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="sr-only">Next</span>
-        </a>
+      <hr />
+      <h3 class="badge bg-primary">
+        brand : <i class="fa fa-tag"></i>
+        <a
+          href="{{ url_for('products.brand', brand_name=brand.name)}}"
+          class="text-light"
+          >Filter by: {{ brand.name}}</a
+        >
+      </h3>
+      <h3 class="badge bg-primary">
+        category : <i class="fa fa-folder"></i>
+        <a
+          href="{{ url_for('products.category', category_name=product.category) }}"
+          class="text-light"
+          >Filter by: {{ product.category }}</a
+        >
+      </h3>
     </div>
-    {% endif %}
-</div> -->
-<div class="row mt-5">
-  <ul class="nav nav-tabs" id="myTab" role="tablist">
-
+  </div>
+  <div class="row mt-5">
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
       <li class="nav-item" role="presentation">
-          <a class="nav-link active" id="description-tab" data-bs-toggle="tab" href="#description" role="tab" aria-controls="description" aria-selected="true">Description</a>
+        <a
+          class="nav-link active"
+          id="description-tab"
+          data-bs-toggle="tab"
+          href="#description"
+          role="tab"
+          aria-controls="description"
+          aria-selected="true"
+          >Description</a
+        >
       </li>
 
-
       <li class="nav-item" role="presentation">
-          <a class="nav-link" id="instructions-tab" data-bs-toggle="tab" href="#instructions" role="tab" aria-controls="instructions" aria-selected="false">Instructions</a>
+        <a
+          class="nav-link"
+          id="instructions-tab"
+          data-bs-toggle="tab"
+          href="#instructions"
+          role="tab"
+          aria-controls="instructions"
+          aria-selected="false"
+          >Instructions</a
+        >
       </li>
 
-
       <li class="nav-item" role="presentation">
-          <a class="nav-link" id="ingredients-tab" data-bs-toggle="tab" href="#ingredients" role="tab" aria-controls="ingredients" aria-selected="false">Ingredients</a>
+        <a
+          class="nav-link"
+          id="ingredients-tab"
+          data-bs-toggle="tab"
+          href="#ingredients"
+          role="tab"
+          aria-controls="ingredients"
+          aria-selected="false"
+          >Ingredients</a
+        >
       </li>
+    </ul>
 
-  </ul>
-  
-  <div class="tab-content" id="myTabContent">
-      <div class="tab-pane fade show active" id="description" role="tabpanel" aria-labelledby="description-tab">
-          <div class="mt-3">
-              <p style="text-align: justify;">{{ product.get_translation('description') }}</p>
-          </div>
+    <div class="tab-content" id="myTabContent">
+      <div
+        class="tab-pane fade show active"
+        id="description"
+        role="tabpanel"
+        aria-labelledby="description-tab"
+      >
+        <div class="mt-3">
+          <p style="text-align: justify">
+            {{ product.get_translation('description') }}
+          </p>
+        </div>
       </div>
-      <div class="tab-pane fade" id="instructions" role="tabpanel" aria-labelledby="instructions-tab">
-          <div class="mt-3">
-              <p style="text-align: justify;">{{ product.get_translation('instructions') }}</p>
-          </div>
+      <div
+        class="tab-pane fade"
+        id="instructions"
+        role="tabpanel"
+        aria-labelledby="instructions-tab"
+      >
+        <div class="mt-3">
+          <p style="text-align: justify">
+            {{ product.get_translation('instructions') }}
+          </p>
+        </div>
       </div>
-      <div class="tab-pane fade" id="ingredients" role="tabpanel" aria-labelledby="ingredients-tab">
-          <div class="mt-3">
-              <p style="text-align: justify;">{{ product.get_translation('ingredients') }}</p>
-          </div>
+      <div
+        class="tab-pane fade"
+        id="ingredients"
+        role="tabpanel"
+        aria-labelledby="ingredients-tab"
+      >
+        <div class="mt-3">
+          <p style="text-align: justify">
+            {{ product.get_translation('ingredients') }}
+          </p>
+        </div>
       </div>
+    </div>
   </div>
 </div>
+<div class="container">
+  <div class="row d-flex justify-content-center">
+    {% set user_has_review = false %}
+    {% for rating in ratings %}
+      {% if rating.user_id == current_user.id %}
+        {% set user_has_review = true %}
+      {% endif %}
+    {% endfor %}
+    {% if user_has_review %}
+      <div class="col md-4">
+        <h1 class="badge bg-primary mt-5 fs-5">Update your review</h1>
+        <form method="post" novalidate class="needs-validation mt-3 mb-3">
+          {{ form.hidden_tag() }}
+          <div class="form-group">
+            {{ form.rating.label(class="form-label") }}
+            {{ form.rating(class="form-control") }}
+            {% for error in form.rating.errors %}
+              <div class="invalid-feedback">{{ error }}</div>
+            {% endfor %}
+          </div>
+          <div class="form-group">
+            {{ form.review.label(class="form-label") }}
+            {{ form.review(class="form-control") }}
+            {% for error in form.review.errors %}
+              <div class="invalid-feedback">{{ error }}</div>
+            {% endfor %}
+          </div>
+          {{ form.submit(class="btn btn-success mt-2 m-b-3") }}
+        </form>
+      </div>
+    {% else %}
+      <div class="col md-4">
+        <h1 class="badge bg-primary mt-5 fs-5">Submit your review</h1>
+        <form method="post" novalidate class="needs-validation mt-3 mb-3">
+          {{ form.hidden_tag() }}
+          <div class="form-group">
+            {{ form.rating.label(class="form-label") }}
+            {{ form.rating(class="form-control") }}
+            {% for error in form.rating.errors %}
+              <div class="invalid-feedback">{{ error }}</div>
+            {% endfor %}
+          </div>
+          <div class="form-group">
+            {{ form.review.label(class="form-label") }}
+            {{ form.review(class="form-control") }}
+            {% for error in form.review.errors %}
+              <div class="invalid-feedback">{{ error }}</div>
+            {% endfor %}
+          </div>
+          {{ form.submit(class="btn btn-success mt-2 m-b-3") }}
+        </form>
+      </div>
+    {% endif %}
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h1 class="badge bg-primary mt-5 fs-5">Reviews</h1>
+      <table class="table table-striped bg-light">
+        <thead>
+          <tr>
+            <th scope="col"></th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for rating in ratings %}
+            <tr>
+              <td>
+                <img
+                  src="{{ url_for('static', filename='uploads/users/' + rating.user.image) }}"
+                  alt="{{ rating.user.firstname }}"
+                  class="img-thumbnail"
+                  style="max-height: 80px ; object-fit: cover"
+                />
+                {{ rating.user.firstname }}
+              </td>
+              <td>
+                {% for i in range(rating.rating) %}
+                  <i class="fa fa-star text-warning"></i>
+                {% endfor %}
+              </td>
+              <td>{{ rating.review }}</td>
+              <td>{{ rating.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>
 {% endblock %}
-
