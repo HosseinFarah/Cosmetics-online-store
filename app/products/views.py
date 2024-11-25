@@ -11,12 +11,18 @@ import os
 import json
 import stripe
 from app.forms import SearchForm
+from flask_babel import _  # Add this import
+import logging  # Add this import
 
 # Stripe Payment Gateway Start
 
 @products.route('/create-checkout-session', methods=['POST'])
 @login_required
 def create_checkout_session():
+    if request.method != 'POST':
+        logging.warning(f"Method {request.method} not allowed for /create-checkout-session")
+        return "Method Not Allowed", 405
+
     form = CheckoutForm()
     if form.validate_on_submit():
         stripe.api_key = current_app.config['STRIPE_SECRET_KEY']
@@ -39,7 +45,7 @@ def create_checkout_session():
                     'quantity': item['quantity'],
                 })
             else:
-                flash('Invalid item in basket', 'error')
+                flash(_('Invalid item in basket'), 'error')
                 return redirect(url_for('products.basket'))
         try:
             # Create or retrieve the customer
@@ -60,16 +66,27 @@ def create_checkout_session():
                     'user_full_name': f"{current_user.firstname} {current_user.lastname}"
                 }
             )
+            logging.info(f"Checkout session created: {checkout_session.url}")
             return redirect(checkout_session.url, code=303)
         except Exception as e:
+            logging.error(f"Error creating checkout session: {e}")
             return str(e)
-    flash('Invalid CSRF token', 'danger')
+    flash(_('Invalid CSRF token'), 'danger')
     return redirect(url_for('products.basket'))
+
+
+@products.route('/redirect-to-checkout', methods=['GET'])
+@login_required
+def redirect_to_checkout():
+    form = CheckoutForm()
+    return render_template('products/redirect_to_checkout.html', form=form)
+
+
 
 @products.route('/payment-success')
 @login_required
 def payment_success():
-    flash('Payment successful!', 'success')
+    flash(_('Payment successful!'), 'success')
     checkout_session_id = request.args.get('session_id')
     if checkout_session_id:
         checkout_session = stripe.checkout.Session.retrieve(checkout_session_id)
@@ -80,7 +97,7 @@ def payment_success():
 @products.route('/payment-cancel')
 @login_required
 def payment_cancel():
-    flash('Payment canceled.', 'danger')
+    flash(_('Payment canceled.'), 'danger')
     return redirect(url_for('products.basket'))
 
 @products.route('/webhook', methods=['POST'])
@@ -169,7 +186,7 @@ def create_new_product():
         product = Product(name=form.name.data, price=form.price.data, description=form.description.data, image=image_filename, pictures=json.dumps(picture_filenames), instructions=form.instructions.data, ingredients=form.ingredients.data, size=form.size.data, weight=form.weight.data, ean=form.ean.data, category_id=form.category.data, brand=brand,videos=form.videos.data,subcategory_id=form.subcategory.data)
         db.session.add(product)
         db.session.commit()
-        flash('Product created successfully', 'success')
+        flash(_('Product created successfully'), 'success')
         return redirect(url_for('main.index'))
     return render_template('products/create_new_product.html', form=form)
 
@@ -197,7 +214,7 @@ def add_to_basket(id):
             if isinstance(item, dict) and int(item["id"]) == int(product.id):
                 item["quantity"] = item.get("quantity", 1) + 1
                 session.modified = True
-                flash("From this product, another product was added to the shopping cart", "success")
+                flash(_('From this product, another product was added to the shopping cart'), 'success')
                 break
         else:
             # If the product is not in the basket, add it with quantity 1
@@ -212,14 +229,14 @@ def add_to_basket(id):
                 "quantity": 1
             })
             session.modified = True
-            flash("Product added to basket", "success")
+            flash(_('Product added to basket'), 'success')
         
         # Debugging statement to check the contents of session["basket"]
         print("Basket contents after adding:")
         for item in session.get("basket", []):
             print(item.get("name"))
     else:
-        flash("Product not found", "danger")
+        flash(_('Product not found'), 'danger')
         print(f"Product with id {id} not found.")
         
     return redirect(url_for("products.brand", brand_name=product.brand.name) if product else url_for("main.index"))
@@ -320,7 +337,7 @@ def edit_product(id):
 
         # Commit the changes
         db.session.commit()
-        flash("Product updated successfully", "success")
+        flash(_('Product updated successfully'), 'success')
         return redirect(url_for("main.index", id=id))
     elif request.method == "GET":
         
@@ -359,7 +376,7 @@ def delete_product(id):
     product = db.session.query(Product).get(id)
     db.session.delete(product)
     db.session.commit()
-    flash("Product deleted successfully", "success")
+    flash(_('Product deleted successfully'), 'success')
     return redirect(url_for("main.index"))
 
 @products.route("/product/<int:id>", methods=["GET", "POST"])
@@ -378,7 +395,7 @@ def product(id):
             existing_rating.rating = form.rating.data
             existing_rating.review = form.review.data
             db.session.commit()
-            flash("Rating updated successfully", "success")
+            flash(_('Rating updated successfully'), 'success')
         else:
             new_rating = Rating(
                 rating=form.rating.data,
@@ -388,7 +405,7 @@ def product(id):
             )
             db.session.add(new_rating)
             db.session.commit()
-            flash("Rating added successfully", "success")
+            flash(_('Rating added successfully'), 'success')
         return redirect(url_for('products.product', id=id))
     
     
@@ -466,7 +483,7 @@ def new_brand():
         brand = Brand(name=form.name.data, logo=logo_filename, video=video_filename, summary=form.summary.data, description=form.description.data)
         db.session.add(brand)
         db.session.commit()
-        flash("Brand created successfully", "success")
+        flash(_('Brand created successfully'), 'success')
         return redirect(url_for("main.index"))
     return render_template("products/new_brand.html", form=form)
 
@@ -491,7 +508,7 @@ def edit_brand(id):
         brand.summary = form.summary.data
         brand.description = form.description.data
         db.session.commit()
-        flash("Brand updated successfully", "success")
+        flash(_('Brand updated successfully'), 'success')
         return redirect(url_for("products.brand", brand_name=brand.name))
     elif request.method == "GET":
         form.logo.data = brand.logo
@@ -516,10 +533,10 @@ def add_new_category():
             category = Category(name=category_name, parent_id=parent_id)
             db.session.add(category)
             db.session.commit()
-            flash("Category created successfully", "success")
+            flash(_('Category created successfully'), 'success')
             return redirect(url_for("products.add_new_category"))
         else:
-            flash("Category already exists", "danger")
+            flash(_('Category already exists'), 'danger')
     return render_template("products/add_new_category.html", form=form)
 
 @products.route("/all_discounted_products", methods=["GET", "POST"])
@@ -545,7 +562,7 @@ def brands():
 def create_translation():
     form = CreateTranslation()
     form.language.choices = [("en", "English"), ("fi", "Suomi"), ("sv", "Svenska"), ("fr", "Français"), ("de", "Deutsch")]
-    form.field.choices = [("name", "Name"), ("description", "Description"), ("instructions", "Instructions"), ("ingredients", "Ingredients")]
+    form.field.choices = [ ("description", "Description"), ("instructions", "Instructions"), ("ingredients", "Ingredients")]
     products = db.session.query(Product).all()
     form.product_id.choices = [(product.id, product.name) for product in products]
     
@@ -554,7 +571,7 @@ def create_translation():
         translation = Translation(language=form.language.data, field=form.field.data, text=form.text.data, product_id=product.id)
         db.session.add(translation)
         db.session.commit()
-        flash("Translation added successfully", "success")
+        flash(_('Translation added successfully'), 'success')
         return redirect(url_for("products.create_translation"))
     return render_template("products/create_translation.html", form=form)
 
@@ -570,7 +587,7 @@ def edit_translation(id):
         translation.field = form.field.data
         translation.text = form.text.data
         db.session.commit()
-        flash("Translation updated successfully", "success")
+        flash(_('Translation updated successfully'), 'success')
         return redirect(url_for("products.create_translation"))
     return render_template("products/edit_translation.html", form=form, translation=translation)
 
@@ -605,7 +622,7 @@ def all_orders():
 
     orders = query.paginate(page=page, per_page=per_page)
 
-    return render_template("products/all_orders.html", orders=orders, search=search, all_orders_count=all_orders_count, json=json)
+    return render_template(_('products/all_orders.html'), orders=orders, search=search, all_orders_count=all_orders_count, json=json)
 
 
 
@@ -642,7 +659,9 @@ def all_products():
 
     products = query.paginate(page=page, per_page=per_page)
 
-    return render_template("products/all_products.html", products=products, search=search, all_products_count=all_products_count)
+    return render_template(_('products/all_products.html'), products=products, search=search, all_products_count=all_products_count)
+
+
 
 
 

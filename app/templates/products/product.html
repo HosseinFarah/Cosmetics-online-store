@@ -18,21 +18,21 @@
   >
     <ol class="breadcrumb">
       <li class="breadcrumb-item">
-        <a href="{{ url_for('main.index') }}">Home</a>
+        <a href="{{ url_for('main.index') }}">{{ _('Home') }}</a>
       </li>
       <li class="breadcrumb-item">
         <a
           href="{{ url_for('products.category', category_name=product.category) }}"
-          >{{ product.category }}</a
+          >{{ _(product.category) }}</a
         >
       </li>
       <li class="breadcrumb-item">
         <a href="{{ url_for('products.brand', brand_name=product.brand.name) }}"
-          >{{ product.brand.name }}</a
+          >{{ _(product.brand.name) }}</a
         >
       </li>
       <li class="breadcrumb-item active" aria-current="page">
-        {{ product.name }}
+        {{ _(product.name) }}
       </li>
     </ol>
   </nav>
@@ -119,7 +119,7 @@
             class="btn btn-success"
             data-bs-toggle="tooltip"
             data-bs-placement="top"
-            data-bs-title="Add to basket"
+            data-bs-title="{{ _('Add to basket') }}"
             ><i class="fa fa-shopping-cart"></i> <i class="fa fa-plus"></i
           ></a>
           {% if current_user.is_administrator() %}
@@ -127,7 +127,7 @@
             href="{{ url_for('products.edit_product', id=product.id) }}"
             data-bs-toggle="tooltip"
             data-bs-placement="top"
-            data-bs-title="Update ({{ product.get_translation('name') }})"
+            data-bs-title="{{ _('Update') }} ({{ product.get_translation('name') }})"
             class="btn btn-warning"
             ><i class="fa fa-edit"></i
           ></a>
@@ -135,9 +135,9 @@
             href="{{ url_for('products.delete_product', id=product.id) }}"
             data-bs-toggle="tooltip"
             data-bs-placement="top"
-            data-bs-title="Delete ({{ product.get_translation('name') }})"
+            data-bs-title="{{ _('Delete') }} ({{ product.get_translation('name') }})"
             class="btn btn-danger"
-            onclick="return confirm('Are you sure you want to delete {{ product.get_translation('name') }}?')"
+            onclick="return confirm('{{ _('Are you sure you want to delete') }} {{ product.get_translation('name') }}?')"
             ><i class="fa fa-trash"></i
           ></a>
           {% endif %}
@@ -216,19 +216,19 @@
       {% endif %}
       <hr />
       <h3 class="badge bg-primary">
-        brand : <i class="fa fa-tag"></i>
+        {{ _('brand') }} : <i class="fa fa-tag"></i>
         <a
           href="{{ url_for('products.brand', brand_name=brand.name)}}"
           class="text-light"
-          >Filter by: {{ brand.name}}</a
+          >{{ _('Filter by') }}: {{ brand.name}}</a
         >
       </h3>
       <h3 class="badge bg-primary">
-        category : <i class="fa fa-folder"></i>
+        {{ _('category') }} : <i class="fa fa-folder"></i>
         <a
           href="{{ url_for('products.category', category_name=product.category) }}"
           class="text-light"
-          >Filter by: {{ product.category }}</a
+          >{{ _('Filter by') }}: {{ product.category }}</a
         >
       </h3>
     </div>
@@ -325,7 +325,7 @@
     {% endfor %}
     {% if user_has_review %}
       <div class="col md-4">
-        <h1 class="badge bg-primary mt-5 fs-5">Update your review</h1>
+        <h1 class="badge bg-primary mt-5 fs-5">{{ _('Update your review') }}</h1>
         <form method="post" novalidate class="needs-validation mt-3 mb-3">
           {{ form.hidden_tag() }}
           <div class="form-group">
@@ -347,7 +347,7 @@
       </div>
     {% else %}
       <div class="col md-4">
-        <h1 class="badge bg-primary mt-5 fs-5">Submit your review</h1>
+        <h1 class="badge bg-primary mt-5 fs-5">{{ _('Submit your review') }}</h1>
         <form method="post" novalidate class="needs-validation mt-3 mb-3">
           {{ form.hidden_tag() }}
           <div class="form-group">
@@ -371,7 +371,7 @@
   </div>
   <div class="row">
     <div class="col-md-6">
-      <h1 class="badge bg-primary mt-5 fs-5">Reviews</h1>
+      <h1 class="badge bg-primary mt-5 fs-5">{{ _('Reviews') }}</h1>
       <table class="table table-striped bg-light">
         <thead>
           <tr>

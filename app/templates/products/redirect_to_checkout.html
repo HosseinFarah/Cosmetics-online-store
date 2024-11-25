@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="refresh" content="0;url={{ url_for('products.create_checkout_session') }}" />
+</head>
+<body>
+    <form id="checkoutForm" action="{{ url_for('products.create_checkout_session') }}" method="POST">
+        {{ form.hidden_tag() }}
+        <noscript>
+            <input type="submit" value="Continue to Checkout">
+        </noscript>
+    </form>
+    <script>
+        document.getElementById('checkoutForm').submit();
+    </script>
+</body>
+</html>

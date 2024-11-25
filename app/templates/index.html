@@ -49,7 +49,7 @@
                 {% set average_rating = average_rating if average_rating is not none else 4 %}
                 <p class="card-text">
                   {% for i in range(1, 6) %}
-                    <i class="fa fa-star{% if i > average_rating %}-o{% endif %} text-warning"></i>
+                    <i class="fa fa-star{% if i > average_rating %}-o{% endif %} text-info"></i>
                   {% endfor %}
                 </p>
               </div>

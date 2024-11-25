@@ -56,9 +56,10 @@ def login():
             if not current_user.is_active or current_user.is_anonymous:
                 flash('Your account has been disabled. Please contact the administrator.', 'danger')
                 return redirect(url_for('auth.logout'))
+            # handeling the checkout session with redirect-to-checkout after login
             next_page = request.args.get('next')
-            if next_page and not next_page.startswith('/'):
-                next_page = None
+            if next_page and 'create-checkout-session' in next_page:
+                return redirect(url_for('products.redirect_to_checkout'))
             return redirect(next_page or url_for('main.index'))
         flash('Invalid email or password.', 'danger')
     return render_template('auth/login.html', title='Login', form=form)
